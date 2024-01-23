@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('annonces', function (Blueprint $table) {
             $table->id();
-            $table->string("titre");
-            $table->string("desciption");
-            $table->string("images")->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('titre');
+            $table->string('description');
+            $table->string('images')->nullable();
+            $table->unsignedBigInteger('users_id');
+            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

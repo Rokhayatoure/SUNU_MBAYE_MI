@@ -13,12 +13,8 @@ return new class extends Migration
     {
         Schema::create('commendes', function (Blueprint $table) {
             $table->id();
-            $table->string("facture");
-            $table->enum('livraison', ['En_court', 'terminer',])->default('En_court');
+            $table->enum('livraison', ['En_court', 'annuler','terminer',])->default('En_court');
             $table->integer("numero_commende")->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            
             $table->timestamps();
         
         });

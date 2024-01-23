@@ -5,80 +5,89 @@ namespace App\Http\Controllers;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CategorieController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+
     public function listeCategorie(Request $request)
     {
+       
         $categorie=Categorie::all();
         return response()->json(compact('categorie'), 200);
       
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function AjoutCategorie(Request $request ,$id)
-    {
 
-        $categorie= new Categorie([
-            'nom_categories' => $request->nom_categories,
-            'description' => $request->description,
-        ]);
-        $categorie->save();
-        
-    }
+  public function voiplusCategorie($categori_id){
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    if (Auth::guard('api')->check())
+        {
+            $categorie = Categorie::find($categori_id);
+            return response()->json(compact('categorie'), 200);
+    
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Categorie $categorie)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Categorie $categorie)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function modifieCategorie(Request $request, $id)
-    {
-        
-        $categorie= Categorie::find($id);
-        if (!$categorie) {
-            return response()->json(['message' => 'Categorie  non trouver'], 404);
+        }
+        else{
+            return response()->json(['message' => ' Veiller vous connecter dabord'], 201);
         }
 
-        $categorie= new Categorie([
-            'nom_categories' => $request->nom_categories,
-            'description' => $request->description,
-        ]);
-        $categorie->save();
+}
+
+    
+public function AjoutCategorie(Request $request)
+{
+   
+    // Vérifier si l'utilisateur est authentifié
+    // if (!Auth::guard('api')->check()) {
+    //     return response()->json(['errors' => 'Veuillez vous connecter avant de faire cette action.'], 422);
+    // }
+
+    // Créer une nouvelle instance de la catégorie
+    $categorie = new Categorie([
+        'nom_categories' => $request->nom_categories,
+    ]);
+
+    // Enregistrer la catégorie dans la base de données
+    $categorie->save();
+
+    // Retourner une réponse JSON
+    return response()->json(['message' => 'Catégorie ajoutée avec succès.'], 200);
+}
+
+   
+   
+    public function modifieCategorie(Request $request, $id)
+    // {
+    //     if (!Auth::guard('api')->check()) {
+    //         return response()->json(['errors' => 'veilleir vous connecter avant de fair cette action.'], 422);
+    //     }
+   {
+    $categorie = Categorie::find($id);
+
+    // Vérifiez si la catégorie existe
+    if (!$categorie) {
+        return response()->json(['message' => 'Catégorie non trouvée'], 404);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // Mettez à jour les propriétés de la catégorie avec les données de la requête
+    $categorie->nom_categories = $request->nom_categories;
+
+    // Sauvegardez la catégorie mise à jour
+    $categorie->save();
+
+    // Réponse JSON
+    return response()->json(['message' => 'Catégorie modifiée avec succès'], 200);
+
+}
     public function destroy($id)
     {
+
+
+        if (!Auth::check()) {
+            return response()->json(['errors' => 'veilleir vous connecter avant de fair cette action.'], 422);
+        }
         Categorie::find($id)->delete();
     return response()->json(['message' => 'categorie supprimé avec succès'], 200);
     

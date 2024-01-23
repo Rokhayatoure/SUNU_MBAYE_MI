@@ -41,7 +41,7 @@ public function inscription(Request $request,Role $role){
         'adresse' => ['required', 'string'],
         'contact' => ['required', 'string'],
         'date_naissance' => ['required'],
-        'nom_role' => ['required', Role::in(['revendeur', 'agriculteur'])],
+       
     ]);
     
     if ($validator->fails()) {
@@ -58,7 +58,7 @@ public function inscription(Request $request,Role $role){
             'adresse' => $request->adresse,
             'date_naissance' => $request->date_naissance,
             'contact' => $request->contact,
-             'sexe' => $request->sexe,
+            'sexe' => $request->sexe,
             'role_id' => $role->id,
         ]);
     
@@ -66,7 +66,7 @@ public function inscription(Request $request,Role $role){
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = date('YmdHi') . $file->getClientOriginalName();
-            $file->move(public_path('public/image'), $filename);
+            $file->move(public_path('image'), $filename);
             $user->image = $filename;
         }
     

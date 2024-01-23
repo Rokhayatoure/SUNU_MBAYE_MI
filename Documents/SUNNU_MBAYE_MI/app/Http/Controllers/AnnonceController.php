@@ -5,91 +5,98 @@ namespace App\Http\Controllers;
 use App\Models\Annonce;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AnnonceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function ajoutAnnonce(Request $request)
     {
-        $annonce = new Annonce([
-            'titre' => $request->titre,
-            'description' => $request->description,
-
-        ]);
+       
+        if (Auth::guard('api')->check()) {
+       
+            $user = Auth::guard('api')->user();
+            $annonce = new Annonce();
+            $annonce->titre = $request->titre;
+            $annonce->description = $request->description;
+            $annonce->users_id = $user->id;
+      
+            
+            if ($request->hasFile('images')) {
+                $file = $request->file('images');
+                $filename = date('YmdHi') . $file->getClientOriginalName();
+                $file->move(public_path('images'), $filename);
+                $annonce->images = $filename;
+            }
     
-        // Gérer l'upload de l'image
-        if ($request->hasFile('images')) {
-            $file = $request->file('image');
-            $filename = date('YmdHi') . $file->getClientOriginalName();
-            $file->move(public_path('images'), $filename);
-            $annonce->image = $filename;
-        }
+            
+            $annonce->save();
     
-        $annonce->save();
-    }
-
-
-    public function modifieAnnonce(Request $request ,$id)
-    {
-        $annonce= Annonce::find($id);
-        if (!$annonce) {
-            return response()->json(['message' => 'Annnonce  non trouvé'], 404);
+            return response()->json(['message' => 'Annonce ajoutée avec succès'], 201);
         }
-      $annonce->titre = $request->titre;
-        $annonce->description = $request->description;
-    // Gérer la mise à jour de l'image si elle est fournie
-    if ($request->hasFile('images')) {
-        $file = $request->file('image');
-        $filename = date('YmdHi') . $file->getClientOriginalName();
-        $file->move(public_path('images'), $filename);
-        $annonce->image = $filename;
+        else{
+            return response()->json(['message' => ' Veiller vous connecter dabord'], 201);
+        }
     }
 
-    $annonce->save();
 
-    return response()->json(['message' => 'Profil utilisateur mis à jour avec succès'], 200);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function supAnnonce($id)
+    public function modifierAnnonce(Request $request, $id)
     {
-        Annonce::find($id)->delete();
-    return response()->json(['message' => 'Annonce supprimé avec succès'], 200);
+        if (Auth::guard('api')->check()) {
+            $user = Auth::guard('api')->user();
+            $annonce = Annonce::find($id);
+    
+            if (!$annonce) {
+                return response()->json(['message' => 'Annonce non trouvée'], 404);
+            }
+    
+            // Vérifier si l'utilisateur est le propriétaire de l'annonce
+            if ($annonce->users_id !== $user->id) {
+                return response()->json(['message' => 'Vous n\'êtes pas autorisé à modifier cette annonce'], 403);
+            }
+    
+            // Mettre à jour les champs de l'annonce
+            $annonce->titre = $request->titre ?? $annonce->titre;
+            $annonce->description = $request->description ?? $annonce->description;
+    
+            // Gérer l'upload de la nouvelle image si fournie
+            if ($request->hasFile('images')) {
+                $file = $request->file('images');
+                $filename = date('YmdHi') . $file->getClientOriginalName();
+                $file->move(public_path('images'), $filename);
+                $annonce->images = $filename;
+            }
+    
+            // Enregistrer les modifications
+            $annonce->save();
+    
+            return response()->json(['message' => 'Annonce modifiée avec succès'], 200);
+        } else {
+            return response()->json(['message' => 'Veillez vous connecter d\'abord'], 401);
+        }
+    }
+    
+
+    public function listAnnonce(Request $request) 
+
+    {
+        $anonces=Annonce::all();
+        return response()->json(compact('anonces'), 200);
+    } 
+ 
+    public function voirPlus( $annonce_id)
+    {
+        if (Auth::guard('api')->check())
+        {
+            $annonce = Annonce::find($annonce_id);
+            return response()->json(compact('annonce'), 200);
+    
+
+        }
+        else{
+            return response()->json(['message' => ' Veiller vous connecter dabord'], 201);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Annonce $annonce)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Annonce $annonce)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Annonce $annonce)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Annonce $annonce)
-    {
-        //
-    }
+    
 }
