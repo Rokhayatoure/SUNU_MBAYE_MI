@@ -131,7 +131,12 @@ class UserController extends Controller
     
         $user->save();
     
-        return response()->json(['message' => 'Utilisateur ajouté avec succès'], 201);
+        return response()->json([
+            "status" => true,
+            "message" => "utilisateur connecter inscrit avec succes ",
+            
+            'user'=>$user
+        ]);
     }
     
 
@@ -263,7 +268,12 @@ public function updateUser(Request $request,$id)
 
     $user->save();
 
-    return response()->json(['message' => 'Profil utilisateur mis à jour avec succès'], 200);
+    return response()->json([
+        "status" => true,
+        "message" => "modifier avec success avec succes ",
+        
+        'user'=>$user
+    ]);
 }
 
 }

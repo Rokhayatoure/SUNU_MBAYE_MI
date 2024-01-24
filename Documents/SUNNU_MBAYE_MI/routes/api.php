@@ -52,7 +52,7 @@ Route::delete('/AfficherPanier', [PanierController::class, 'AfficherPanier']);
 
 
 //commender 
-Route::post('/effectuerCommande/{$produit_id}', [DetailCommendeController::class, 'effectuerCommande']);
+Route::post('/effectuerCommande/{$panier_id}', [DetailCommendeController::class, 'effectuerCommande']);
 Route::middleware('auth:api')->group( function (){
    
     Route::post('/AjoutCategorie', [CategorieController::class ,'AjoutCategorie']);

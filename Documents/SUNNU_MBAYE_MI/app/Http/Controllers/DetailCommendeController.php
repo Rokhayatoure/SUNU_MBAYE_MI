@@ -30,15 +30,13 @@ class DetailCommendeController extends Controller
         $commende->date_commende =Carbon::now()->format('d/m/Y');
         // Ajoutez chaque article du panier à la table de commande produit
         foreach( $panier as $item) {
-            $commendeProduit = new DetailCommende();
-            $commendeProduit->commende_id = $commende->id;
-            $commendeProduit->produit_id = $item->product_id;
-            // $commendeProduit->vendor_id = $item->vendor_id; // vous pouvez ajouter l'ID du vendeur si vous avez plusieurs vendeurs
-            $commendeProduit->color = $item->color;
-            $commendeProduit->size = $item->size;
-            $commendeProduit->quantite= $item->quantite;
-            $commendeProduit->prix= $item->prix;
-            $commendeProduit->save();
+         $commendeProduit = new DetailCommende();
+         $commendeProduit->commende_id = $commende->id;
+         $commendeProduit->produit_id = $item->product_id;
+        // $commendeProduit->vendor_id = $item->vendor_id; // vous pouvez ajouter l'ID du vendeur si vous avez plusieurs vendeurs
+         $commendeProduit->quantite= $item->quantite;
+        $commendeProduit->prix= $item->prix;
+        $commendeProduit->save();
 
     }
     // Supprimez tous les articles du panier de l'utilisateur après la création de la commande
@@ -46,6 +44,7 @@ class DetailCommendeController extends Controller
 
 
         $commende->save();
+        
        
 
 }
