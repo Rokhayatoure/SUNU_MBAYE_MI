@@ -10,7 +10,16 @@ class DetailCommende extends Model
     use HasFactory;
     protected $fillable = [
         'commende_id',
-        'produit_id'
+        'produit_id',
+           'nom',
+           'prenom',
+           'contact',
+           'prix',
+           'images',
+           'quantite',
+           'nom_produit',
+           'email'
+
         
     ];
     public function produit()

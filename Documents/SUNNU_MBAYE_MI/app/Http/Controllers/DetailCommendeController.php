@@ -36,7 +36,7 @@ class DetailCommendeController extends Controller
             // $commendeProduit->vendor_id = $item->vendor_id; // vous pouvez ajouter l'ID du vendeur si vous avez plusieurs vendeurs
             $commendeProduit->color = $item->color;
             $commendeProduit->size = $item->size;
-            $commendeProduit->quantiter= $item->quantiter;
+            $commendeProduit->quantite= $item->quantite;
             $commendeProduit->prix= $item->prix;
             $commendeProduit->save();
 

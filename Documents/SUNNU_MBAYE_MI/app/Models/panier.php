@@ -8,6 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class panier extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'produit_id',
+           'nom',
+           'prenom',
+           'contact',
+           'prix',
+           'images',
+           'quantite',
+           'nom_produit',
+           'email'
+
+        
+    ];
     public function produit()
     {
         return $this->belongsTo(Produit::class, 'produit_id');

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('prix');
             $table->string('images');
             $table->string('quanite');
-            $table->string('nom_prouit');
+            $table->string('nom_produit');
             $table->timestamps();
         });
     }

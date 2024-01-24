@@ -23,6 +23,8 @@ use Spatie\LaravelIgnition\Solutions\SolutionProviders\RunningLaravelDuskInProdu
 |
 */
 //Utilisateur inscription auth sup deconnection
+Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
+
 Route::post('/role', [UserController::class ,'ajouterRole']);
 Route::post('inscrirption', [UserController::class ,'inscription']);
 Route::post('login', [UserController::class ,'login']);
@@ -45,15 +47,14 @@ Route::put('updateproduit/{id}', [ProduitController::class ,'updateproduit']);
 Route::put('supProduit/{id}', [ProduitController::class ,'supProduit']);
 // Route::delete('/listeCategorie', [ProduitController::class ,'listeCategorie']);
 //pagner
-Route::delete('/AjoutPanier/{produit_id}', [PanierController::class, 'AjoutPanier']);
+Route::POST('/AjoutPanier/{produit_id}', [PanierController::class, 'AjoutPanier']);
 Route::delete('/AfficherPanier', [PanierController::class, 'AfficherPanier']);
 
 
 //commender 
-Route::post(' /effectuerCommande/{$produit_id}', [DetailCommendeController::class, 'effectuerCommande']);
+Route::post('/effectuerCommande/{$produit_id}', [DetailCommendeController::class, 'effectuerCommande']);
 Route::middleware('auth:api')->group( function (){
    
-    Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
     Route::post('/AjoutCategorie', [CategorieController::class ,'AjoutCategorie']);
 
     

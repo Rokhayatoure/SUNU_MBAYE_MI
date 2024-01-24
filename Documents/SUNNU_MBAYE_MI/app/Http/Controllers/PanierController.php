@@ -16,21 +16,31 @@ class PanierController extends Controller
      */
     public function AjoutPanier(Request $request,$produit_id)
     {
+        if (Auth::guard('api')->check()){
+
+      
         $user = Auth::guard('api')->user();
         $produit =Produit::find($produit_id);
         $panier=new Panier;
         $panier->email=$user->email;
-        $panier->name=$user->name;
+        $panier->nom=$user->nom;
         $panier->prenom=$user->prenom;
-        $panier->users_id=$user->users_id;
+        $panier->user_id=auth()->guard('api')->user()->id;
         $panier->contact=$user->contact;
-       
-
-        $panier->prix=$produit->prix * $request->quantiter;
+        $panier->prix=$user->prix;
+        $panier->quantite= $produit->quantite;
+        $panier->prix=$produit->prix * $request->quantite;
         $panier->nom_produit=$produit->nom_produit;
         $panier->images=$produit->images;
-        $panier->quantiter= $produit->quantiter;
-        $panier->save();
+      
+        $panier->produit_id= $produit->id;
+        // dd($panier);
+
+
+        $panier->save(); 
+    }   else{
+        return response()->json(['message' => ' Veiller vous connecter dabord'], 201);
+    }
         return response()->json([
             'status' => true,
             'panier' => $panier

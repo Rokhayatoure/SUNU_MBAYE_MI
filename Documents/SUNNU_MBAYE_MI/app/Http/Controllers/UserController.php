@@ -84,49 +84,31 @@ class UserController extends Controller
      * )
      */
 
-    
-public function inscription(Request $request,Role $role){
-
-
-    $validator = Validator::make($request->all(), [
-        'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
-        'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
-        'email' => ['required', 'email', 'unique:users,email'],
-        'adresse' => ['required', 'string'],
-        'contact' => ['required', 'string'],
-        'date_naissance' => ['required'],
-       
-    ]);
-    
-    if ($validator->fails()) {
-        return response()->json(['errors' => $validator->errors()], 422);
-    }
-    
-    if ($request->role === 'revendeur') {
-        $role = Role::where('nom_role', 'revendeur')->first();
-        $user = new User([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'adresse' => $request->adresse,
-            'date_naissance' => $request->date_naissance,
-            'contact' => $request->contact,
-            'sexe' => $request->sexe,
-            'role_id' => $role->id,
+     public function inscription(Request $request, Role $role) {
+        $validator = Validator::make($request->all(), [
+            'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
+            'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'adresse' => ['required', 'string'],
+            'contact' => ['required', 'string'],
+            'date_naissance' => ['required'],
+            // "password" => "required|min:5|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/|confirmed"
         ]);
     
-        // Gérer l'upload de l'image
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = date('YmdHi') . $file->getClientOriginalName();
-            $file->move(public_path('image'), $filename);
-            $user->image = $filename;
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
     
-        $user->save();
-    } else {
-        $role = Role::where('nom_role', 'agriculteur')->first();
+        if ($request->password != $request->password_validation) {
+            return response()->json(['errors' => ['password' => ['Le mot de passe ne respecte pas les critères de validation.']]], 422);
+        }
+    
+        if ($request->role === 'revendeur') {
+            $role = Role::where('nom_role', 'revendeur')->first();
+        } else {
+            $role = Role::where('nom_role', 'agriculteur')->first();
+        }
+    
         $user = new User([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
@@ -148,11 +130,10 @@ public function inscription(Request $request,Role $role){
         }
     
         $user->save();
+    
+        return response()->json(['message' => 'Utilisateur ajouté avec succès'], 201);
     }
     
-    return response()->json(['message' => 'Utilisateur ajouté avec succès'], 201);
-}
-
 
  /**
      * @OA\Post(
@@ -186,7 +167,7 @@ public function inscription(Request $request,Role $role){
         // data validate 
         $validator = Validator::make($request->all(), [
             "email" => "required|email",
-            "password" => "required|min:5|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/|confirmed"
+            // "password" => "required|min:5|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/|confirmed"
 
         ]);
         
