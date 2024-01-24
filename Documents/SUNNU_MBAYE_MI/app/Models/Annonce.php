@@ -12,7 +12,7 @@ class Annonce extends Model
         'titre',
         'description',
         'images',
-        'users_id'
+        'user_id'
     ];
 
 }

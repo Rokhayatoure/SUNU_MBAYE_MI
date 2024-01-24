@@ -33,9 +33,9 @@ class ProduitController extends Controller
             $user = Auth::guard('api')->user();
             $produit = new Produit();
             $produit->nom_produit = $request->nom_produit;
-            $produit->quantiter = $request->quantiter;
+            $produit->quantite = $request->quantite;
             $produit->prix = $request->prix;
-            $produit->users_id = $user->id; // Récupérer l'id de l'utilisateur connecté
+            $produit->user_id = $user->id; // Récupérer l'id de l'utilisateur connecté
             $produit->categorie_id = $request->categorie_id;
           
          

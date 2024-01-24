@@ -11,13 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('annonces', function (Blueprint $table) {
+        Schema::create('paniers', function (Blueprint $table) {
             $table->id();
-            $table->string('titre');
-            $table->string('description');
-            $table->string('images')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('produit_id');
+            $table->foreign('produit_id')->references('id')->on('produits')->onDelete('cascade');
+            $table->string('prenom');
+            $table->string('nom');
+            $table->string('contact');
+            $table->string('email');
+            $table->string('prix');
+            $table->string('images');
+            $table->string('quanite');
+            $table->string('nom_prouit');
             $table->timestamps();
         });
     }
@@ -27,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('annonces');
+        Schema::dropIfExists('paniers');
     }
 };

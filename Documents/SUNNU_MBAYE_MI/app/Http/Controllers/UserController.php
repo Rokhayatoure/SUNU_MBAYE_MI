@@ -10,12 +10,42 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use OpenAi\Annotations as OA;
 
+/**
+ * @OA\Info(
+ *     title="Documentation du projet SUNNU_MBAYE_MI",
+ *     version="1.0.0",
+ *     description="Documentation de l'API du projet SUNNU_MBAYE_MI",
+ *     @OA\PathItem(path="/User")
+ * )
+ */
 
 
 
 class UserController extends Controller
 {
+         /**
+     * @OA\Post(
+     *     path="/api/role",
+     *     summary="Ajouter un rôle",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="nom_role", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Rôle ajouté avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Rôle ajouté avec succès"),
+     *             @OA\Property(property="role", type="object", ref="#/components/schemas/Role")
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Erreur de validation")
+     * )
+     */
     public function ajouterRole(Request $request)
     {
         $request->validate([
@@ -29,13 +59,37 @@ class UserController extends Controller
         return response()->json(['message' => 'Rôle ajouté avec succès', 'role' => $role], 201);
     }
 
+  /**
+     * @OA\Post(
+     *     path="/api/inscription",
+     *     summary="inscription",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="nom", type="string"),
+     *             @OA\Property(property="prenom", type="string"),
+     *             @OA\Property(property="email", type="string", format="email"),
+     *             @OA\Property(property="password", type="string"),
+     *             @OA\Property(property="adresse", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+ *         response=201,
+ *         description="Utilisateur ajouté avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Utilisateur ajouté avec succès")
+ *         )
+ *     ),
+     *     @OA\Response(response="422", description="Erreur de validation")
+     * )
+     */
 
-    //inscription
+    
 public function inscription(Request $request,Role $role){
 
 
     $validator = Validator::make($request->all(), [
-        'name' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
+        'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
         'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
         'email' => ['required', 'email', 'unique:users,email'],
         'adresse' => ['required', 'string'],
@@ -51,7 +105,7 @@ public function inscription(Request $request,Role $role){
     if ($request->role === 'revendeur') {
         $role = Role::where('nom_role', 'revendeur')->first();
         $user = new User([
-            'name' => $request->nom,
+            'nom' => $request->nom,
             'prenom' => $request->prenom,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -74,7 +128,7 @@ public function inscription(Request $request,Role $role){
     } else {
         $role = Role::where('nom_role', 'agriculteur')->first();
         $user = new User([
-            'name' => $request->nom,
+            'nom' => $request->nom,
             'prenom' => $request->prenom,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -100,15 +154,39 @@ public function inscription(Request $request,Role $role){
 }
 
 
-
+ /**
+     * @OA\Post(
+     *     path="/api/login",
+     *     summary="Connecter un utilisateur",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string", format="email"),
+     *             @OA\Property(property="password", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Utilisateur connecté avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Utilisateur connecté avec succès"),
+     *             @OA\Property(property="token", type="string"),
+     *             @OA\Property(property="user", type="object", ref="#/components/schemas/User")
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Détails invalides")
+     * )
+     */
 // loging
 
   public function login(Request $request)
     {
 
-        // data validation
+        // data validate 
         $validator = Validator::make($request->all(), [
             "email" => "required|email",
+            "password" => "required|min:5|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/|confirmed"
 
         ]);
         
@@ -138,7 +216,20 @@ public function inscription(Request $request,Role $role){
     }
 
 
-
+ /**
+     * @OA\Post(
+     *     path="/api/logout",
+     *     summary="Déconnecter un utilisateur",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Utilisateur déconnecté avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Utilisateur déconnecté avec succès")
+     *         )
+     *     )
+     * )
+     */
 
     // logout un user
     public function logout(Request $request)
@@ -150,6 +241,18 @@ public function inscription(Request $request,Role $role){
     ]);
 }
 
+
+
+
+/**
+     * @OA\Post(
+     *     path="/api/updateUser/{id}",
+     *     summary="Mettre à jour le profil d'un utilisateur",
+     *     @OA\Parameter(
+     *      name="id",
+     *  * )
+     */
+    
 // update
 public function updateUser(Request $request,$id)
 {

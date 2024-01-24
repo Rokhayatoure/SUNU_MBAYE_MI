@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string("nom_produit");
             $table->string("images");
-            $table->string("quantiter");
+            $table->string("quantite");
             $table->string("prix");
-            $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('categorie_id');
             $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('cascade');
             

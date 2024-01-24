@@ -14,9 +14,9 @@ class Produit extends Model
     protected $fillable = [
         'id',
         'nom_produit',
-        'quantiter',
+        'quantite',
         'images',
-        'users_id',
+        'user_id',
         'prix',
         'categorie_id'
     ];
@@ -30,7 +30,7 @@ class Produit extends Model
     }
     public function detailCommende()
     {
-        return $this->hasMany(Detail_Commende::class);
+        return $this->hasMany(DetailCommende::class);
     }
 
 }

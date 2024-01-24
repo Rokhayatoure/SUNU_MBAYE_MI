@@ -9,24 +9,30 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('detail_commendes', function (Blueprint $table) {
+        Schema::create('paniers', function (Blueprint $table) {
             $table->id();
-             
-        $table->unsignedBigInteger('produit_id');
-        $table->foreign('produit_id')->references('id')->on('produits')->onDelete('cascade');
-        $table->unsignedBigInteger('commende_id');
-        $table->foreign('commende_id')->references('id')->on('commendes')->onDelete('cascade');
-        $table->timestamps();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('produit_id');
+            $table->foreign('produit_id')->references('id')->on('produits')->onDelete('cascade');
+            $table->string('prenom');
+            $table->string('nom');
+            $table->string('contact');
+            $table->string('email');
+            $table->string('prix');
+            $table->string('images');
+            $table->string('quanite');
+            $table->string('nom_prouit');
+            $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    
+    public function down()
     {
-        Schema::dropIfExists('detail_commendes');
+        Schema::dropIfExists('paniers');
     }
+    
+    
 };

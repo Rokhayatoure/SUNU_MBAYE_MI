@@ -15,7 +15,7 @@ class Commende extends Model
     ];
     public function detailCommende()
     {
-        return $this->hasMany(Detail_Commende::class);
+        return $this->hasMany(DetailCommende::class);
     }
 
 }

@@ -45,6 +45,7 @@ public function AjoutCategorie(Request $request)
     // }
 
     // Créer une nouvelle instance de la catégorie
+    
     $categorie = new Categorie([
         'nom_categories' => $request->nom_categories,
     ]);
