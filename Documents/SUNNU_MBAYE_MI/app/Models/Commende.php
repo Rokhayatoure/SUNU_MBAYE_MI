@@ -9,9 +9,16 @@ class Commende extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'numero_commende',
-        'livraison'
-        
+        'produit_id',
+        'nom',
+        'prenom',
+        'contact',
+        'prix',
+        'images',
+        'quantite',
+        'nom_produit',
+        'email',
+        'user_id'
     ];
     public function detailCommende()
     {

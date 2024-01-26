@@ -33,8 +33,8 @@ class ProduitController extends Controller
             $user = Auth::guard('api')->user();
             $produit = new Produit();
             $produit->nom_produit = $request->nom_produit;
-            $produit->quantite = $request->quantite;
-            $produit->prix = $request->prix;
+            $produit->quantite = intval($request->quantite);
+            $produit->prix = intval($request->prix);
             $produit->user_id = $user->id; // Récupérer l'id de l'utilisateur connecté
             $produit->categorie_id = $request->categorie_id;
           
@@ -75,7 +75,7 @@ class ProduitController extends Controller
             }
         $produit->nom_produit = $request->nom_produit;
         $produit->quantiter = $request->quantiter;
-        $produit->prix = $request->prix;
+        $produit->prix = intval($request->prix);
         $produit->user_id = auth()->id(); // Récupérer l'id de l'utilisateur connecté
         $produit->categorie_id = $request->categorie_id;
         if ($request->hasFile('images')) {

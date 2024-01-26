@@ -92,7 +92,8 @@ class UserController extends Controller
             'adresse' => ['required', 'string'],
             'contact' => ['required', 'string'],
             'date_naissance' => ['required'],
-            // "password" => "required|min:5|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/|confirmed"
+            //  'role_id' => ['required','integer', Role::exists('roles','id')],
+            // "password" => "required|min:4|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,}$"
         ]);
     
         if ($validator->fails()) {
@@ -102,13 +103,6 @@ class UserController extends Controller
         if ($request->password != $request->password_validation) {
             return response()->json(['errors' => ['password' => ['Le mot de passe ne respecte pas les critères de validation.']]], 422);
         }
-    
-        if ($request->role === 'revendeur') {
-            $role = Role::where('nom_role', 'revendeur')->first();
-        } else {
-            $role = Role::where('nom_role', 'agriculteur')->first();
-        }
-    
         $user = new User([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
@@ -118,7 +112,8 @@ class UserController extends Controller
             'date_naissance' => $request->date_naissance,
             'contact' => $request->contact,
             'sexe' => $request->sexe,
-            'role_id' => $role->id,
+            'role_id' => $request->role_id
+          
         ]);
     
         // Gérer l'upload de l'image
@@ -134,7 +129,6 @@ class UserController extends Controller
         return response()->json([
             "status" => true,
             "message" => "utilisateur connecter inscrit avec succes ",
-            
             'user'=>$user
         ]);
     }

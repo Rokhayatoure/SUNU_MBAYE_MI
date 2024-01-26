@@ -18,7 +18,8 @@ class DetailCommende extends Model
            'images',
            'quantite',
            'nom_produit',
-           'email'
+           'email',
+           'user_id'
 
         
     ];
@@ -30,5 +31,9 @@ class DetailCommende extends Model
     public function commende()
     {
         return $this->belongsTo(Commende::class, 'commende_id');
+    }
+    public function User()
+    {
+        return $this->belongsTo(Commende::class, 'user_id');
     }
 }

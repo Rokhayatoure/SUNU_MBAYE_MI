@@ -9,9 +9,47 @@ use Illuminate\Support\Facades\Auth;
 
 class AnnonceController extends Controller
 {
+
+
+/**
+ * Ajouter une nouvelle annonce.
+ *
+ * @OA\Post(
+ *     path="/api/ajoutAnnonce",
+ *     summary="Ajouter une annonce",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 required={"titre", "description", "images"},
+ *                 @OA\Property(property="titre", type="string"),
+ *                 @OA\Property(property="description", type="string"),
+ *                 @OA\Property(property="images", type="string", format="binary")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Annonce ajoutée avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Annonce ajoutée avec succès"),
+ *             @OA\Property(property="annonce", type="object", ref="#/components/schemas/Annonce")
+ *         )
+ *     ),
+ *     @OA\Response(response=401, description="Non autorisé"),
+ *     @OA\Response(response=422, description="Erreur de validation")
+ * )
+ */
+
+
    
     public function ajoutAnnonce(Request $request)
     {
+
+
+
        
         if (Auth::guard('api')->check()) {
        
@@ -19,7 +57,7 @@ class AnnonceController extends Controller
             $annonce = new Annonce();
             $annonce->titre = $request->titre;
             $annonce->description = $request->description;
-            $annonce->users_id = $user->id;
+            $annonce->user_id = $user->id;
       
             
             if ($request->hasFile('images')) {
@@ -32,13 +70,59 @@ class AnnonceController extends Controller
             
             $annonce->save();
     
-            return response()->json(['message' => 'Annonce ajoutée avec succès'], 201);
+            return response()->json([
+                "status" => true,
+                "message" => "utilisateur connecter inscrit avec succes ",
+                'annonce'=>$annonce
+            ]);
         }
         else{
-            return response()->json(['message' => ' Veiller vous connecter dabord'], 201);
+            return response()->json([
+                "status" => false,
+                "message" => "Veiller vous connecter dabord "
+            ]);
         }
     }
 
+
+ /**
+     * Modifier une annonce existante.
+     *
+     * @OA\Put(
+     *     path="/api/modifierAnnonce/{id}",
+     *     summary="Modifier une annonce",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID de l'annonce à modifier",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(property="titre", type="string"),
+     *                 @OA\Property(property="description", type="string"),
+     *                 @OA\Property(property="images", type="string", format="binary")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Annonce modifiée avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Annonce modifiée avec succès"),
+     *             @OA\Property(property="annonce", type="object", ref="#/components/schemas/Annonce")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Non autorisé"),
+     *     @OA\Response(response=404, description="Annonce non trouvée"),
+     *     @OA\Response(response=422, description="Erreur de validation")
+     * )
+     */
 
     public function modifierAnnonce(Request $request, $id)
     {
@@ -47,13 +131,19 @@ class AnnonceController extends Controller
             $annonce = Annonce::find($id);
     
             if (!$annonce) {
-                return response()->json(['message' => 'Annonce non trouvée'], 404);
+                return response()->json([
+                    "status" => false,
+                    "message" => "annonce non trouver "
+                ]);
             }
     
             // Vérifier si l'utilisateur est le propriétaire de l'annonce
-            if ($annonce->users_id !== $user->id) {
-                return response()->json(['message' => 'Vous n\'êtes pas autorisé à modifier cette annonce'], 403);
-            }
+            // if ($annonce->users_id !== $user->id) {
+            //      return response()->json([
+            //         "status" => false,
+            //         "message" => "vous n'avez pas le droit de modifier cette annonce "
+            //     ]);
+            // }
     
             // Mettre à jour les champs de l'annonce
             $annonce->titre = $request->titre ?? $annonce->titre;
@@ -70,21 +160,42 @@ class AnnonceController extends Controller
             // Enregistrer les modifications
             $annonce->save();
     
-            return response()->json(['message' => 'Annonce modifiée avec succès'], 200);
+            return response()->json([
+                "status" => true,
+                "message" => "annonce modifier  avec succes ",
+                'annonce'=>$annonce
+            ]);
         } else {
             return response()->json(['message' => 'Veillez vous connecter d\'abord'], 401);
         }
     }
     
-
+/**
+     * Liste de toutes les annonces.
+     *
+     * @OA\Get(
+     *     path="/api/listAnnonce",
+     *     summary="Liste de toutes les annonces",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Liste des annonces",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="anonces", type="array", @OA\Items(ref="#/components/schemas/Annonce"))
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Non autorisé")
+     * )
+     */
     public function listAnnonce(Request $request) 
 
     {
         $anonces=Annonce::all();
         return response()->json(compact('anonces'), 200);
     } 
- 
-    public function voirPlus( $annonce_id)
+
+
+
+ public function voirPlus( $annonce_id)
     {
         if (Auth::guard('api')->check())
         {
@@ -97,6 +208,58 @@ class AnnonceController extends Controller
             return response()->json(['message' => ' Veiller vous connecter dabord'], 201);
         }
     }
+/**
+ * Supprimer une annonce.
+ *
+ * @OA\Delete(
+ *     path="/api/supAnnonce/{id}",
+ *     summary="Supprimer une annonce",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID de l'annonce à supprimer",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Annonce supprimée avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Annonce supprimée avec succès")
+ *         )
+ *     ),
+ *     @OA\Response(response=404, description="Annonce non trouvée"),
+ *     @OA\Response(response=403, description="Vous n'êtes pas autorisé à supprimer cette annonce")
+ * )
+ */
+public function supprimerAnnonce($id)
+{
+    if (Auth::guard('api')->check()) {
+        $user = Auth::guard('api')->user();
+        $annonce = Annonce::find($id);
+
+        if (!$annonce) {
+            return response()->json(['message' => 'Annonce non trouvée'], 404);
+        }
+
+        // Vérifier si l'utilisateur est le propriétaire de l'annonce
+        // if ($annonce->users_id !== $user->id) {
+        //     return response()->json(['message' => 'Vous n\'êtes pas autorisé à supprimer cette annonce'], 403);
+        // }
+
+        // Supprimer l'annonce
+        $annonce->delete();
+
+        return response()->json([
+            "status" => true,
+            "message" => "annonce suprimer  avec succes ",
+            'annonce'=>$annonce
+        ]);
+    } else {
+        return response()->json(['message' => 'Veillez vous connecter d\'abord'], 401);
+    }
+}
 
     
 }

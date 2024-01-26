@@ -13,37 +13,39 @@ use Illuminate\Support\Facades\Auth;
 
 class DetailCommendeController extends Controller
 {
-    public function effectuerCommande(Request $request ,Produit $produit_id)
+    public function effectuerCommande()
     {
         // Récupérez le produit par son ID
-        $user = Auth::guard('api')->user();
-        $panier = panier::where('user_id', $user->id)->get();
-        if ( $panier->isEmpty()) 
-        {
-            return response()->json(['message' => ' votre panier est vide'], 201);
+        if (!Auth::guard('api')->check()) {
+            return response()->json(['errors' => 'veilleir vous connecter avant de fair cette action.'], 422);
         }
+        $user = Auth::guard('api')->user();
+    // dd($user);
+        $panier = panier::where('user_id',auth()->guard('api')->user()->id)->get();
+    
+        // if ( $panier->isEmpty()) 
+        // {
+        //     return response()->json(['message' => ' votre panier est vide'], 201);
+        // }
         $commende = new Commende();
-        $commende->livraison = 'En_cours';
-        $commende->users_id= $user->id;
-        $commende->name =$user->name;
+        $commende->livraison = 'En_court';
+        $commende->user_id= auth()->guard('api')->user()->id;
+        $commende->nom=$user->nom;
         $commende->prenom =$user->prenom;
-        $commende->date_commende =Carbon::now()->format('d/m/Y');
-        // Ajoutez chaque article du panier à la table de commande produit
-        foreach( $panier as $item) {
-         $commendeProduit = new DetailCommende();
-         $commendeProduit->commende_id = $commende->id;
-         $commendeProduit->produit_id = $item->product_id;
-        // $commendeProduit->vendor_id = $item->vendor_id; // vous pouvez ajouter l'ID du vendeur si vous avez plusieurs vendeurs
-         $commendeProduit->quantite= $item->quantite;
-        $commendeProduit->prix= $item->prix;
-        $commendeProduit->save();
-
-    }
+        $cptQ = 0;
+        $cptC = 0;
+      // Ajoutez chaque article du panier à la table de commande produit
+      foreach( $panier as $item) {
+       $cptQ+= $item->quantite;
+       $cptC+=$item->prix;
+    //    $commende->email= $item->email;
+   }
+   $commende->quantite =$cptQ;
+   $commende->prix =$cptC;
+//    dd($panier);
     // Supprimez tous les articles du panier de l'utilisateur après la création de la commande
     panier::where('user_id', $user->id)->delete();
-
-
-        $commende->save();
+    $commende->save();
         
        
 

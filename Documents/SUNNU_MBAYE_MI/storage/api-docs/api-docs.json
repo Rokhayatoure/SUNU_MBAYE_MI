@@ -6,6 +6,434 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/ajoutAnnonce": {
+            "post": {
+                "summary": "Ajouter une annonce",
+                "description": "Ajouter une nouvelle annonce.",
+                "operationId": "181806a34c74c53117fea52fcd82acbe",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "titre",
+                                    "description",
+                                    "images"
+                                ],
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Annonce ajoutée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Annonce ajoutée avec succès"
+                                        },
+                                        "annonce": {
+                                            "$ref": "#/components/schemas/Annonce"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/modifierAnnonce/{id}": {
+            "put": {
+                "summary": "Modifier une annonce",
+                "description": "Modifier une annonce existante.",
+                "operationId": "45b5207fc51dd1fea9645c25e8f37419",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'annonce à modifier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Annonce modifiée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Annonce modifiée avec succès"
+                                        },
+                                        "annonce": {
+                                            "$ref": "#/components/schemas/Annonce"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    },
+                    "404": {
+                        "description": "Annonce non trouvée"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/listAnnonce": {
+            "get": {
+                "summary": "Liste de toutes les annonces",
+                "description": "Liste de toutes les annonces.",
+                "operationId": "13f2f0bd645aa23cff7899e7c45cdcde",
+                "responses": {
+                    "200": {
+                        "description": "Liste des annonces",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "anonces": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Annonce"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    }
+                }
+            }
+        },
+        "/api/supAnnonce/{id}": {
+            "delete": {
+                "summary": "Supprimer une annonce",
+                "description": "Supprimer une annonce.",
+                "operationId": "e6b7e06cb55bcfb93d04bd8b382c201d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'annonce à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Annonce supprimée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Annonce supprimée avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Annonce non trouvée"
+                    },
+                    "403": {
+                        "description": "Vous n'êtes pas autorisé à supprimer cette annonce"
+                    }
+                }
+            }
+        },
+        "/api/listeCategorie": {
+            "get": {
+                "summary": "Liste de toutes les catégories",
+                "description": "Liste toutes les catégories.",
+                "operationId": "1b5bbfda02b549f42ad1aff814f9c7f9",
+                "responses": {
+                    "200": {
+                        "description": "Liste des catégories",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "categorie": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Categorie"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    }
+                }
+            }
+        },
+        "/api/voiplusCategorie/{id}": {
+            "get": {
+                "summary": "Détails d'une catégorie",
+                "description": "Afficher les détails d'une catégorie.",
+                "operationId": "d2f2a07544a4cb4ccaa560f13fbd63bc",
+                "parameters": [
+                    {
+                        "name": "categori_id",
+                        "in": "path",
+                        "description": "ID de la catégorie à afficher",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de la catégorie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "categorie": {
+                                            "$ref": "#/components/schemas/Categorie"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée"
+                    }
+                }
+            }
+        },
+        "/api/AjoutCategorie": {
+            "post": {
+                "summary": "Ajouter une catégorie",
+                "description": "Ajouter une nouvelle catégorie.",
+                "operationId": "8e6f3dac358c84ecbc6d9b71179bd598",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nom_categories": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Catégorie ajoutée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Catégorie ajoutée avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    }
+                }
+            }
+        },
+        "/api/modifieCategorie/{id}": {
+            "put": {
+                "summary": "Modifier une catégorie",
+                "description": "Modifier une catégorie existante.",
+                "operationId": "865ac9f0c75b36aa7f51300674f6513e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la catégorie à modifier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nom_categories": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Catégorie modifiée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Catégorie modifiée avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée"
+                    }
+                }
+            }
+        },
+        "/api/supCategorie/{id}": {
+            "delete": {
+                "summary": "Supprimer une catégorie",
+                "description": "Supprimer une catégorie.",
+                "operationId": "a1e7e68092878b5fd5d15063c05f9de2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la catégorie à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Catégorie supprimée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Catégorie supprimée avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée"
+                    }
+                }
+            }
+        },
         "/api/role": {
             "post": {
                 "summary": "Ajouter un rôle",

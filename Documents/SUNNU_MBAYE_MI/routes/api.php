@@ -32,8 +32,8 @@ Route::post('logout', [UserController::class ,'logout']);
 Route::put('/updateUser/{id}',[UserController::class ,'updateUser'] );
 //anonce
 Route::post('/ajoutAnnonce', [AnnonceController::class ,'ajoutAnnonce']);
-Route::put('/modifierAnnonce/{id}', [AnnonceController::class ,'modifierAnnonc']);
-Route::delete('/supAnnonce/{id}', [AnnonceController::class ,'supAnnonce']);
+Route::put('/modifierAnnonce/{id}',[AnnonceController::class ,'modifierAnnonce']);
+Route::delete('/supAnnonce/{id}', [AnnonceController::class ,'supprimerAnnonce']);
 Route::get('/listAnnonce', [AnnonceController::class ,'listAnnonce']);
 Route::get('/voirPlus/{annonce_id}', [AnnonceController::class ,'voirPlus']);
 //categorie
@@ -48,18 +48,27 @@ Route::put('supProduit/{id}', [ProduitController::class ,'supProduit']);
 // Route::delete('/listeCategorie', [ProduitController::class ,'listeCategorie']);
 //pagner
 Route::POST('/AjoutPanier/{produit_id}', [PanierController::class, 'AjoutPanier']);
-Route::delete('/AfficherPanier', [PanierController::class, 'AfficherPanier']);
+Route::get('/AfficherPanier', [PanierController::class, 'AfficherPanier']);
+Route::delete('/viderPanier/{produit_id}', [PanierController::class, 'viderPanier']);
+Route::delete('/validerPanier/{panier_id}', [PanierController::class, 'validerPanier']);
 
 
 //commender 
-Route::post('/effectuerCommande/{$panier_id}', [DetailCommendeController::class, 'effectuerCommande']);
+Route::post('/effectuerCommande', [DetailCommendeController::class, 'effectuerCommande']);
 Route::middleware('auth:api')->group( function (){
    
     Route::post('/AjoutCategorie', [CategorieController::class ,'AjoutCategorie']);
+    
 
     
 });
+Route::middleware(['auth','nom_role:'])->group(function () {
 
+    // Route::post('/AjoutCategorie', [CategorieController::class ,'AjoutCategorie']);
+});
+Route::middleware(['auth','nom_role:admin'])->group(function () {
+
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
