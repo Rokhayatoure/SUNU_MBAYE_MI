@@ -55,6 +55,11 @@ Route::delete('/validerPanier/{panier_id}', [PanierController::class, 'validerPa
 
 //commender 
 Route::post('/effectuerCommande', [DetailCommendeController::class, 'effectuerCommande']);
+Route::get('/AfficheCommende', [DetailCommendeController::class, 'AfficheCommende']);
+Route::get('/voirplus/{commende_id}', [DetailCommendeController::class, 'voirplus']);
+Route::delete('/suprimmerCommende/{commende_id}', [DetailCommendeController::class, 'suprimmerCommende']);
+
+
 Route::middleware('auth:api')->group( function (){
    
     Route::post('/AjoutCategorie', [CategorieController::class ,'AjoutCategorie']);

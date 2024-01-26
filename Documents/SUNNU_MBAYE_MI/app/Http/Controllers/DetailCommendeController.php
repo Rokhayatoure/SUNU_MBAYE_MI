@@ -20,13 +20,9 @@ class DetailCommendeController extends Controller
             return response()->json(['errors' => 'veilleir vous connecter avant de fair cette action.'], 422);
         }
         $user = Auth::guard('api')->user();
-    // dd($user);
+
         $panier = panier::where('user_id',auth()->guard('api')->user()->id)->get();
     
-        // if ( $panier->isEmpty()) 
-        // {
-        //     return response()->json(['message' => ' votre panier est vide'], 201);
-        // }
         $commende = new Commende();
         $commende->livraison = 'En_court';
         $commende->user_id= auth()->guard('api')->user()->id;
@@ -38,27 +34,48 @@ class DetailCommendeController extends Controller
       foreach( $panier as $item) {
        $cptQ+= $item->quantite;
        $cptC+=$item->prix;
-    //    $commende->email= $item->email;
+   
    }
    $commende->quantite =$cptQ;
    $commende->prix =$cptC;
-//    dd($panier);
+
     // Supprimez tous les articles du panier de l'utilisateur après la création de la commande
     panier::where('user_id', $user->id)->delete();
     $commende->save();
-        
-       
+        }
 
-}
-private function Calculepanier($panier)
-{
-    $total = 0;
 
-    foreach ($panier as $item) {
-        $total +=   $item->prix* $item->quantite;
+   public function AfficheCommende ()
+    {
+        $id = Auth::guard('api')->user()->id;
+        $commende = Commende::where('user_id', $id)->get();
+        return response()->json(compact('commende'), 200);
     }
 
-    return $total;
-}
 
-}
+
+    public function voirPlus( $commende_id)
+    {
+        if (Auth::guard('api')->check())
+        {
+            $commende = Commende::find($commende_id);
+            return response()->json(compact('commende'), 200);
+    
+
+        }
+        else{
+            return response()->json(['message' => ' Veiller vous connecter dabord'], 201);
+        }
+    }
+    public function suprimmerCommende($commende_id)
+    {
+        if(!Auth::guard('api')->check()){
+            return response()->json(['message' => 'veiller vouss connecter avant de faire cette action'], 403);
+
+        }
+        Commende::find($commende_id)->delete();
+        return response()->json(['message' => 'commende supprimé avec succès'], 200);
+    }
+    }
+
+

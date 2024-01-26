@@ -36,10 +36,6 @@ class CategorieController extends Controller
       
     }
 
-
-
-
-    
     /**
      * Afficher les détails d'une catégorie.
      *
@@ -203,11 +199,7 @@ if ($user->role->nom_role !== $requiredRole) {
     return response()->json(['message' => 'Catégorie modifiée avec succès'], 200);
 
 }
-
-
-
-
-    /**
+/**
      * Supprimer une catégorie.
      *
      * @OA\Delete(

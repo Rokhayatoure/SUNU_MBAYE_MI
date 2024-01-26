@@ -137,15 +137,7 @@ class AnnonceController extends Controller
                 ]);
             }
     
-            // Vérifier si l'utilisateur est le propriétaire de l'annonce
-            // if ($annonce->users_id !== $user->id) {
-            //      return response()->json([
-            //         "status" => false,
-            //         "message" => "vous n'avez pas le droit de modifier cette annonce "
-            //     ]);
-            // }
-    
-            // Mettre à jour les champs de l'annonce
+           
             $annonce->titre = $request->titre ?? $annonce->titre;
             $annonce->description = $request->description ?? $annonce->description;
     

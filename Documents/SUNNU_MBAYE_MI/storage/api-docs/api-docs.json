@@ -434,6 +434,195 @@
                 }
             }
         },
+        "/api/produits": {
+            "get": {
+                "summary": "Liste des produits",
+                "operationId": "eea3d0e160512645efde4d04355421be",
+                "responses": {
+                    "200": {
+                        "description": "Renvoie la liste de tous les produits."
+                    }
+                }
+            }
+        },
+        "/api/AjoutProduit": {
+            "post": {
+                "summary": "Ajoute un nouveau produit",
+                "operationId": "db7b5752f84b4c611aa52bedbbf74945",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "nom_produit": {
+                                        "type": "string"
+                                    },
+                                    "quantite": {
+                                        "type": "integer"
+                                    },
+                                    "prix": {
+                                        "type": "integer"
+                                    },
+                                    "categorie_id": {
+                                        "type": "integer"
+                                    },
+                                    "images": {
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Produit ajouté avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "produit": {
+                                            "$ref": "#/components/schemas/Produit"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    },
+                    "422": {
+                        "description": "Erreurs de validation"
+                    }
+                }
+            }
+        },
+        "/api/updateproduit/{id}": {
+            "put": {
+                "summary": "Mettre à jour un produit existant",
+                "operationId": "558bbbb3524de96b7c4de056a96feb48",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du produit à mettre à jour",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "nom_produit": {
+                                        "type": "string"
+                                    },
+                                    "quantite": {
+                                        "type": "integer"
+                                    },
+                                    "prix": {
+                                        "type": "integer"
+                                    },
+                                    "categorie_id": {
+                                        "type": "integer"
+                                    },
+                                    "images": {
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Produit mis à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "produit": {
+                                            "$ref": "#/components/schemas/Produit"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    },
+                    "403": {
+                        "description": "Interdit d'accès"
+                    },
+                    "404": {
+                        "description": "Produit non trouvé"
+                    },
+                    "422": {
+                        "description": "Erreurs de validation"
+                    }
+                }
+            }
+        },
+        "/api/supProduit/{id}": {
+            "delete": {
+                "summary": "Supprime un produit",
+                "operationId": "ed54e9c91d63de3bfbdfc1cac02787f5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du produit à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Produit supprimé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Produit supprimé avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Interdit d'accès"
+                    },
+                    "404": {
+                        "description": "Produit non trouvé"
+                    }
+                }
+            }
+        },
         "/api/role": {
             "post": {
                 "summary": "Ajouter un rôle",
