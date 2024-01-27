@@ -89,9 +89,9 @@ class UserController extends Controller
             'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
             'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'adresse' => ['required', 'string'],
+          
             'contact' => ['required', 'string'],
-            'date_naissance' => ['required'],
+           
             //  'role_id' => ['required','integer', Role::exists('roles','id')],
             // "password" => "required|min:4|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,}$"
         ]);
