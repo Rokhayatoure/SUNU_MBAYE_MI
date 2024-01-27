@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('nom');
             $table->string('contact');
             $table->string('email');
-            $table->intiger('prix');
+            $table->integer('prix');
             $table->string('images');
-            $table->intiger('quantite');
-            $table->intiger('nom_produit');
+            $table->integer('quantite');
+            $table->integer('nom_produit');
             $table->timestamps();
         });
     }

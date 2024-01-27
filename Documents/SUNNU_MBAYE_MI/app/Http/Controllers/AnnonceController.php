@@ -228,7 +228,7 @@ class AnnonceController extends Controller
 public function supprimerAnnonce($id)
 {
     if (Auth::guard('api')->check()) {
-        $user = Auth::guard('api')->user();
+        
         $annonce = Annonce::find($id);
 
         if (!$annonce) {

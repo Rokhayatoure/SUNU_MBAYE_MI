@@ -15,7 +15,8 @@ class Role
      */
     public function handle(Request $request, Closure $next,$role): Response
     {
-        if($request->user()->Role()->nom_role !== $role)
+        // dd($role);
+        if($request->user()->role->nom_role == $role)
         {
            return $next($request);
         }

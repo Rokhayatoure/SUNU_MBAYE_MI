@@ -21,7 +21,7 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 WORKDIR /var/www/html
 
 # Copie les fichiers de l'application dans le conteneur
-COPY . .
+COPY . /var/www/html/
 
 # Installe les dépendances Symfony
 RUN curl -sS https://getcomposer.org/installer | php -- --disable-tls

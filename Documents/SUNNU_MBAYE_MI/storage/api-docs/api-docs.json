@@ -434,6 +434,313 @@
                 }
             }
         },
+        "/api/effectuerCommande": {
+            "post": {
+                "summary": "Effectue une commande",
+                "operationId": "9eee5936efbdad8e8703a199cb67f3f2",
+                "responses": {
+                    "200": {
+                        "description": "Commande effectuée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Commande effectuée avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Non autorisé"
+                    }
+                }
+            }
+        },
+        "/api/AfficheCommende": {
+            "get": {
+                "summary": "Affiche les commandes de l'utilisateur",
+                "operationId": "c9c042f33c1016ea8da17c159a86fc0c",
+                "responses": {
+                    "200": {
+                        "description": "Commandes affichées avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "commende": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Commende"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/voirPlus/{commende_id}": {
+            "get": {
+                "summary": "Affiche plus de détails sur une commande",
+                "operationId": "97e3d5598a1edc37bc80f8fa6367a0e5",
+                "parameters": [
+                    {
+                        "name": "commende_id",
+                        "in": "path",
+                        "description": "ID de la commande",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de la commande affichés avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "commende": {
+                                            "$ref": "#/components/schemas/Commende"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Non connecté"
+                    }
+                }
+            }
+        },
+        "/api/suprimmerCommende/{commende_id}": {
+            "delete": {
+                "summary": "Supprime une commande",
+                "operationId": "7b4d1c48d09263e18e3ce044c3944e3d",
+                "parameters": [
+                    {
+                        "name": "commende_id",
+                        "in": "path",
+                        "description": "ID de la commande à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Commande supprimée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Commande supprimée avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Non autorisé"
+                    }
+                }
+            }
+        },
+        "/api/AnnulerLivraison/{commende_id}": {
+            "put": {
+                "summary": "Annule une livraison",
+                "operationId": "3052e7bf1df7c194f9946daebac36a64",
+                "parameters": [
+                    {
+                        "name": "livraison_id",
+                        "in": "path",
+                        "description": "ID de la livraison à annuler",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Livraison annulée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Livraison annulée avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/LivraisonTerminer/{commende_id}": {
+            "put": {
+                "summary": "Termine une livraison",
+                "operationId": "ba66f75283eb7da1b5e9793ed0162a9f",
+                "parameters": [
+                    {
+                        "name": "livraison_id",
+                        "in": "path",
+                        "description": "ID de la livraison à terminer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Livraison terminée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Livraison terminée avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/AjoutPanier/{produit_id}": {
+            "post": {
+                "summary": "Ajoute un produit au panier",
+                "operationId": "d139f9ec5d2964950a80346582d81d8b",
+                "parameters": [
+                    {
+                        "name": "produit_id",
+                        "in": "path",
+                        "description": "ID du produit à ajouter",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Produit ajouté au panier avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "panier": {
+                                            "$ref": "#/components/schemas/Panier"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/AfficherPanier": {
+            "get": {
+                "summary": "Affiche le panier de l'utilisateur",
+                "operationId": "630735db7c08f4328ce9e2e1802b0cdf",
+                "responses": {
+                    "200": {
+                        "description": "Panier affiché avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "panier": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Panier"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/viderPanier/{produit_id}": {
+            "delete": {
+                "summary": "Vide un produit du panier",
+                "operationId": "e9b1753e334b77c0eb0342b32b12d736",
+                "parameters": [
+                    {
+                        "name": "produit_id",
+                        "in": "path",
+                        "description": "ID du produit à vider",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Produit vidé du panier avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "panier": {
+                                            "$ref": "#/components/schemas/Panier"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Le produit est vidé du panier avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Produit non trouvé dans le panier"
+                    }
+                }
+            }
+        },
         "/api/produits": {
             "get": {
                 "summary": "Liste des produits",
@@ -619,6 +926,54 @@
                     },
                     "404": {
                         "description": "Produit non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/rechercheProduit": {
+            "get": {
+                "summary": "Recherche un produit par nom",
+                "operationId": "d8da89537f2090e673583f1268eeef00",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Nom du produit à rechercher",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Produit filtré par nom avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "status_message": {
+                                            "type": "string",
+                                            "example": "Produit filtré par nom avec succès"
+                                        },
+                                        "filtered_users": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Produit"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de requête"
                     }
                 }
             }

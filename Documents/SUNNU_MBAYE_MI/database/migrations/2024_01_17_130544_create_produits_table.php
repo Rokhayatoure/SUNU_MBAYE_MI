@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string("nom_produit");
             $table->string("images");
-            $table->intiger("quantite");
-            $table->intiger("prix");
+            $table->integer("quantite");
+            $table->integer("prix");
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('categorie_id');

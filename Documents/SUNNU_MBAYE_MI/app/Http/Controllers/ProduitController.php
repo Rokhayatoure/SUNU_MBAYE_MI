@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 session_start();
+use Exception;
 use App\Models\Produit;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -150,7 +151,7 @@ class ProduitController extends Controller
 
     public function updateproduit(Request $request,$id)
     {
-        //  dd('ok');
+    
         $user = Auth::guard('api')->user();
         $produit = Produit::find($id);
          if (!$produit) {
@@ -219,8 +220,44 @@ class ProduitController extends Controller
         return response()->json(['message' => 'produit supprimé avec succès'], 200);
     }
 
+/**
+ * @OA\Get(
+ *     path="/api/rechercheProduit",
+ *     summary="Recherche un produit par nom",
+ *     @OA\Parameter(
+ *         name="search",
+ *         in="query",
+ *         description="Nom du produit à rechercher",
+ *         required=true,
+ *         @OA\Schema(type="string")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Produit filtré par nom avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status_code", type="integer", example=200),
+ *             @OA\Property(property="status_message", type="string", example="Produit filtré par nom avec succès"),
+ *             @OA\Property(property="filtered_users", type="array", @OA\Items(ref="#/components/schemas/Produit"))
+ *         )
+ *     ),
+ *     @OA\Response(response=400, description="Erreur de requête")
+ * )
+ */
 
-
+    public function rechercheProduit(Request $request)
+    {
+        try {
+            $nameFilter = $request->input('search');
+            $produit = Produit::where('nom_produit', 'like', '%' . $nameFilter . '%')->get();
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'produit filtrés par nom avec succès',
+                'filtered_users' => $produit,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([$e]);
+        }
+    }
 
 
  

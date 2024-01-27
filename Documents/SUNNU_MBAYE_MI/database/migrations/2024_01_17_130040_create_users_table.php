@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('sexe')->nullable();
             $table->string('date_naissance')->nullable();
-            $table->string('adresse');
+            $table->string('adresse')->nullable();
             $table->string('nom_entreprise')->nullable();
             $table->foreignIdFor(Role::class)->constrained()->onDelete('cascade');
             $table->rememberToken();
