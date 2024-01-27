@@ -89,20 +89,17 @@ class UserController extends Controller
             'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
             'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
             'email' => ['required', 'email', 'unique:users,email'],
-          
-            'contact' => ['required', 'string'],
-           
-            //  'role_id' => ['required','integer', Role::exists('roles','id')],
-            // "password" => "required|min:4|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,}$"
+            'telephone' => ['required', 'string'],
+            'role_id' => ['required','integer',],
+            'password' => ['required', 'string', 'min:8'],
+
         ]);
     
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
     
-        if ($request->password != $request->password_validation) {
-            return response()->json(['errors' => ['password' => ['Le mot de passe ne respecte pas les critères de validation.']]], 422);
-        }
+        
         $user = new User([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
@@ -110,7 +107,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'adresse' => $request->adresse,
             'date_naissance' => $request->date_naissance,
-            'contact' => $request->contact,
+            'telephone' => $request->telephone,
             'sexe' => $request->sexe,
             'role_id' => $request->role_id
           
