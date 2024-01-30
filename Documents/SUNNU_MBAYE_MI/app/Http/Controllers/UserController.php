@@ -53,7 +53,7 @@ class UserController extends Controller
         ]);
   
         $role = Role::create([
-            'nom_role' => $request->nonRole,
+            'nom_role' => $request->nom_role,
         ]);
   
         return response()->json(['message' => 'Rôle ajouté avec succès', 'role' => $role], 201);
@@ -127,7 +127,7 @@ class UserController extends Controller
             "status" => true,
             "message" => "utilisateur connecter inscrit avec succes ",
             'user'=>$user
-        ]);
+        ],201);
     }
     
 
@@ -188,8 +188,9 @@ class UserController extends Controller
 
         return response()->json([
             "status" => false,
-            "message" => "details invalide"
-        ]);
+            "message" => "details invalide",
+            
+        ],201);
     }
 
 

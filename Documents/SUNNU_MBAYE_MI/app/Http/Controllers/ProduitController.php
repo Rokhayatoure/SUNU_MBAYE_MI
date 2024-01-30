@@ -64,7 +64,7 @@ class ProduitController extends Controller
             'quantite' => ['required', 'integer', 'min:0'],
             'prix' => ['required', 'integer', 'min:0'],
             'categorie_id' => ['required', 'integer', 'exists:categories,id'],
-            'images' => ['nullable', 'image', 'max:2048'],
+            'images' => ['requered', 'image', 'max:2048'],
         ]);
     
         // Si la validation échoue, renvoyez une réponse avec les erreurs
@@ -147,6 +147,7 @@ class ProduitController extends Controller
 
     public function updateproduit(Request $request,$id)
     {
+
     
         $user = Auth::guard('api')->user();
         $produit = Produit::find($id);
