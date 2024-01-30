@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("nom_produit");
             $table->string("images");
+            $table->string("description");
             $table->integer("quantite");
             $table->integer("prix");
             $table->unsignedBigInteger('user_id');

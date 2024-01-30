@@ -55,7 +55,12 @@ class ProduitController extends Controller
  *                     property="images",
  *                     type="file"
  *                 ),
- *             )
+ *                      @OA\Property(
+ *                     property="description",
+ *                     type="string"
+ *                 ),
+ * 
+ *             )  
  *         )
  *     ),
  *     @OA\Response(
@@ -82,6 +87,7 @@ class ProduitController extends Controller
             $user = Auth::guard('api')->user();
             $produit = new Produit();
             $produit->nom_produit = $request->nom_produit;
+            $produit->description= $request->description;
             $produit->quantite = intval($request->quantite);
             $produit->prix = intval($request->prix);
             $produit->user_id = $user->id; // Récupérer l'id de l'utilisateur connecté
@@ -131,6 +137,7 @@ class ProduitController extends Controller
  *                 @OA\Property(property="prix", type="integer"),
  *                 @OA\Property(property="categorie_id", type="integer"),
  *                 @OA\Property(property="images", type="file")
+ *                 @OA\Property(property="description", type="string")
  *             )
  *         )
  *     ),
@@ -163,6 +170,7 @@ class ProduitController extends Controller
                 return response()->json(['message' => 'Vous n\'êtes pas autorisé à modifier cette annonce'], 403);
             }
         $produit->nom_produit = $request->nom_produit;
+        $produit->description= $request->description;
         $produit->quantite = intval($request->quantite);
         $produit->prix = intval($request->prix);
         $produit->user_id = auth()->id(); // Récupérer l'id de l'utilisateur connecté
