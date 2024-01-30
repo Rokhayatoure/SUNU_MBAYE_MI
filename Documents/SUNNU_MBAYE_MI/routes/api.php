@@ -76,7 +76,7 @@ Route::put('/AnnulerLivraison/{commende_id}', [DetailCommendeController::class, 
 Route::middleware(['auth','nom_role:agriculteur'])->group(function () {
 Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
 Route::put('updateproduit/{id}', [ProduitController::class ,'updateproduit']);
-Route::put('supProduit/{id}', [ProduitController::class ,'supProduit']);
+Route::delete('supProduit/{id}', [ProduitController::class ,'supProduit']);
 
 });
 

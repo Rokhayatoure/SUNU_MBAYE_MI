@@ -11,18 +11,19 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserControllerTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
 
-    // public function testAjouterRole()
-    // {
-    //     $role=Role::factory()->create();
-    //     $response=$this
+    public function testAjouterRole()
+    {
+        $role = Role::factory()->create();
 
-    //        ->actingAs($role)
-    //        ->post('api/role');
+        $response=$this
 
-    //   $response->assertOk();
-    // }
+           ->actingAs($role)
+           ->post('api/role');
+
+      $response->assertOk();
+    }
     
     
 

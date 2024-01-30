@@ -759,10 +759,13 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "properties": {
                                     "nom_produit": {
+                                        "type": "string"
+                                    },
+                                    "description": {
                                         "type": "string"
                                     },
                                     "quantite": {
@@ -791,11 +794,10 @@
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "type": "boolean",
-                                            "example": true
+                                            "type": "boolean"
                                         },
                                         "produit": {
-                                            "$ref": "#/components/schemas/Produit"
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -807,7 +809,7 @@
                         "description": "Non autorisé"
                     },
                     "422": {
-                        "description": "Erreurs de validation"
+                        "description": "Erreur de validation"
                     }
                 }
             }
@@ -820,7 +822,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID du produit à mettre à jour",
+                        "description": "L'ID du produit à mettre à jour",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -830,10 +832,13 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "properties": {
                                     "nom_produit": {
+                                        "type": "string"
+                                    },
+                                    "description": {
                                         "type": "string"
                                     },
                                     "quantite": {
@@ -862,11 +867,10 @@
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "type": "boolean",
-                                            "example": true
+                                            "type": "boolean"
                                         },
                                         "produit": {
-                                            "$ref": "#/components/schemas/Produit"
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -878,13 +882,13 @@
                         "description": "Non autorisé"
                     },
                     "403": {
-                        "description": "Interdit d'accès"
+                        "description": "Interdit"
                     },
                     "404": {
                         "description": "Produit non trouvé"
                     },
                     "422": {
-                        "description": "Erreurs de validation"
+                        "description": "Erreur de validation"
                     }
                 }
             }
@@ -930,41 +934,43 @@
                 }
             }
         },
-        "/api/rechercheProduit": {
-            "get": {
-                "summary": "Recherche un produit par nom",
-                "operationId": "d8da89537f2090e673583f1268eeef00",
-                "parameters": [
-                    {
-                        "name": "search",
-                        "in": "query",
-                        "description": "Nom du produit à rechercher",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+        "/api/produitrecherche": {
+            "post": {
+                "summary": "Recherche de produits",
+                "operationId": "d70a7b3336cf183d279259a55e345a70",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "search": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
-                        "description": "Produit filtré par nom avec succès",
+                        "description": "Produits trouvés avec succès",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 200
+                                        "products": {
+                                            "type": "array"
                                         },
-                                        "status_message": {
-                                            "type": "string",
-                                            "example": "Produit filtré par nom avec succès"
+                                        "item": {
+                                            "type": "string"
                                         },
-                                        "filtered_users": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Produit"
-                                            }
+                                        "categories": {
+                                            "type": "array"
+                                        },
+                                        "newProduct": {
+                                            "type": "array"
                                         }
                                     },
                                     "type": "object"
@@ -972,8 +978,49 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Erreur de requête"
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/rechercheproduit": {
+            "post": {
+                "summary": "Recherche de produits",
+                "operationId": "e9be2194dfbdda4935cfae7c8a690182",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "search": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Produits trouvés avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "products": {
+                                            "type": "array"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
                     }
                 }
             }

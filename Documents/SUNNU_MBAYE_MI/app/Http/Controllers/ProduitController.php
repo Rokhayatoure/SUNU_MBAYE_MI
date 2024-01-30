@@ -7,6 +7,8 @@ use App\Models\Produit;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
 
 class ProduitController extends Controller
 {
@@ -26,58 +28,49 @@ class ProduitController extends Controller
         $produit=Produit::all();
         return response()->json(compact('produit'), 200);
     }
-   /**
+/**
  * @OA\Post(
  *     path="/api/AjoutProduit",
  *     summary="Ajoute un nouveau produit",
  *     @OA\RequestBody(
  *         required=true,
- *         @OA\MediaType(
- *             mediaType="multipart/form-data",
- *             @OA\Schema(
- *                 @OA\Property(
- *                     property="nom_produit",
- *                     type="string"
- *                 ),
- *                 @OA\Property(
- *                     property="quantite",
- *                     type="integer"
- *                 ),
- *                 @OA\Property(
- *                     property="prix",
- *                     type="integer"
- *                 ),
- *                 @OA\Property(
- *                     property="categorie_id",
- *                     type="integer"
- *                 ),
- *                 @OA\Property(
- *                     property="images",
- *                     type="file"
- *                 ),
- *                      @OA\Property(
- *                     property="description",
- *                     type="string"
- *                 ),
- * 
- *             )  
+ *         @OA\JsonContent(
+ *             @OA\Property(property="nom_produit", type="string"),
+ *             @OA\Property(property="description", type="string"),
+ *             @OA\Property(property="quantite", type="integer"),
+ *             @OA\Property(property="prix", type="integer"),
+ *             @OA\Property(property="categorie_id", type="integer"),
+ *             @OA\Property(property="images", type="file")
  *         )
  *     ),
  *     @OA\Response(
  *         response=201,
  *         description="Produit ajouté avec succès",
  *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="produit", type="object", ref="#/components/schemas/Produit")
+ *             @OA\Property(property="status", type="boolean"),
+ *             @OA\Property(property="produit", type="object")
  *         )
  *     ),
  *     @OA\Response(response=401, description="Non autorisé"),
- *     @OA\Response(response=422, description="Erreurs de validation")
+ *     @OA\Response(response=422, description="Erreur de validation")
  * )
  */
     
     public function AjoutProduit(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'nom_produit' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'quantite' => ['required', 'integer', 'min:0'],
+            'prix' => ['required', 'integer', 'min:0'],
+            'categorie_id' => ['required', 'integer', 'exists:categories,id'],
+            'images' => ['nullable', 'image', 'max:2048'],
+        ]);
+    
+        // Si la validation échoue, renvoyez une réponse avec les erreurs
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
       
         
         if(Auth::guard('api')->check())
@@ -114,47 +107,43 @@ class ProduitController extends Controller
         ], 201);
     
     }
-
-
-/**
+    /**
  * @OA\Put(
  *     path="/api/updateproduit/{id}",
  *     summary="Mettre à jour un produit existant",
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
- *         description="ID du produit à mettre à jour",
+ *         description="L'ID du produit à mettre à jour",
  *         required=true,
  *         @OA\Schema(type="integer")
  *     ),
  *     @OA\RequestBody(
  *         required=true,
- *         @OA\MediaType(
- *             mediaType="multipart/form-data",
- *             @OA\Schema(
- *                 @OA\Property(property="nom_produit", type="string"),
- *                 @OA\Property(property="quantite", type="integer"),
- *                 @OA\Property(property="prix", type="integer"),
- *                 @OA\Property(property="categorie_id", type="integer"),
- *                 @OA\Property(property="images", type="file")
- *                 @OA\Property(property="description", type="string")
- *             )
+ *         @OA\JsonContent(
+ *             @OA\Property(property="nom_produit", type="string"),
+ *             @OA\Property(property="description", type="string"),
+ *             @OA\Property(property="quantite", type="integer"),
+ *             @OA\Property(property="prix", type="integer"),
+ *             @OA\Property(property="categorie_id", type="integer"),
+ *             @OA\Property(property="images", type="file")
  *         )
  *     ),
  *     @OA\Response(
  *         response=201,
  *         description="Produit mis à jour avec succès",
  *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="produit", type="object", ref="#/components/schemas/Produit")
+ *             @OA\Property(property="status", type="boolean"),
+ *             @OA\Property(property="produit", type="object")
  *         )
  *     ),
  *     @OA\Response(response=401, description="Non autorisé"),
- *     @OA\Response(response=403, description="Interdit d'accès"),
+ *     @OA\Response(response=403, description="Interdit"),
  *     @OA\Response(response=404, description="Produit non trouvé"),
- *     @OA\Response(response=422, description="Erreurs de validation")
+ *     @OA\Response(response=422, description="Erreur de validation")
  * )
  */
+
 
     public function updateproduit(Request $request,$id)
     {
