@@ -163,7 +163,7 @@ class UserController extends Controller
         // data validate 
         $validator = Validator::make($request->all(), [
             "email" => "required|email",
-            // "password" => "required|min:5|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/|confirmed"
+             "password" => "required|"
 
         ]);
         
