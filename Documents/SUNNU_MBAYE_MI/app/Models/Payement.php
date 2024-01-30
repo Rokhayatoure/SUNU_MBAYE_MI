@@ -17,7 +17,7 @@ class Payment extends Model
 
     protected $fillable = [
         'user_id',
-        'product_name',
+        'commende_id',
         'token',
         'amount',
         'qty'
@@ -28,6 +28,10 @@ class Payment extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function Commende()
+    {
+        return $this->belongsTo(Commende::class);
     }
 
 }

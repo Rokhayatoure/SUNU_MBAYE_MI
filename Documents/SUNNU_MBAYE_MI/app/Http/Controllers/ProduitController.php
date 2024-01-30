@@ -221,43 +221,78 @@ class ProduitController extends Controller
     }
 
 /**
- * @OA\Get(
- *     path="/api/rechercheProduit",
- *     summary="Recherche un produit par nom",
- *     @OA\Parameter(
- *         name="search",
- *         in="query",
- *         description="Nom du produit à rechercher",
+ * @OA\Post(
+ *     path="/api/produitrecherche",
+ *     summary="Recherche de produits",
+ *     @OA\RequestBody(
  *         required=true,
- *         @OA\Schema(type="string")
+ *         @OA\JsonContent(
+ *             @OA\Property(property="search", type="string")
+ *         )
  *     ),
  *     @OA\Response(
  *         response=200,
- *         description="Produit filtré par nom avec succès",
+ *         description="Produits trouvés avec succès",
  *         @OA\JsonContent(
- *             @OA\Property(property="status_code", type="integer", example=200),
- *             @OA\Property(property="status_message", type="string", example="Produit filtré par nom avec succès"),
- *             @OA\Property(property="filtered_users", type="array", @OA\Items(ref="#/components/schemas/Produit"))
+ *             @OA\Property(property="products", type="array"),
+ *             @OA\Property(property="item", type="string"),
+ *             @OA\Property(property="categories", type="array"),
+ *             @OA\Property(property="newProduct", type="array")
  *         )
  *     ),
- *     @OA\Response(response=400, description="Erreur de requête")
+ *     @OA\Response(response=422, description="Erreur de validation")
+ * )
+ */
+ public function Produitrecherche(Request $request){
+
+    $request->validate(['search' => "required"]);
+
+    $item = $request->search;
+    // $categories = Category::orderBy('category_name','ASC')->get();
+    $products = Produit::where('nom_produit','LIKE',"%$item%")->get();
+    $newProduct = Produit::orderBy('id','DESC')->limit(3)->get();
+    // return ('frontend.product.search',compact('products','item','categories','newProduct'));
+    return response()->json(compact('products','item','categories','newProduct'), 200);
+
+}// End Method
+
+
+/**
+ * @OA\Post(
+ *     path="/api/rechercheproduit",
+ *     summary="Recherche de produits",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             @OA\Property(property="search", type="string")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Produits trouvés avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="products", type="array")
+ *         )
+ *     ),
+ *     @OA\Response(response=422, description="Erreur de validation")
  * )
  */
 
-    public function rechercheProduit(Request $request)
-    {
-        try {
-            $nameFilter = $request->input('search');
-            $produit = Produit::where('nom_produit', 'like', '%' . $nameFilter . '%')->get();
-            return response()->json([
-                'status_code' => 200,
-                'status_message' => 'produit filtrés par nom avec succès',
-                'filtered_users' => $produit,
-            ]);
-        } catch (Exception $e) {
-            return response()->json([$e]);
-        }
-    }
+
+public function rechercheProduit(Request $request){
+
+    $request->validate(['search' => "required"]);
+
+    $item = $request->search;
+    $products = Produit::where('nom_produit','LIKE',"%$item%")->select('nom_produit','product_slug','product_thambnail','selling_price','id')->limit(6)->get();
+
+    // return view('frontend.product.search_product',compact('products'));
+    return response()->json(compact('products'), 200);
+
+    
+
+} 
+
 
 
  

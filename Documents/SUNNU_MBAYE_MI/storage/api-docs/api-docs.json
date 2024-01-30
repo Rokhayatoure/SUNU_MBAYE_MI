@@ -1161,6 +1161,27 @@
                     }
                 }
             }
+        },
+        "/api/listeUser": {
+            "get": {
+                "summary": "Récupère la liste de tous les utilisateurs.",
+                "operationId": "da4618bc73e0be7e0cc623154ebd4382",
+                "responses": {
+                    "200": {
+                        "description": "Liste des utilisateurs",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

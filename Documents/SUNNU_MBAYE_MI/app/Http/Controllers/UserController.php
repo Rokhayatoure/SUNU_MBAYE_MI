@@ -267,4 +267,26 @@ public function updateUser(Request $request,$id)
     ]);
 }
 
+
+/**
+ * @OA\Get(
+ *     path="/api/listeUser",
+ *     summary="Récupère la liste de tous les utilisateurs.",
+ *     @OA\Response(
+ *         response=200,
+ *         description="Liste des utilisateurs",
+ *         @OA\JsonContent(
+ *             type="array",
+ *             @OA\Items(ref="#/components/schemas/User")
+ *         ),
+ *     ),
+ * )
+ */
+
+public function listeUser()
+{
+    $user=User::all();
+    return response()->json(compact('user'), 200);
+}
+
 }

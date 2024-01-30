@@ -141,9 +141,9 @@
                         <h3 class="header-title">Validation de Commande</h3>
                         <form class="login-form" action="{{ route('payment.submit') }}" method="POST">
                             @csrf
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <input type="text" name="product_name" value="HP EliteBook 1030 G5" class="form-control" placeholder="Nom du produit">
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <input type="number" name="price" value="380000" class="form-control" placeholder="Montant">
                             </div>

@@ -24,5 +24,9 @@ class Commende extends Model
     {
         return $this->hasMany(DetailCommende::class);
     }
+    public function Payement()
+    {
+        return $this->belongsTo(Payment::class);
+    }
 
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\Commende;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Http\Services\PaytechService;
@@ -46,12 +47,12 @@ class PayementController extends Controller
 
 
         $jsonResponse = $paymentService->setQuery([
-            'item_name' => $request['product_name'],
+            // 'item_name' => $request['product_name'],
             'item_price' => $amount,
             'command_name' => "Paiement pour l'achat de " . $request['product_name'] . " via PayTech",
         ])
             ->setCustomeField([
-                'item_id' => $request['product_name'], // You can change it by the product id
+                // 'item_id' => $request['product_name'], // You can change it by the product id
                 'time_command' => time(),
                 'ip_user' => $_SERVER['REMOTE_ADDR'],
                 'lang' => $_SERVER['HTTP_ACCEPT_LANGUAGE']
@@ -77,57 +78,80 @@ class PayementController extends Controller
         }
     }
 
-    public function success(Request $request, $code)
+    public function success(Request $request, $code ,$commende)
     {
-        $validated = $_GET['data'];
-        $validated['token'] = session('token') ?? '';
+        // $validated = $_GET['data'];
+        // $validated['token'] = session('token') ?? '';
 
         // Call the save methods to save data to database using the Payment model
 
-        $payment = $this->savePayment($validated);
+        // $payment = $this->savePayment($validated);
 
-        session()->forget('token');
+        // session()->forget('token');
 
-        return Redirect::to(route('payment.success.view', ['code' => $code]));
-    }
+        // return Redirect::to(route('payment.success.view', ['code' => $code]));
 
-    public function savePayment($data = [])
-    {
+        $token = session('token') ?? '';
+        $data = $request->query('data');
 
-        # save payment database
-
+        if (!$token || !$data) {
+            return redirect()->route('payment.index')->withErrors('Token ou données manquants');
+        }
         $payment = Payment::firstOrCreate([
-            'token' => $data['token'],
-        ], [
-            'user_id' => auth()->user()->id,
-            'product_name' => $data['product_name'],
-            'amount' => $data['price'],
-            'qty' => $data['qty']
-        ]);
+                    'token' => $data['token'],
+                ], [
+                    'user_id' => auth()->user()->id,
+                    'commende_id'=>$commende->id,
+                    'amount' => $commende->prix,
+                    'qty' => $commende->quantite
+                ]);
+                if (!$payment) {
+                    return redirect()->route('payment.index')->withErrors('Échec de la sauvegarde du paiement');
+                }
+        
+                session()->forget('token');
+        
+                return view('succes');
+            }
 
-        if (!$payment) {
-            # redirect to home page if payment not saved
-            return $response = [
-                'success' => false,
-                'data' => $data
-            ];
-        } 
+
+    // public function savePayment($data = [],$commende_id)
+    // {
+    //     $commende=Commende::find($commende_id);
+    //     # save payment database
+
+    //     $payment = Payment::firstOrCreate([
+    //         'token' => $data['token'],
+    //     ], [
+    //         'user_id' => auth()->user()->id,
+    //         'commende_id'=>$commende->id,
+    //         'amount' => $commende->prix,
+    //         'qty' => $commende->quantite
+    //     ]);
+
+    //     if (!$payment) {
+    //         # redirect to home page if payment not saved
+    //         return $response = [
+    //             'success' => false,
+    //             'data' => $data
+    //         ];
+    //     } 
 
 
-        # Redirect to Success page if payment success
+    //     # Redirect to Success page if payment success
 
-        $data['payment_id'] = $payment->id;
+    //     $data['payment_id'] = $payment->id;
 
-        /*
-            You can continu to save onother records to database using Eloquant methods
-            Exemple: Transaction::create($data);
-        */
+    //     /*
+    //         You can continu to save onother records to database using Eloquant methods
+    //         Exemple: Transaction::create($data);
+    //     */
 
-        return $response = [
-            'success' => true, //
-            'data' => $data
-        ];
-    }
+    //     return $response = [
+    //         'success' => true, //
+    //         'data' => $data
+    //     ];
+    //  }
 
     public function paymentSuccessView(Request $request, $code)
     {

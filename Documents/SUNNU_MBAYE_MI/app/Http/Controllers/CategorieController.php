@@ -227,9 +227,9 @@ if ($user->role->nom_role !== $requiredRole) {
     {
 
 
-        if (!Auth::check()) {
-            return response()->json(['errors' => 'veilleir vous connecter avant de fair cette action.'], 422);
-        }
+        // if (!Auth::check()) {
+        //     return response()->json(['errors' => 'veilleir vous connecter avant de fair cette action.'], 422);
+        // }
         Categorie::find($id)->delete();
     return response()->json(['message' => 'categorie supprimé avec succès'], 200);
     

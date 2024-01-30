@@ -14,10 +14,12 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('nom_produit');
+           
+            $table->unsignedBigInteger('commende_id');
+            $table->foreign('commende_id')->references('id')->on('commendes')->onDelete('cascade');
             $table->string('token')->unique()->nullable();
-            $table->integer('prix');
-            $table->integer('quantite');
+            $table->integer('amount');
+            $table->integer('qty');
             $table
                 ->foreignIdFor(User::class)
                 ->nullable()
