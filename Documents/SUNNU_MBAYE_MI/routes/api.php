@@ -32,6 +32,7 @@ Route::post('logout', [UserController::class ,'logout']);
 Route::put('/updateUser/{id}',[UserController::class ,'updateUser'] );
 Route::get('/listeUser',[UserController::class ,'listeUser'] );
 //anonce
+Route::post('/ajoutAnnonce', [AnnonceController::class ,'ajoutAnnonce']);
 
 Route::get('/listAnnonce', [AnnonceController::class ,'listAnnonce']);
 Route::get('/voirPlus/{annonce_id}', [AnnonceController::class ,'voirPlus']);
@@ -82,16 +83,16 @@ Route::get('/listeAnnonceAgriculteur', [AnnonceController::class ,'listeAnnonceA
 Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
 
 
+
 });
 
 //admin middleware
 Route::middleware(['auth','nom_role:admin'])->group(function () {
-    Route::post('/AjoutCategorie', [CategorieController::class ,'AjoutCategorie']);
+Route::post('/AjoutCategorie', [CategorieController::class ,'AjoutCategorie']);
 
 Route::delete('/suprimmerCommende/{commende_id}', [DetailCommendeController::class, 'suprimmerCommende']);
 Route::put('/LivraisonTerminer/{commende_id}', [DetailCommendeController::class, 'LivraisonTerminer']);
 //annonce
-Route::post('/ajoutAnnonce', [AnnonceController::class ,'ajoutAnnonce']);
 Route::put('/modifierAnnonce/{id}',[AnnonceController::class ,'modifierAnnonce']);
 Route::delete('/supAnnonce/{id}', [AnnonceController::class ,'supprimerAnnonce']);
 //categorie

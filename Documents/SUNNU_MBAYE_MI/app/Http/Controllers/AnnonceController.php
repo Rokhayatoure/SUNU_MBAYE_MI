@@ -75,7 +75,7 @@ class AnnonceController extends Controller
     
             return response()->json([
                 "status" => true,
-                "message" => "utilisateur connecter inscrit avec succes ",
+                "message" => "anonce ajoter avec succes ",
                 'annonce'=>$annonce
             ]);
         }
