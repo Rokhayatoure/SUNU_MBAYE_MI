@@ -231,6 +231,36 @@
                 ]
             }
         },
+        "/api/listeAnnonceAgriculteur": {
+            "get": {
+                "summary": "Liste de toutes les annonces",
+                "description": "Liste des annonces en fonction du users.",
+                "operationId": "612b5104579ec22348e674b714ec0c38",
+                "responses": {
+                    "200": {
+                        "description": "Liste des annonces",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "anonces": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Annonce"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    }
+                }
+            }
+        },
         "/api/listeCategorie": {
             "get": {
                 "summary": "Liste de toutes les catégories",

@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Payment;
 use App\Models\Commende;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Services\PaytechService;
 use App\Http\Requests\PayementRequest;
-use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\DB;
 
 
 class PayementController extends Controller
@@ -33,19 +34,46 @@ class PayementController extends Controller
     public function initiatePayment($commende_id,Request $request){
         $commende = Commende::find($commende_id);
         $user = User::where('id', $commende->user_id)->first();
+        
         if(!$user){
             return response()->json(['status' => 404, 'status_message' => 'Vous n\'etes pas l\'auteur de cette commande.']);
         }
+        
         $montant = $commende->prix;
+
         $commende_id = $commende->commende_id;
         $userexist=DB::table('password_reset_tokens')->insert([
-            'clientConnecter' =>$user->id,
-            'token'=>1
+            'users_id' =>$user = Auth::guard('api')->user()->id,
+            'token'=>2
         ]);
-        
+       
                       
 
         
+
+
+    
+        
+        // Construisez l'URL de succès
+       // $success_url = secure_url(route('payment.success', ['code' => $commandeId, 'data' => $request->all()]));
+        //$success_url = secure_url(route('payment.success', ['code' => $commandeId, 'data' => $commande->all()]));
+        // $success_url = route('payment.success', [
+        //     'code' => $commandeId,
+        //     'data' => [
+        //         'montant' => $montant,
+        //         // 'qty' => $request->qty,
+        //         'commande_id' => $commandeId
+        //     ],
+        // ]);
+    
+        // Construisez l'URL d'annulation
+        //$cancel_url = secure_url(route('payment.index'));
+        return redirect()->route('payment.index');
+    
+        
+
+
+
         $paymentService = new PaytechService(config('paytech.PAYTECH_API_KEY'), config('paytech.PAYTECH_SECRET_KEY'));
     
         // Envoyez la requête de paiement

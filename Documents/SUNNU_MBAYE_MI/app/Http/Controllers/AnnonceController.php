@@ -256,7 +256,22 @@ public function supprimerAnnonce($id)
     }
 }
 
-
+/**
+     * Liste des annonces en fonction du users.
+     *
+     * @OA\Get(
+     *     path="/api/listeAnnonceAgriculteur",
+     *     summary="Liste de toutes les annonces",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Liste des annonces",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="anonces", type="array", @OA\Items(ref="#/components/schemas/Annonce"))
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Non autorisé")
+     * )
+     */
 public function listeAnnonceAgriculteur()
 {
     
