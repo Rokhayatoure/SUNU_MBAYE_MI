@@ -17,9 +17,9 @@ return new class extends Migration
            
             $table->unsignedBigInteger('commende_id');
             $table->foreign('commende_id')->references('id')->on('commendes')->onDelete('cascade');
-            $table->string('token')->unique()->nullable();
-            $table->integer('amount');
-            $table->integer('qty');
+            // $table->string('token')->unique()->nullable();
+            // $table->integer('amount');
+            // $table->integer('qty');
             $table
                 ->foreignIdFor(User::class)
                 ->nullable()

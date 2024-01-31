@@ -27,6 +27,9 @@ class DetailCommendeController extends Controller
  *             @OA\Property(property="message", type="string", example="Commande effectuée avec succès")
  *         )
  *     ),
+ *  security={
+     *         {"bearerAuth": {}}
+     *     },
  *     @OA\Response(response=422, description="Non autorisé"),
  * )
  */
@@ -39,8 +42,14 @@ class DetailCommendeController extends Controller
         }
         $user = Auth::guard('api')->user();
 
-        $panier = panier::where('user_id',auth()->guard('api')->user()->id)->get();
-    
+        $panier = Panier::where('user_id',auth()->guard('api')->user()->id)->get();
+    if(!$panier){
+        return response()->json([
+            "status" => false,
+            "message" => "Veillez ajoutez des produits dans le panier ",
+           
+        ],500);
+    }
         $commende = new Commende();
         $commende->livraison = 'En_court';
         $commende->user_id= auth()->guard('api')->user()->id;
@@ -50,13 +59,14 @@ class DetailCommendeController extends Controller
         $cptC = 0;
       // Ajoutez chaque article du panier à la table de commande produit
       foreach( $panier as $item) {
+     
        $cptQ+= $item->quantite;
        $cptC+=$item->prix;
    
    }
    $commende->quantite =$cptQ;
    $commende->prix =$cptC;
-
+//    dd($cptQ);
     // Supprimez tous les articles du panier de l'utilisateur après la création de la commande
     panier::where('user_id', $user->id)->delete();
     $commende->save();
@@ -70,6 +80,9 @@ class DetailCommendeController extends Controller
  * @OA\Get(
  *     path="/api/AfficheCommende",
  *     summary="Affiche les commandes de l'utilisateur",
+ *  security={
+     *         {"bearerAuth": {}}
+     *     },
  *     @OA\Response(
  *         response=200,
  *         description="Commandes affichées avec succès",
@@ -99,6 +112,9 @@ class DetailCommendeController extends Controller
  *         required=true,
  *         @OA\Schema(type="integer")
  *     ),
+ * security={
+     *         {"bearerAuth": {}}
+     *     },
  *     @OA\Response(
  *         response=200,
  *         description="Détails de la commande affichés avec succès",
@@ -136,6 +152,9 @@ class DetailCommendeController extends Controller
  *         required=true,
  *         @OA\Schema(type="integer")
  *     ),
+ * security={
+     *         {"bearerAuth": {}}
+     *     },
  *     @OA\Response(
  *         response=200,
  *         description="Commande supprimée avec succès",
@@ -168,6 +187,9 @@ class DetailCommendeController extends Controller
  *         required=true,
  *         @OA\Schema(type="integer")
  *     ),
+ * security={
+     *         {"bearerAuth": {}}
+     *     },
  *     @OA\Response(
  *         response=200,
  *         description="Livraison annulée avec succès",
@@ -199,6 +221,9 @@ class DetailCommendeController extends Controller
  *         required=true,
  *         @OA\Schema(type="integer")
  *     ),
+ * security={
+     *         {"bearerAuth": {}}
+     *     },
  *     @OA\Response(
  *         response=200,
  *         description="Livraison terminée avec succès",

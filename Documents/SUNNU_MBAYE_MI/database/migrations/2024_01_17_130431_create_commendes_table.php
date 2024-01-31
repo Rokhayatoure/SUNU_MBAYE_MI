@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('prix')->nullable();
             $table->string('images')->nullable();
-            $table->string('quanite')->nullable();
+            $table->string('quantite')->nullable();
             $table->string('nom_prouit')->nullable();
             $table->timestamps();
         

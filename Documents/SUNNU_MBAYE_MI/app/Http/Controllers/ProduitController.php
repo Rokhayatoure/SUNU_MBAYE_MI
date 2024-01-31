@@ -13,7 +13,13 @@ use Illuminate\Support\Facades\Validator;
 class ProduitController extends Controller
 {
 
-
+    public function listeProduitAgriculteur()
+    {
+        
+        
+     $produit = Produit::where('user_id',auth()->guard('api')->user()->id)->get();
+        return response()->json(compact('produit'), 200);
+    }
 
      /**
      * @OA\Get(
@@ -25,34 +31,42 @@ class ProduitController extends Controller
     public function listeProduit()
     {
         
-        $produit=Produit::all();
+         $produit=Produit::all();
+        // $panier = Produit::where('user_id',auth()->guard('api')->user()->id)->get();
         return response()->json(compact('produit'), 200);
     }
 /**
  * @OA\Post(
- *     path="/api/AjoutProduit",
- *     summary="Ajoute un nouveau produit",
+ *     path="/api/ajoutProduit",
+ *     summary="Ajouter un produit",
  *     @OA\RequestBody(
  *         required=true,
- *         @OA\JsonContent(
- *             @OA\Property(property="nom_produit", type="string"),
- *             @OA\Property(property="description", type="string"),
- *             @OA\Property(property="quantite", type="integer"),
- *             @OA\Property(property="prix", type="integer"),
- *             @OA\Property(property="categorie_id", type="integer"),
- *             @OA\Property(property="images", type="file")
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(property="nom_produit", type="string"),
+ *                 @OA\Property(property="description", type="string"),
+ *                 @OA\Property(property="quantite", type="integer"),
+ *                 @OA\Property(property="prix", type="integer"),
+ *                 @OA\Property(property="categorie_id", type="integer"),
+ *                 @OA\Property(property="images", type="string", format="binary")
+ *             )
  *         )
  *     ),
+ * security={
+     *         {"bearerAuth": {}}
+     *     },
  *     @OA\Response(
  *         response=201,
  *         description="Produit ajouté avec succès",
  *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean"),
- *             @OA\Property(property="produit", type="object")
+ *             @OA\Property(property="status", type="boolean", example=true),
+ *             @OA\Property(property="produit", type="object", ref="#/components/schemas/Produit")
  *         )
  *     ),
- *     @OA\Response(response=401, description="Non autorisé"),
- *     @OA\Response(response=422, description="Erreur de validation")
+ *     @OA\Response(response=401, description="Non autorisé - Jeton invalide"),
+ *     @OA\Response(response=422, description="Erreur de validation"),
+ *     @OA\Response(response=500, description="Erreur interne du serveur")
  * )
  */
     
@@ -64,7 +78,7 @@ class ProduitController extends Controller
             'quantite' => ['required', 'integer', 'min:0'],
             'prix' => ['required', 'integer', 'min:0'],
             'categorie_id' => ['required', 'integer', 'exists:categories,id'],
-            'images' => ['requered', 'image', 'max:2048'],
+            'images' => ['required', 'image', 'max:2048'],
         ]);
     
         // Si la validation échoue, renvoyez une réponse avec les erreurs
@@ -107,40 +121,47 @@ class ProduitController extends Controller
         ], 201);
     
     }
-    /**
+/**
  * @OA\Put(
  *     path="/api/updateproduit/{id}",
- *     summary="Mettre à jour un produit existant",
+ *     summary="Mettre à jour un produit",
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
- *         description="L'ID du produit à mettre à jour",
+ *         description="ID du produit à mettre à jour",
  *         required=true,
  *         @OA\Schema(type="integer")
  *     ),
+ * security={
+     *         {"bearerAuth": {}}
+     *     },
  *     @OA\RequestBody(
  *         required=true,
- *         @OA\JsonContent(
- *             @OA\Property(property="nom_produit", type="string"),
- *             @OA\Property(property="description", type="string"),
- *             @OA\Property(property="quantite", type="integer"),
- *             @OA\Property(property="prix", type="integer"),
- *             @OA\Property(property="categorie_id", type="integer"),
- *             @OA\Property(property="images", type="file")
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(property="nom_produit", type="string"),
+ *                 @OA\Property(property="description", type="string"),
+ *                 @OA\Property(property="quantite", type="integer"),
+ *                 @OA\Property(property="prix", type="integer"),
+ *                 @OA\Property(property="categorie_id", type="integer"),
+ *                 @OA\Property(property="images", type="string", format="binary")
+ *             )
  *         )
  *     ),
  *     @OA\Response(
  *         response=201,
  *         description="Produit mis à jour avec succès",
  *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean"),
- *             @OA\Property(property="produit", type="object")
+ *             @OA\Property(property="status", type="boolean", example=true),
+ *             @OA\Property(property="produit", type="object", ref="#/components/schemas/Produit")
  *         )
  *     ),
- *     @OA\Response(response=401, description="Non autorisé"),
- *     @OA\Response(response=403, description="Interdit"),
+ *     @OA\Response(response=401, description="Non autorisé - Jeton invalide"),
+ *     @OA\Response(response=403, description="Accès refusé - Utilisateur non autorisé à modifier cette annonce"),
  *     @OA\Response(response=404, description="Produit non trouvé"),
- *     @OA\Response(response=422, description="Erreur de validation")
+ *     @OA\Response(response=422, description="Erreur de validation"),
+ *     @OA\Response(response=500, description="Erreur interne du serveur")
  * )
  */
 
@@ -201,6 +222,9 @@ class ProduitController extends Controller
      *             @OA\Property(property="message", type="string", example="Produit supprimé avec succès")
      *         )
      *     ),
+     *  security={
+     *         {"bearerAuth": {}}
+     *     },
      *     @OA\Response(response=403, description="Interdit d'accès"),
      *     @OA\Response(response=404, description="Produit non trouvé")
      * )

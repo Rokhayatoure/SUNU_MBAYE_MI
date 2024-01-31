@@ -45,7 +45,7 @@ class PanierController extends Controller
         $panier->nom=$user->nom;
         $panier->prenom=$user->prenom;
         $panier->user_id=auth()->guard('api')->user()->id;
-        $panier->contact=$user->contact;
+        // $panier->contact=$user->contact;
         // $panier->prix=$produit->prix;
         $panier->quantite= $produit->quantite;
        $panier->prix=intval($produit->prix )*intval($produit->quantite);

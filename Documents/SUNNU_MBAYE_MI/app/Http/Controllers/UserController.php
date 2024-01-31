@@ -22,6 +22,16 @@ use OpenAi\Annotations as OA;
  */
 
 
+ /**
+ * @OA\SecurityScheme(
+ *      securityScheme="bearerAuth",
+ *      type="http",
+ *      scheme="bearer",
+ *      bearerFormat="JWT",
+ * )
+ */
+ 
+
 
 class UserController extends Controller
 {
@@ -35,6 +45,7 @@ class UserController extends Controller
      *             @OA\Property(property="nom_role", type="string")
      *         )
      *     ),
+     * 
      *     @OA\Response(
      *         response=201,
      *         description="Rôle ajouté avec succès",
@@ -59,31 +70,38 @@ class UserController extends Controller
         return response()->json(['message' => 'Rôle ajouté avec succès', 'role' => $role], 201);
     }
 
-  /**
-     * @OA\Post(
-     *     path="/api/inscription",
-     *     summary="inscription",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="nom", type="string"),
-     *             @OA\Property(property="prenom", type="string"),
-     *             @OA\Property(property="email", type="string", format="email"),
-     *             @OA\Property(property="password", type="string"),
-     *             @OA\Property(property="adresse", type="string")
-     *         )
-     *     ),
-     *     @OA\Response(
- *         response=201,
- *         description="Utilisateur ajouté avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="message", type="string", example="Utilisateur ajouté avec succès")
+/**
+ * @OA\Post(
+ *     path="/api/inscription",
+ *     summary="Inscription d'un utilisateur",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 @OA\Property(property="nom", type="string"),
+ *                 @OA\Property(property="prenom", type="string"),
+ *                 @OA\Property(property="email", type="string", format="email"),
+ *                 @OA\Property(property="telephone", type="string"),
+ *                 @OA\Property(property="role_id", type="integer"),
+ *                 @OA\Property(property="password", type="string", format="password"),
+ *                 @OA\Property(property="image", type="string", format="binary")
+ *             )
  *         )
  *     ),
-     *     @OA\Response(response="422", description="Erreur de validation")
-     * )
-     */
-
+ *     @OA\Response(
+ *         response=201,
+ *         description="Utilisateur inscrit avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Utilisateur inscrit avec succès"),
+ *             @OA\Property(property="user", type="object", ref="#/components/schemas/User")
+ *         )
+ *     ),
+ *     @OA\Response(response=422, description="Erreur de validation"),
+ *     @OA\Response(response=500, description="Erreur interne du serveur")
+ * )
+ */
      public function inscription(Request $request, Role $role) {
         $validator = Validator::make($request->all(), [
             'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
@@ -216,7 +234,7 @@ class UserController extends Controller
     return response()->json([
         "status" => true,
         "message" => "utilisateur déconnecté avec succès"
-    ]);
+    ],200);
 }
 
 

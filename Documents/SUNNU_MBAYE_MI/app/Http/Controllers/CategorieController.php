@@ -49,6 +49,9 @@ class CategorieController extends Controller
      *         description="ID de la catégorie à afficher",
      *         @OA\Schema(type="integer")
      *     ),
+     *  security={
+     *         {"bearerAuth": {}}
+     *     },
      *     @OA\Response(
      *         response=200,
      *         description="Détails de la catégorie",
@@ -87,6 +90,9 @@ class CategorieController extends Controller
      *             @OA\Property(property="nom_categories", type="string")
      *         )
      *     ),
+     *  security={
+     *         {"bearerAuth": {}}
+     *     },
      *     @OA\Response(
      *         response=200,
      *         description="Catégorie ajoutée avec succès",
@@ -149,6 +155,9 @@ if ($user->role->nom_role !== $requiredRole) {
      *             @OA\Property(property="nom_categories", type="string")
      *         )
      *     ),
+     *  security={
+     *         {"bearerAuth": {}}
+     *     },
      *     @OA\Response(
      *         response=200,
      *         description="Catégorie modifiée avec succès",
@@ -212,6 +221,9 @@ if ($user->role->nom_role !== $requiredRole) {
      *         description="ID de la catégorie à supprimer",
      *         @OA\Schema(type="integer")
      *     ),
+     *  security={
+     *         {"bearerAuth": {}}
+     *     },
      *     @OA\Response(
      *         response=200,
      *         description="Catégorie supprimée avec succès",

@@ -1,10 +1,5 @@
 {
     "openapi": "3.0.0",
-    "info": {
-        "title": "Documentation du projet SUNNU_MBAYE_MI",
-        "description": "Documentation de l'API du projet SUNNU_MBAYE_MI",
-        "version": "1.0.0"
-    },
     "paths": {
         "/api/ajoutAnnonce": {
             "post": {
@@ -68,7 +63,12 @@
                     "422": {
                         "description": "Erreur de validation"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/modifierAnnonce/{id}": {
@@ -142,7 +142,12 @@
                     "422": {
                         "description": "Erreur de validation"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/listAnnonce": {
@@ -218,7 +223,12 @@
                     "403": {
                         "description": "Vous n'êtes pas autorisé à supprimer cette annonce"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/listeCategorie": {
@@ -289,7 +299,12 @@
                     "404": {
                         "description": "Catégorie non trouvée"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/AjoutCategorie": {
@@ -332,7 +347,12 @@
                     "401": {
                         "description": "Non autorisé"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/modifieCategorie/{id}": {
@@ -389,7 +409,12 @@
                     "404": {
                         "description": "Catégorie non trouvée"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/supCategorie/{id}": {
@@ -431,7 +456,12 @@
                     "404": {
                         "description": "Catégorie non trouvée"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/effectuerCommande": {
@@ -458,7 +488,12 @@
                     "422": {
                         "description": "Non autorisé"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/AfficheCommende": {
@@ -484,7 +519,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/voirPlus/{commende_id}": {
@@ -521,7 +561,12 @@
                     "201": {
                         "description": "Non connecté"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/suprimmerCommende/{commende_id}": {
@@ -559,7 +604,12 @@
                     "403": {
                         "description": "Non autorisé"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/AnnulerLivraison/{commende_id}": {
@@ -594,7 +644,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/LivraisonTerminer/{commende_id}": {
@@ -629,7 +684,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/AjoutPanier/{produit_id}": {
@@ -752,14 +812,14 @@
                 }
             }
         },
-        "/api/AjoutProduit": {
+        "/api/ajoutProduit": {
             "post": {
-                "summary": "Ajoute un nouveau produit",
-                "operationId": "db7b5752f84b4c611aa52bedbbf74945",
+                "summary": "Ajouter un produit",
+                "operationId": "f19499da27676744a66014051960bc8d",
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "properties": {
                                     "nom_produit": {
@@ -778,7 +838,8 @@
                                         "type": "integer"
                                     },
                                     "images": {
-                                        "type": "file"
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -794,10 +855,11 @@
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "type": "boolean"
+                                            "type": "boolean",
+                                            "example": true
                                         },
                                         "produit": {
-                                            "type": "object"
+                                            "$ref": "#/components/schemas/Produit"
                                         }
                                     },
                                     "type": "object"
@@ -806,23 +868,31 @@
                         }
                     },
                     "401": {
-                        "description": "Non autorisé"
+                        "description": "Non autorisé - Jeton invalide"
                     },
                     "422": {
                         "description": "Erreur de validation"
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/updateproduit/{id}": {
             "put": {
-                "summary": "Mettre à jour un produit existant",
+                "summary": "Mettre à jour un produit",
                 "operationId": "558bbbb3524de96b7c4de056a96feb48",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "L'ID du produit à mettre à jour",
+                        "description": "ID du produit à mettre à jour",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -832,7 +902,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "properties": {
                                     "nom_produit": {
@@ -851,7 +921,8 @@
                                         "type": "integer"
                                     },
                                     "images": {
-                                        "type": "file"
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -867,10 +938,11 @@
                                 "schema": {
                                     "properties": {
                                         "status": {
-                                            "type": "boolean"
+                                            "type": "boolean",
+                                            "example": true
                                         },
                                         "produit": {
-                                            "type": "object"
+                                            "$ref": "#/components/schemas/Produit"
                                         }
                                     },
                                     "type": "object"
@@ -879,18 +951,26 @@
                         }
                     },
                     "401": {
-                        "description": "Non autorisé"
+                        "description": "Non autorisé - Jeton invalide"
                     },
                     "403": {
-                        "description": "Interdit"
+                        "description": "Accès refusé - Utilisateur non autorisé à modifier cette annonce"
                     },
                     "404": {
                         "description": "Produit non trouvé"
                     },
                     "422": {
                         "description": "Erreur de validation"
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/supProduit/{id}": {
@@ -931,7 +1011,12 @@
                     "404": {
                         "description": "Produit non trouvé"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/produitrecherche": {
@@ -1072,12 +1157,12 @@
         },
         "/api/inscription": {
             "post": {
-                "summary": "inscription",
+                "summary": "Inscription d'un utilisateur",
                 "operationId": "3ada20efe3f26de09629da386e44eb01",
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "properties": {
                                     "nom": {
@@ -1090,11 +1175,19 @@
                                         "type": "string",
                                         "format": "email"
                                     },
-                                    "password": {
+                                    "telephone": {
                                         "type": "string"
                                     },
-                                    "adresse": {
-                                        "type": "string"
+                                    "role_id": {
+                                        "type": "integer"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -1104,14 +1197,21 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Utilisateur ajouté avec succès",
+                        "description": "Utilisateur inscrit avec succès",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
                                         "message": {
                                             "type": "string",
-                                            "example": "Utilisateur ajouté avec succès"
+                                            "example": "Utilisateur inscrit avec succès"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
                                         }
                                     },
                                     "type": "object"
@@ -1121,6 +1221,9 @@
                     },
                     "422": {
                         "description": "Erreur de validation"
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur"
                     }
                 }
             }
@@ -1228,6 +1331,15 @@
                         }
                     }
                 }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
             }
         }
     }

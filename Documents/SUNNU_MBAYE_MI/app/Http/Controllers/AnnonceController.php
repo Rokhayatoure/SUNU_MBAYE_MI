@@ -29,6 +29,9 @@ class AnnonceController extends Controller
  *             )
  *         )
  *     ),
+ *  security={
+     *         {"bearerAuth": {}}
+     *     },
  *     @OA\Response(
  *         response=201,
  *         description="Annonce ajoutée avec succès",
@@ -109,6 +112,9 @@ class AnnonceController extends Controller
      *             )
      *         )
      *     ),
+     *  security={
+     *         {"bearerAuth": {}}
+     *     },
      *     @OA\Response(
      *         response=200,
      *         description="Annonce modifiée avec succès",
@@ -213,6 +219,9 @@ class AnnonceController extends Controller
  *         description="ID de l'annonce à supprimer",
  *         @OA\Schema(type="integer")
  *     ),
+ *  security={
+     *         {"bearerAuth": {}}
+     *     },
  *     @OA\Response(
  *         response=200,
  *         description="Annonce supprimée avec succès",
