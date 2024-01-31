@@ -12,7 +12,13 @@ use Illuminate\Support\Facades\Validator;
 
 class ProduitController extends Controller
 {
-
+ /**
+     * @OA\Get(
+     *     path="/api/listeProduitAgriculteur",
+     *     summary="Liste des produits  de L'agriculteur ",
+     *     @OA\Response(response=200, description="Renvoie la liste de tous les produits.")
+     * )
+     */
     public function listeProduitAgriculteur()
     {
         

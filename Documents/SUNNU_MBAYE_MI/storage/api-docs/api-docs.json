@@ -801,6 +801,17 @@
                 }
             }
         },
+        "/api/listeProduitAgriculteur": {
+            "get": {
+                "summary": "Liste des produits  de L'agriculteur ",
+                "operationId": "d4d20a74d0693c4fd1b3f193296e3d18",
+                "responses": {
+                    "200": {
+                        "description": "Renvoie la liste de tous les produits."
+                    }
+                }
+            }
+        },
         "/api/produits": {
             "get": {
                 "summary": "Liste des produits",
