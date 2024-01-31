@@ -175,30 +175,48 @@ class ProduitController extends Controller
     public function updateproduit(Request $request,$id)
     {
 
+        $validator = Validator::make($request->all(), [
+            'nom_produit' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'quantite' => ['required', 'integer', 'min:0'],
+            'prix' => ['required', 'integer', 'min:0'],
+            'categorie_id' => ['required', 'integer', 'exists:categories,id'],
+            
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+      
     
-        $user = Auth::guard('api')->user();
         $produit = Produit::find($id);
+       
          if (!$produit) {
-                return response()->json(['message' => 'Produit  non trouvée'], 404);
+                return response()->json([
+                    "status" => false,
+                    "message" => "annonce non trouver "
+                ]);
             }
     
             // Vérifier si l'utilisateur est le propriétaire de l'annonce
-            if ($produit->users_id !== $user->id) {
-                return response()->json(['message' => 'Vous n\'êtes pas autorisé à modifier cette annonce'], 403);
+            if ($produit->user_id !==  Auth::guard('api')->user()->id){
+                return response()->json([
+                    "status" => false,
+                    "message" => "annonce non trouver "
+                ],403);
             }
-        $produit->nom_produit = $request->nom_produit;
-        $produit->description= $request->description;
-        $produit->quantite = intval($request->quantite);
-        $produit->prix = intval($request->prix);
-        $produit->user_id = auth()->id(); // Récupérer l'id de l'utilisateur connecté
-        $produit->categorie_id = $request->categorie_id;
+           $produit->nom_produit = $request->nom_produit;
+            $produit->description= $request->description;
+            $produit->quantite = intval($request->quantite);
+            $produit->prix = intval($request->prix);
+           $produit->user_id = auth()->id(); // Récupérer l'id de l'utilisateur connecté
+            $produit->categorie_id = $request->categorie_id;
         if ($request->hasFile('images')) {
             $file = $request->file('image');
             $filename = date('YmdHi') . $file->getClientOriginalName();
             $file->move(public_path('images'), $filename);
             $produit->image = $filename;
         }
-        $produit->save();
+        $produit->update();
     
         // Renvoyer une réponse JSON avec le produit créé et un code de statut 201
         return response()->json([

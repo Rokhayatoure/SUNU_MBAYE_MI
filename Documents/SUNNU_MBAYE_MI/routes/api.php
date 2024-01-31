@@ -74,16 +74,17 @@ Route::put('/AnnulerLivraison/{commende_id}', [DetailCommendeController::class, 
 
 });
 
-Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
 
 Route::middleware(['auth','nom_role:agriculteur'])->group(function () {
 Route::put('updateproduit/{id}', [ProduitController::class ,'updateproduit']);
 Route::delete('supProduit/{id}', [ProduitController::class ,'supProduit']);
 Route::get('/listeAnnonceAgriculteur', [AnnonceController::class ,'listeAnnonceAgriculteur']);
+Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
+
 
 });
 
-
+//admin middleware
 Route::middleware(['auth','nom_role:admin'])->group(function () {
     Route::post('/AjoutCategorie', [CategorieController::class ,'AjoutCategorie']);
 
@@ -111,3 +112,4 @@ Route::get('payment-success/{code}', [PayementController::class, 'success'])->na
 Route::get('payment/{code}/success', [PayementController::class, 'paymentSuccessView'])->name('payment.success.view');
 Route::get('payment-cancel', [PayementController::class, 'cancel'])->name('paytech.cancel');
 Route::post('initiatePayment/{commende_id}', [PayementController::class, 'initiatePayment']);
+Route::post('savePayment', [PayementController::class, 'savePayment']);

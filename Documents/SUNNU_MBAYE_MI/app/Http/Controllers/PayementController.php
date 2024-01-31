@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+
 use App\Models\Payment;
 use App\Models\Commende;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -46,28 +48,7 @@ class PayementController extends Controller
             'users_id' =>$user = Auth::guard('api')->user()->id,
             'token'=>2
         ]);
-       
-                      
-
-        
-
-
     
-        
-        // Construisez l'URL de succès
-       // $success_url = secure_url(route('payment.success', ['code' => $commandeId, 'data' => $request->all()]));
-        //$success_url = secure_url(route('payment.success', ['code' => $commandeId, 'data' => $commande->all()]));
-        // $success_url = route('payment.success', [
-        //     'code' => $commandeId,
-        //     'data' => [
-        //         'montant' => $montant,
-        //         // 'qty' => $request->qty,
-        //         'commande_id' => $commandeId
-        //     ],
-        // ]);
-    
-        // Construisez l'URL d'annulation
-        //$cancel_url = secure_url(route('payment.index'));
         return redirect()->route('payment.index');
     
         
@@ -108,81 +89,132 @@ class PayementController extends Controller
     }
 
     
+    public function success(Request $request, $code)
+    {
+        $validated = $_GET['data'];
+        // $validated['token'] = session('token') ?? '';
+        $validated['token'] = Str::random(156);
+
+        // Call the save methods to save data to database using the Payment model
+
+        $payment = $this->savePayment($validated);
+
+        session()->forget('token');
+
+        return Redirect::to(route('payment.success.view', ['code' => $code]));
+    }
+
+    public function savePayment($data = [])
+    {
+        
+        // Récupérez les informations nécessaires du tableau $data
+        $token = $data['token'];
+        $montant = $data['prix'];
+       $commende_id = $data['Commende_id'];
+    
+        $id= DB::table('password_reset_tokens')->first();
+       
+        $payment = Payment::firstOrCreate([
+             'token' => $token,
+            
+        ], [
+            'montant' => $montant,
+            'user_id' =>   $id->user,
+            'Commende_id' =>$commende_id,
+        ]);
+        
+        DB::table('password_reset_tokens')->delete();
+        
+        if (!$payment) {
+            // Redirection vers la page d'accueil si le paiement n'est pas enregistré
+            return [
+                'success' => false,
+                'data' => $data
+            ];
+    
+        }
+    
+        // Redirection vers la page de succès si le paiement est réussi
+        $data['payment_id'] = $payment->id;
+    
+        return [
+            'success' => true,
+            'data' => $data
+        ];
+    }
+
+    // public function savePayment($data = [])
+    // {
+
+    //     $payment = Payment::create([
+    //         'commande_id' => $data['commande_id'],
+    //         'montant' => $data['item_price'],
+    //         'token' => $data['token'],
+    //     ]);
+
+    //     if (!$payment) {
+    //         return $response = [
+    //             'success' => false,
+    //             'data' => $data
+    //         ];
+    //     }
+
+    //     return $response = [
+    //         'success' => true,
+    //         'data' => $data
+    //     ];
+
+    //     # save payment database
+
+    //     /* $payment = Payment::firstOrCreate([
+    //         'token' => $data['token'],
+    //     ], [
+    //         'user_id' => auth()->user()->id,
+    //         'product_name' => $data['product_name'],
+    //         'amount' => $data['price'],
+    //         'qty' => $data['qty']
+    //     ]);
+
+    //     if (!$payment) {
+    //         # redirect to home page if payment not saved
+    //         return $response = [
+    //             'success' => false,
+    //             'data' => $data
+    //         ];
+    //     } */
+
+
+    //     # Redirect to Success page if payment success
+
+    //     // $data['payment_id'] = $payment->id;
+
+    //     /*
+    //         You can continu to save onother records to database using Eloquant methods
+    //         Exemple: Transaction::create($data);
+    //     */
+
+    //     return $response = [
+    //         'success' => true, //
+    //         'data' => $data
+    //     ];
+    // }
+
+    public function paymentSuccessView(Request $request, $code)
+    {
+        // You can fetch data from db if you want to return the data to views
+
+        /* $record = Payment::where([
+            ['token', '=', $code],
+            ['user_id', '=', auth()->user()->id]
+        ])->first(); */
+
+        return view('vendor.paytech.success'/* , compact('record') */)->with('success', 'Félicitation, Votre paiement est éffectué avec succès');
+    }
+
+    // public function cancel()
+    // {
+    //     # code...
+    // }
  
 
- public function savePayment($data = [])
-{
-  
-  // Récupérez les informations nécessaires du tableau $data
-  $token = $data['token'];
-  $amount = $data['price'];
-  $collecteId = $data['collecte_id'];
-
-  $id= DB::table('password_reset_tokens')->first();
- 
-  $payment = Payment::firstOrCreate([
-       'token' => $token,
-      
-  ], [
-      'amount' => $amount,
-      'user_id' =>   $id->donateurConnecter,
-      'collecte_de_fonds_id' => $collecteId,
-  ]);
-  
-  DB::table('password_reset_tokens')->delete();
-  
-  if (!$payment) {
-      // Redirection vers la page d'accueil si le paiement n'est pas enregistré
-      return [
-          'success' => false,
-          'data' => $data
-      ];
-
-  }
-
-  // Redirection vers la page de succès si le paiement est réussi
-  $data['payment_id'] = $payment->id;
-
-  return [
-      'success' => true,
-      'data' => $data
-  ];
-}
-
-
-
-
-
-
-
-  public function paymentSuccessView(Request $request, $code)
-  {
-      // You can fetch data from db if you want to return the data to views
-
-      /* $record = Payment::where([
-          ['token', '=', $code],
-          ['user_id', '=', auth()->user()->id]
-      ])->first(); */
-
-      return 'success Félicitation, Votre paiement est éffectué avec succès';
-  }
-
-  public function cancel()
-  {
-      # code...
-  }
-//   public function success(Request $request, $code)
-//   {
-//       $validated = $_GET['data'];
-//       // $validated['token'] = session('token') ?? '';
-//       $validated['token'] = Str::random(156);
-
-//       // Call the save methods to save data to database using the Payment model
-
-//       $payment = $this->savePayment($validated);
-
-//       session()->forget('token');
-
-//       return Redirect::to(route('payment.success.view', ['code' => $code]));
-//   }
 }
