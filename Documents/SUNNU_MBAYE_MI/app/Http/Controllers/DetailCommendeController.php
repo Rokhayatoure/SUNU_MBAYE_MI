@@ -70,6 +70,10 @@ class DetailCommendeController extends Controller
     // Supprimez tous les articles du panier de l'utilisateur après la création de la commande
     panier::where('user_id', $user->id)->delete();
     $commende->save();
+    return response()->json([
+        'status' => true,
+        'commende' => $commende
+    ], 201);
         }
 
 

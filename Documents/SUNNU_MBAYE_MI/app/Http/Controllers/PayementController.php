@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Http\Services\PaytechService;
 use App\Http\Requests\PayementRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 
@@ -29,60 +30,53 @@ class PayementController extends Controller
 
 
 
-    public function initiatePayment(Commende $commende_id){
-        dd($commende_id);
-        // Récupérez les informations nécessaires de la requête $request
-        //$amount = $request->input('price');
-       // $commandeId = $request->input('commande_id');
-        // $commande= DetailCommande::where('commande_id', $detailCommande->commande_id)->first();
-        // $client=Client::where('id', $commande->client_id)->first();
-        // $user = Client::where('user_id', Auth::user()->id)->first();
-        // $montant = $detailCommande->montant;
-        // $commandeId = $detailCommande->commande_id;
-        // $userexist=DB::table('password_reset_tokens')->insert([
-        //     'clientConnecter' =>$user->id,
-        //     'token'=>1
-        // ]);
-     
-        // Construisez l'URL de succès
-       // $success_url = secure_url(route('payment.success', ['code' => $commandeId, 'data' => $request->all()]));
-        // $success_url = secure_url(route('payment.success', ['code' => $commende_id, 'data' => $detailCommande->all()]));
-    
-        // Construisez l'URL d'annulation
-        // $cancel_url = secure_url(route('payment.index'));
-    
-        // Instanciez le service de paiement
-        // $paymentService = new PaytechService(config('paytech.PAYTECH_API_KEY'), config('paytech.PAYTECH_SECRET_KEY'));
+    public function initiatePayment($commende_id,Request $request){
+        $commende = Commende::find($commende_id);
+        $user = User::where('id', $commende->user_id)->first();
+        if(!$user){
+            return response()->json(['status' => 404, 'status_message' => 'Vous n\'etes pas l\'auteur de cette commande.']);
+        }
+        $montant = $commende->prix;
+        $commende_id = $commende->commende_id;
+        $userexist=DB::table('password_reset_tokens')->insert([
+            'clientConnecter' =>$user->id,
+            'token'=>1
+        ]);
+        
+                      
+
+        
+        $paymentService = new PaytechService(config('paytech.PAYTECH_API_KEY'), config('paytech.PAYTECH_SECRET_KEY'));
     
         // Envoyez la requête de paiement
-        // $jsonResponse = $paymentService->setQuery([
-        //     'item_name' => "Paiement de la commande",
-        //     'item_price' => $montant,
-        //     'command_name' => "Paiement pour un don via PayTech",
-        // ])
-    //     ->setCustomeField([
-    //         'item_id' => $collecteId,
-    //         'time_command' => time(),
-    //         'ip_user' => $request->ip(),
-    //         'lang' => $request->server('HTTP_ACCEPT_LANGUAGE')
-    //     ])
-    //     ->setTestMode(true)
-    //     ->setCurrency("xof")
-    //     ->setRefCommand(uniqid())
-    //     ->setNotificationUrl([
-    //         'ipn_url' => 'https://urltowebsite.com/ipn',  
-    //         'success_url' => $success_url,
-    //         'cancel_url' => $cancel_url
-    //     ])->send();
+        $jsonResponse = $paymentService->setQuery([
+            'commande_id' =>$commende_id  ,
+            'item_price' => $montant,
+            'command_name' => "Paiement pour un don via PayTech",
+        ])
+        ->setCustomeField([
+            'detail_commande_id' => $commende->id,
+            'time_command' => time(),
+            'ip_user' => $request->ip(),
+            'lang' => $request->server('HTTP_ACCEPT_LANGUAGE')
+        ])
+        ->setTestMode(true)
+        ->setCurrency("xof")
+        ->setRefCommand(uniqid())
+        ->setNotificationUrl([
+            'ipn_url' => 'https://urltowebsite.com/ipn',  
+            'success_url' => $success_url,
+            'cancel_url' => $cancel_url
+        ])->send();
     
-    //     // Traitez la réponse et retournez une réponse appropriée à votre application
-    //     if ($jsonResponse['success'] < 0) {
-    //         return response()->json(['error' => $jsonResponse['errors'][0]], 422);
-    //     } elseif ($jsonResponse['success'] == 1) {
+        // Traitez la réponse et retournez une réponse appropriée à votre application
+        if ($jsonResponse['success'] < 0) {
+            return response()->json(['error' => $jsonResponse['errors'][0]], 422);
+        } elseif ($jsonResponse['success'] == 1) {
            
-    //         return response()->json(['token' => $jsonResponse['token'], 'redirect_url' => $jsonResponse['redirect_url']]);
-    //     }
-       
+            return response()->json(['token' => $jsonResponse['token'], 'redirect_url' => $jsonResponse['redirect_url']]);
+        }
+
     }
 
     

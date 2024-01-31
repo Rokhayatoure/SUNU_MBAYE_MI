@@ -74,17 +74,18 @@ Route::put('/AnnulerLivraison/{commende_id}', [DetailCommendeController::class, 
 
 });
 
+Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
 
 Route::middleware(['auth','nom_role:agriculteur'])->group(function () {
-Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
 Route::put('updateproduit/{id}', [ProduitController::class ,'updateproduit']);
 Route::delete('supProduit/{id}', [ProduitController::class ,'supProduit']);
+Route::get('/listeAnnonceAgriculteur', [AnnonceController::class ,'listeAnnonceAgriculteur']);
 
 });
 
 
 Route::middleware(['auth','nom_role:admin'])->group(function () {
-Route::post('/AjoutCategorie', [CategorieController::class ,'AjoutCategorie']);
+    Route::post('/AjoutCategorie', [CategorieController::class ,'AjoutCategorie']);
 
 Route::delete('/suprimmerCommende/{commende_id}', [DetailCommendeController::class, 'suprimmerCommende']);
 Route::put('/LivraisonTerminer/{commende_id}', [DetailCommendeController::class, 'LivraisonTerminer']);

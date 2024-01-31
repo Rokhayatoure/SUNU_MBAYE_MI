@@ -244,12 +244,6 @@ public function supprimerAnnonce($id)
             return response()->json(['message' => 'Annonce non trouvée'], 404);
         }
 
-        // Vérifier si l'utilisateur est le propriétaire de l'annonce
-        // if ($annonce->users_id !== $user->id) {
-        //     return response()->json(['message' => 'Vous n\'êtes pas autorisé à supprimer cette annonce'], 403);
-        // }
-
-        // Supprimer l'annonce
         $annonce->delete();
 
         return response()->json([
@@ -260,6 +254,15 @@ public function supprimerAnnonce($id)
     } else {
         return response()->json(['message' => 'Veillez vous connecter d\'abord'], 401);
     }
+}
+
+
+public function listeAnnonceAgriculteur()
+{
+    
+    
+    $anonces=Annonce::where('user_id',auth()->guard('api')->user()->id)->get();
+    return response()->json(compact('anonces'), 200);
 }
 
     

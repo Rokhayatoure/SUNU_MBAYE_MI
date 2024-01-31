@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('prix')->nulable();
             $table->string('images')->nulable();
             $table->integer('quantite')->nulable();
-            $table->string('nom_produit')->nulable();
+            $table->string('nom_produit')->nullable();
             $table->timestamps();
         });
     }
