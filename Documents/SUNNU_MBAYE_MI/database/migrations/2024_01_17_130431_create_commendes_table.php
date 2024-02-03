@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('nom')->nullable();
             $table->string('contact')->nullable();
             $table->string('email')->nullable();
-            $table->string('prix')->nullable();
+            $table->integer('prix')->nullable();
             $table->string('images')->nullable();
-            $table->string('quantite')->nullable();
+            $table->integer('quantite')->nullable();
             $table->string('nom_prouit')->nullable();
             $table->timestamps();
         

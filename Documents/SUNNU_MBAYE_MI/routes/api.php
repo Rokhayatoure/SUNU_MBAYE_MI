@@ -10,6 +10,7 @@ use App\Http\Controllers\AnnonceController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\PayementController;
 use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\CommendeController;
 use App\Http\Controllers\DetailCommendeController;
 use Spatie\LaravelIgnition\Solutions\SolutionProviders\RunningLaravelDuskInProductionProvider;
 
@@ -30,7 +31,7 @@ Route::post('inscription', [UserController::class ,'inscription']);
 Route::post('login', [UserController::class ,'login']);
 Route::post('logout', [UserController::class ,'logout']);
 Route::put('/updateUser/{id}',[UserController::class ,'updateUser'] );
-Route::get('/listeUser',[UserController::class ,'listeUser'] );
+
 //anonce
 Route::post('/ajoutAnnonce', [AnnonceController::class ,'ajoutAnnonce']);
 
@@ -45,42 +46,36 @@ Route::get('/listeCategorie', [CategorieController::class ,'listeCategorie']);
 Route::get('Produitrecherche', [ProduitController::class ,'Produitrecherche']);
 Route::get('rechercheProduit', [ProduitController::class ,'rechercheProduit']);
 Route::get('listeProduit', [ProduitController::class ,'listeProduit']);
-Route::get('listeProduitAgriculteur', [ProduitController::class ,'listeProduitAgriculteur']);
 
 // Route::delete('/listeCategorie', [ProduitController::class ,'listeCategorie']);
 //pagner
-Route::get('/AfficheCommende', [DetailCommendeController::class, 'AfficheCommende']);
-Route::get('/voirplus/{commende_id}', [DetailCommendeController::class, 'voirplus']);
 
 
 
 
 
-Route::middleware('auth:api')->group( function (){
-   
-    // Route::post('/AjoutCategorie', [CategorieController::class ,'AjoutCategorie']);
-    
-
-    
-});
+//revendeur middleware
 Route::middleware(['auth','nom_role:revendeur'])->group(function () {
 Route::POST('/AjoutPanier/{produit_id}', [PanierController::class, 'AjoutPanier']);
 Route::get('/AfficherPanier', [PanierController::class, 'AfficherPanier']);
 Route::delete('/viderPanier/{produit_id}', [PanierController::class, 'viderPanier']);
 Route::delete('/validerPanier/{panier_id}', [PanierController::class, 'validerPanier']);
 //commender 
-Route::post('/effectuerCommande', [DetailCommendeController::class, 'effectuerCommande']);
 Route::put('/AnnulerLivraison/{commende_id}', [DetailCommendeController::class, 'AnnulerLivraison']);
 
+Route::post('/Commander', [CommendeController::class, 'Commander']);
 
 });
 
-
+//agriculteur middleware
 Route::middleware(['auth','nom_role:agriculteur'])->group(function () {
 Route::put('updateproduit/{id}', [ProduitController::class ,'updateproduit']);
 Route::delete('supProduit/{id}', [ProduitController::class ,'supProduit']);
 Route::get('/listeAnnonceAgriculteur', [AnnonceController::class ,'listeAnnonceAgriculteur']);
 Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
+Route::get('listeProduitAgriculteur', [ProduitController::class ,'listeProduitAgriculteur']);
+
+
 
 
 
@@ -98,19 +93,24 @@ Route::delete('/supAnnonce/{id}', [AnnonceController::class ,'supprimerAnnonce']
 //categorie
 Route::put('/modifieCategorie/{id}', [CategorieController::class ,'modifieCategorie']);
 Route::delete('/supCategorie/{id}', [CategorieController::class ,'destroy']);
+Route::get('/listeUser',[UserController::class ,'listeUser'] );
+Route::get('/AfficheCommende', [DetailCommendeController::class, 'AfficheCommende']);
+Route::get('/voirplus/{commende_id}', [DetailCommendeController::class, 'voirplus']);
+
 
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 
 Route::get('payment', [PayementController::class, 'index'])->name('payment.index');
 Route::post('/checkout', [PayementController::class, 'payment'])->name('payment.submit');
 Route::get('ipn', [PayementController::class, 'ipn'])->name('paytech-ipn');
+Route::get('payment-cancel', [PayementController::class, 'cancel'])->name('paytech.cancel');
 Route::get('payment-success/{code}', [PayementController::class, 'success'])->name('payment.success');
 Route::get('payment/{code}/success', [PayementController::class, 'paymentSuccessView'])->name('payment.success.view');
-Route::get('payment-cancel', [PayementController::class, 'cancel'])->name('paytech.cancel');
-Route::post('initiatePayment/{commende_id}', [PayementController::class, 'initiatePayment']);
-Route::post('savePayment', [PayementController::class, 'savePayment']);
+// Route::post('initiatePayment/{commende_id}', [PayementController::class, 'initiatePayment']);
+// Route::post('payment', [PayementController::class, 'payment']);
+

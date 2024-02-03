@@ -111,7 +111,7 @@ class UserController extends Controller
             'role_id' => ['required','integer',],
             'password' => ['required', 'string', 'min:8'],
 
-        ]);
+        ]); 
     
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -262,7 +262,7 @@ public function updateUser(Request $request,$id)
     $user->prenom = $request->prenom;
     $user->adresse = $request->adresse;
     $user->date_naissance = $request->date_naissance;
-    $user->contact = $request->contact;
+    $user->telephone = $request->telephone;
     $user->sexe= $request->sexe;
     $user->password= $request->password;
    

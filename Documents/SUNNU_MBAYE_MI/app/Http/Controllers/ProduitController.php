@@ -84,7 +84,7 @@ class ProduitController extends Controller
             'quantite' => ['required', 'integer', 'min:0'],
             'prix' => ['required', 'integer', 'min:0'],
             'categorie_id' => ['required', 'integer', 'exists:categories,id'],
-            'images' => ['required', 'image', 'max:2048'],
+            // 'images' => ['required', 'image', 'max:2048'],
         ]);
     
         // Si la validation échoue, renvoyez une réponse avec les erreurs
@@ -124,7 +124,7 @@ class ProduitController extends Controller
         return response()->json([
             'status' => true,
             'produit' => $produit
-        ], 201);
+        ], 200);
     
     }
 /**

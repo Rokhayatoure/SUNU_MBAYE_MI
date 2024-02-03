@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('produit_id')->references('id')->on('produits')->onDelete('cascade');
             $table->string('prenom')->nulable();
             $table->string('nom')->nulable();
-            $table->string('contact')->nulable();
+            // $table->string('contact')->nulable();
             $table->string('email')->nulable();
             $table->integer('prix')->nulable();
             $table->string('images')->nulable();

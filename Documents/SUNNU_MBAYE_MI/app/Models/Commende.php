@@ -9,6 +9,7 @@ class Commende extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'id',
         'produit_id',
         'nom',
         'prenom',

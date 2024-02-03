@@ -14,7 +14,12 @@ use Illuminate\Support\Facades\Auth;
 
 class DetailCommendeController extends Controller
 {
+    private $paymentController;
 
+    // public function __construct( PayementController $paymentController)
+    // {
+    //     $this->paymentController = $paymentController;
+    // }
 
     /**
  * @OA\Post(
@@ -34,12 +39,15 @@ class DetailCommendeController extends Controller
  * )
  */
 
-    public function effectuerCommande()
+    public function Commander()
     {
+        dd('ok');
+        // set_time_limit(0);
+
         // Récupérez le produit par son ID
-        if (!Auth::guard('api')->check()) {
-            return response()->json(['errors' => 'veilleir vous connecter avant de fair cette action.'], 422);
-        }
+        // if (!Auth::guard('api')->check()) {
+        //     return response()->json(['errors' => 'veilleir vous connecter avant de fair cette action.'], 422);
+        // }
         $user = Auth::guard('api')->user();
 
         $panier = Panier::where('user_id',auth()->guard('api')->user()->id)->get();
@@ -49,11 +57,13 @@ class DetailCommendeController extends Controller
             "message" => "Veillez ajoutez des produits dans le panier ",
            
         ],500);
+
+
     }
         $commende = new Commende();
         $commende->livraison = 'En_court';
         $commende->user_id= auth()->guard('api')->user()->id;
-        $commende->nom=$user->nom;
+        $commende->noam=$user->nom;
         $commende->prenom =$user->prenom;
         $cptQ = 0;
         $cptC = 0;
@@ -70,11 +80,12 @@ class DetailCommendeController extends Controller
     // Supprimez tous les articles du panier de l'utilisateur après la création de la commande
     panier::where('user_id', $user->id)->delete();
     $commende->save();
+    // return view('index', compact('cptc','commende_id'));
     return response()->json([
         'status' => true,
         'commende' => $commende
     ], 201);
-        }
+         }
 
 
 
@@ -248,6 +259,8 @@ class DetailCommendeController extends Controller
     
         return response()->json(['message' => 'livraison terminer avec succes.'], 200);
     }
+
+    
     }
 
 
