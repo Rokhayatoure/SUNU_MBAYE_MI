@@ -280,5 +280,48 @@ public function listeAnnonceAgriculteur()
     return response()->json(compact('anonces'), 200);
 }
 
+public function ajoutAnnonceAdmin(Request $request)
+{
+   
+        $user = Auth::guard('api')->user();
+
+        // Vérifier le nombre d'annonces existantes pour l'utilisateur
+        $nombreAnnonces = Annonce::where('user_id', $user->id)->count();
+
+        // Limiter à 3 annonces
+        if ($nombreAnnonces >= 3) {
+            return response()->json([
+                "status" => false,
+                "message" => "Vous avez atteint la limite de 3 annonces. Vous ne pouvez pas en ajouter plus."
+            ]);
+        }
+
+        // Créer une nouvelle annonce
+        $annonce = new Annonce();
+        $annonce->titre = $request->titre;
+        $annonce->description = $request->description;
+        $annonce->user_id = $user->id;
+
+        if ($request->hasFile('images')) {
+            $file = $request->file('images');
+            $filename = date('YmdHi') . $file->getClientOriginalName();
+            $file->move(public_path('images'), $filename);
+            $annonce->images = $filename;
+        }
+
+        $annonce->save();
+
+        return response()->json([
+            "status" => true,
+            "message" => "Annonce ajoutée avec succès.",
+            'annonce' => $annonce
+        ]);
     
+        return response()->json([
+            "status" => false,
+            "message" => "Veuillez vous connecter d'abord."
+        ]);
+    
+}
+
 }

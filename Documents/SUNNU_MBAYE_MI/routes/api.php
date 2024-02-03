@@ -33,7 +33,6 @@ Route::post('logout', [UserController::class ,'logout']);
 Route::put('/updateUser/{id}',[UserController::class ,'updateUser'] );
 
 //anonce
-Route::post('/ajoutAnnonce', [AnnonceController::class ,'ajoutAnnonce']);
 
 Route::get('/listAnnonce', [AnnonceController::class ,'listAnnonce']);
 Route::get('/voirPlus/{annonce_id}', [AnnonceController::class ,'voirPlus']);
@@ -73,6 +72,7 @@ Route::get('/listeAnnonceAgriculteur', [AnnonceController::class ,'listeAnnonceA
 Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
 Route::get('listeProduitAgriculteur', [ProduitController::class ,'listeProduitAgriculteur']);
 
+Route::post('/ajoutAnnonce', [AnnonceController::class ,'ajoutAnnonce']);
 
 
 
@@ -95,6 +95,7 @@ Route::get('/listeUser',[UserController::class ,'listeUser'] );
 Route::get('/AfficheCommende', [DetailCommendeController::class, 'AfficheCommende']);
 Route::get('/voirplus/{commende_id}', [DetailCommendeController::class, 'voirplus']);
 
+Route::post('/ajoutAnnonceAdmin', [AnnonceController::class ,'ajoutAnnonceAdmin']);
 
 });
 
