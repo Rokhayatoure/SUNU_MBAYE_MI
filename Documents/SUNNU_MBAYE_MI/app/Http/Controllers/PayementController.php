@@ -32,7 +32,7 @@ class PayementController extends Controller
         $IPN_URL = 'https://urltowebsite.com';
 
         $amount = $request->input('price');
-       $commende_id = $request->input('commande_id');
+       $commende_id = $request->input('commende_id');
         $code = "47";
 
         $success_url = route('payment.success', [
@@ -46,7 +46,7 @@ class PayementController extends Controller
         $paymentService = new PaytechService(config('paytech.PAYTECH_API_KEY'), config('paytech.PAYTECH_SECRET_KEY'));
 
         $jsonResponse = $paymentService->setQuery([
-            'commande_id' =>$commende_id,
+            'commende_id' =>$commende_id,
             'item_price' => $amount,
             'command_name' => "Paiement pour l'achat de via PayTech",
         ])
@@ -93,14 +93,15 @@ class PayementController extends Controller
 
         $data['token'] = $token;
 
-        $payment = payment::firstOrCreate([
+        $payment = Payment::firstOrCreate([
             'token' => rand(1,1000),
         ], 
         [
             'amount' => $data['amount'],
+            
             'commende_id' => $data['commende_id'],
         ]);
-       // dd($payment);
+        // dd($payment);
 
         if (!$payment) {
             //return 'no payment';

@@ -42,7 +42,6 @@ Route::get('/voirPlus/{annonce_id}', [AnnonceController::class ,'voirPlus']);
 Route::get('/voiplusCategorie/{id}', [CategorieController::class ,'voiplusCategorie']);
 Route::get('/listeCategorie', [CategorieController::class ,'listeCategorie']);
 //produit
-
 Route::get('Produitrecherche', [ProduitController::class ,'Produitrecherche']);
 Route::get('rechercheProduit', [ProduitController::class ,'rechercheProduit']);
 Route::get('listeProduit', [ProduitController::class ,'listeProduit']);
@@ -62,7 +61,6 @@ Route::delete('/viderPanier/{produit_id}', [PanierController::class, 'viderPanie
 Route::delete('/validerPanier/{panier_id}', [PanierController::class, 'validerPanier']);
 //commender 
 Route::put('/AnnulerLivraison/{commende_id}', [DetailCommendeController::class, 'AnnulerLivraison']);
-
 Route::post('/Commander', [CommendeController::class, 'Commander']);
 
 });

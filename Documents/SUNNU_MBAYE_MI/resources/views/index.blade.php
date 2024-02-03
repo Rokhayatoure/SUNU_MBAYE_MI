@@ -148,7 +148,7 @@
                                 <input type="number" name="price"  value="{{$cptC }}" class="form-control" placeholder="Montant">
                             </div>
                             <div class="form-group">
-                                <input type="number" name="qty" value="{{$commende_id}}" class="form-control" placeholder="Quantité">
+                                <input type="number" name="commende_id" value="{{$commende_id}}" class="form-control" placeholder="Quantité">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary btn-block">Effectuer le Paiement</button>

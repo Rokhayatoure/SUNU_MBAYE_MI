@@ -23,9 +23,9 @@ class PayementRequest extends FormRequest
     {
         return [
             // 'product_name' => 'required|string',
-            'price' => 'required',
-            // 'commende_id' => 'required'
-            'qty' => 'required'
+            'price' => 'required|numeric',
+            'commende_id' => 'required'
+            // 'qty' => 'required'
         ];
     }
 }

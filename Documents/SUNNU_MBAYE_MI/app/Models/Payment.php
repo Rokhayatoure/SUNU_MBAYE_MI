@@ -20,7 +20,7 @@ class Payment extends Model
         'commende_id',
         'token',
         'amount',
-        'qty'
+        // 'qty'
     ];
 
     protected $table = 'payments';
