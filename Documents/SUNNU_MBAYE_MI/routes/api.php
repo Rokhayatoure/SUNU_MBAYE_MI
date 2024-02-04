@@ -97,8 +97,8 @@ Route::get('/listeUser',[UserController::class ,'listeUser'] );
 Route::get('/AfficheCommende', [CommendeController::class, 'AfficheCommende']);
 Route::get('/voirplus/{commende_id}', [CommendeController::class, 'voirplus']);
 
-Route::post('/publierAnnonce/{id}', [AnnoncepublierController::class ,'publierAnnonce']);
-Route::post('/retirerAnnonce/{id}', [AnnoncepublierController::class ,'retirerAnnonce']);
+Route::get('/publierAnnonce/{id}', [AnnonceController::class ,'publierAnnonce']);
+Route::get('/retirerAnnonce/{id}', [AnnonceController::class ,'retirerAnnonce']);
 Route::get('listerMessages', [MessageController::class ,'listerMessages']);
 
 });

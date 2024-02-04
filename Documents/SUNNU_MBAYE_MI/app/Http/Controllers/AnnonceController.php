@@ -288,6 +288,72 @@ public function listeAnnonceAgriculteur()
     $anonces=Annonce::where('user_id',auth()->guard('api')->user()->id)->get();
     return response()->json(compact('anonces'), 200);
 }
+public function publierAnnonce(Request $request, $id)
+{
+    if (Auth::guard('api')->check()) {
+        $user = Auth::guard('api')->user();
+
+        // Vérifier si l'utilisateur a déjà publié trois annonces cette semaine
+        $annoncesPublieesCetteSemaine = Annonce::where('user_id', $user->id)
+            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->count();
+
+        if ($annoncesPublieesCetteSemaine >= 3) {
+            return response()->json([
+                "status" => false,
+                "message" => "Vous avez déjà publié trois annonces cette semaine. Supprimez une annonce pour en publier une nouvelle.",
+            ]);
+        }
+
+        // Vérifier si l'annonce existe
+        $annonce = Annonce::find($id);
+
+        if (!$annonce) {
+            return response()->json([
+                "status" => false,
+                "message" => "Annonce non trouvée.",
+            ]);
+        }
+
+        // Marquer l'annonce comme publiée
+        $annonce->is_published = true;
+        $annonce->save();
+
+        return response()->json([
+            "status" => true,
+            "message" => "Annonce publiée avec succès.",
+            'annonce' => $annonce
+        ]);
+    } else {
+        return response()->json(['message' => 'Veuillez vous connecter d\'abord'], 401);
+    }
+}
+public function retirerAnnonce($id)
+{
+    $user = Auth::guard('api')->user();
+    if (Auth::guard('api')->check()) {
+        $annonce = Annonce::find($id);
+        
+        
+        if (!$annonce) {
+            return response()->json(['message' => 'Annonce non trouvée'], 404);
+        }
+
+        // Retirer de la page d'accueil
+        $annonce->is_published = false;
+        $annonce->save();
+
+        return response()->json([
+            "status" => true,
+            "message" => "Annonce retirée avec succès.",
+            'annonce' => $annonce
+        ]);
+    } else {
+        return response()->json(['message' => 'Veuillez vous connecter d\'abord'], 401);
+    }
+}
+
+
 
 
 }

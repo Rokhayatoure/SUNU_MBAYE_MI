@@ -16,10 +16,6 @@ class Annonce extends Model
     ];
     // Annonce.php
 
-public function publiees()
-{
-    return $this->hasMany(AnnoncePublier::class);
-}
 
 
 }
