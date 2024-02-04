@@ -37,7 +37,6 @@ Route::put('/updateUser/{id}',[UserController::class ,'updateUser'] );
 
 Route::get('/listAnnonce', [AnnonceController::class ,'listAnnonce']);
 Route::get('/voirPlus/{annonce_id}', [AnnonceController::class ,'voirPlus']);
-Route::get('/listeAnnoncesPubliees', [AnnonceController::class ,'listeAnnoncesPubliees']);
 //categorie
 
 Route::get('/voiplusCategorie/{id}', [CategorieController::class ,'voiplusCategorie']);
@@ -102,6 +101,7 @@ Route::get('/voirplus/{commende_id}', [CommendeController::class, 'voirplus']);
 Route::get('/publierAnnonce/{id}', [AnnonceController::class ,'publierAnnonce']);
 Route::get('/retirerAnnonce/{id}', [AnnonceController::class ,'retirerAnnonce']);
 Route::get('listerMessages', [MessageController::class ,'listerMessages']);
+Route::get('/listeAnnoncesPubliees', [AnnonceController::class ,'listeAnnoncesPubliees']);
 
 });
 
