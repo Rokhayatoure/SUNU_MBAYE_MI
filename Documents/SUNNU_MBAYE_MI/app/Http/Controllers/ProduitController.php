@@ -435,5 +435,20 @@ public function filtrerProduitsParCategorie(Request $request)
     return response()->json(compact('produits'), 200);
 }
 
+
+public function supProduitAdmine($id)
+{ 
+    
+    if(!Auth::guard('api')->check()){
+        return response()->json(['message' => 'veiller vouss connecter avant de faire cette action'], 403);
+
+    }
+    
+  $produit=  Produit::find($id)->delete();
+  $user = Auth::guard('api')->user();
+    
+    return response()->json(['message' => 'produit supprimé avec succès'], 200);
+}
+
  
 }

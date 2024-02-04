@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Panier;
+use App\Models\Produit;
 use App\Models\Commende;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -82,6 +83,49 @@ class CommendeController extends Controller
       return view('index', compact('cptC','commende_id'));
      
            }
+
+
+
+
+public function Commender(Request $request,$produit_id)
+    {
+        if (Auth::guard('api')->check()){
+
+      
+        $user = Auth::guard('api')->user();
+        $produit =Produit::find($produit_id);
+        $commende=new Commende();
+        $commende->email=$user->email;
+        $commende->nom=$user->nom;
+        $commende->prenom=$user->prenom;
+        $commende->user_id=auth()->guard('api')->user()->id;
+        $commende->quantite= $produit->quantite;
+        // $commende->prix=intval($produit->prix )*intval($produit->quantite);
+        $commende->nom_produit=$produit->nom_produit;
+        $commende->images=$produit->images;
+        $commende->produit_id= $produit->id;
+        
+         $cptQ = 0;
+          $cptC = 0;
+        // Ajoutez chaque article du panier à la table de commande produit
+        foreach( $produit as $item) {
+       
+         $cptQ+= $item->quantite;
+         $cptC+=$item->prix;
+     
+     }
+     $commende->quantite =$cptQ;
+     $commende->prix =$cptC;
+
+        $commende->save(); 
+    }   else{
+        return response()->json(['message' => ' Veiller vous connecter dabord'], 201);
+    }
+        return response()->json([
+            'status' => true,
+            'panier' => $commende
+        ], 201);
+        }
   /**
      * Afficher les commandes de l'utilisateur.
      *
