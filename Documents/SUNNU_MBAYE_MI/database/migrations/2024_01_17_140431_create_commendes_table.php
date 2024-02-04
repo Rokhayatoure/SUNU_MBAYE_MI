@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('produit_id');
-            $table->foreign('produit_id')->references('id')->on('produits')->onDelete('cascade');
+            // $table->unsignedBigInteger('produit_id');
+            // $table->foreign('produit_id')->references('id')->on('produits')->onDelete('cascade');
             $table->enum('livraison', ['En_court', 'annuler','terminer',])->default('En_court');
             $table->integer("numero_commende")->nullable();
             $table->string('prenom')->nullable();

@@ -445,9 +445,9 @@ public function supProduitAdmine($id)
     }
     
   $produit=  Produit::find($id)->delete();
-  $user = Auth::guard('api')->user();
+
     
-    return response()->json(['message' => 'produit supprimé avec succès'], 200);
+    return response()->json(['message' => 'produit supprimé avec succès','produit'=>$produit], 200);
 }
 
  

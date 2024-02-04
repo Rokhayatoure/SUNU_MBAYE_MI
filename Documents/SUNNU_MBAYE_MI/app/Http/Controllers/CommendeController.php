@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Panier;
 use App\Models\Produit;
 use App\Models\Commende;
+use App\Models\DetailCommende;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -20,7 +21,7 @@ class CommendeController extends Controller
      * Passer une commande.
      *
      * @OA\Post(
-     *     path="/api/commander",
+     *     path="/api/commenender",
      *     summary="Passer une commande",
      *     security={
      *         {"bearerAuth": {}}
@@ -39,80 +40,79 @@ class CommendeController extends Controller
      *     @OA\Response(response=403, description="Non autorisé")
      * )
      */
-    public function Commander()
-      {
+//     public function Commander()
+//       {
   
           
-          $user = Auth::guard('api')->user();
+//           $user = Auth::guard('api')->user();
   
-          $panier = Panier::where('user_id',auth()->guard('api')->user()->id)->get();
-      if(!$panier){
-          return response()->json([
-              "status" => false,
-              "message" => "Veillez ajoutez des produits dans le panier ",
+//           $panier = Panier::where('user_id',auth()->guard('api')->user()->id)->get();
+//       if(!$panier){
+//           return response()->json([
+//               "status" => false,
+//               "message" => "Veillez ajoutez des produits dans le panier ",
              
-          ],500);
+//           ],500);
   
   
-      }
-          $commende = new Commende();
-          $commende->livraison = 'En_court';
-          $commende->user_id= auth()->guard('api')->user()->id;
-          $commende->nom=$user->nom;
-          $commende->prenom =$user->prenom;
-          $cptQ = 0;
-          $cptC = 0;
-        // Ajoutez chaque article du panier à la table de commande produit
-        foreach( $panier as $item) {
+//       }
+//           $commende = new Commende();
+//           $commende->livraison = 'En_court';
+//           $commende->user_id= auth()->guard('api')->user()->id;
+//           $commende->nom=$user->nom;
+//           $commende->prenom =$user->prenom;
+//           $cptQ = 0;
+//           $cptC = 0;
+//         // Ajoutez chaque article du panier à la table de commande produit
+//         foreach( $panier as $item) {
        
-         $cptQ+= $item->quantite;
-         $cptC+=$item->prix;
+//          $cptQ+= $item->quantite;
+//          $cptC+=$item->prix;
      
-     }
-     $commende->quantite =$cptQ;
-     $commende->prix =$cptC;
+//      }
+//      $commende->quantite =$cptQ;
+//      $commende->prix =$cptC;
    
    
 
-  //    dd($cptQ);
-      // Supprimez tous les articles du panier de l'utilisateur après la création de la commande
-      panier::where('user_id', $user->id)->delete();
-      $commende->save();
-      $commende_id = $commende->id;
+//   //    dd($cptQ);
+//       // Supprimez tous les articles du panier de l'utilisateur après la création de la commande
+//       panier::where('user_id', $user->id)->delete();
+//       $commende->save();
+//       $commende_id = $commende->id;
 
-      return view('index', compact('cptC','commende_id'));
+//       return view('index', compact('cptC','commende_id'));
      
-           }
+//            }
 
 
 
 
-public function Commender(Request $request,$produit_id)
+public function Commender(Request $request)
     {
         if (Auth::guard('api')->check()){
 
       
         $user = Auth::guard('api')->user();
-        $produit =Produit::find($produit_id);
+       
         $commende=new Commende();
-        $commende->email=$user->email;
-        $commende->nom=$user->nom;
-        $commende->prenom=$user->prenom;
+        $commende->livraison='Encourt';
         $commende->user_id=auth()->guard('api')->user()->id;
-        $commende->quantite= $produit->quantite;
-        // $commende->prix=intval($produit->prix )*intval($produit->quantite);
-        $commende->nom_produit=$produit->nom_produit;
-        $commende->images=$produit->images;
-        $commende->produit_id= $produit->id;
-        
+       
          $cptQ = 0;
           $cptC = 0;
-        // Ajoutez chaque article du panier à la table de commande produit
-        foreach( $produit as $item) {
-       
-         $cptQ+= $item->quantite;
-         $cptC+=$item->prix;
-     
+        
+        foreach( $request->input('panier') as $produit) {
+          DetailCommende::create([
+            'commende_id'=>$commende->id,
+            'produit_id'=>$produit['produit_id'],
+            'prix'=>$produit['prix'],
+            'quantite'=>$produit['quantite'],
+          ]);
+        
+     Produit::where('id',$produit['produit_id'])->decremente('quantite',$produit['quantite']);
+     $cptQ+= $produit['quantite'];
+     $cptC+=$produit ['prix']*$produit['quantite'];
      }
      $commende->quantite =$cptQ;
      $commende->prix =$cptC;
@@ -121,10 +121,8 @@ public function Commender(Request $request,$produit_id)
     }   else{
         return response()->json(['message' => ' Veiller vous connecter dabord'], 201);
     }
-        return response()->json([
-            'status' => true,
-            'panier' => $commende
-        ], 201);
+        // 
+        return view('index', compact('cptC','commende_id'));
         }
   /**
      * Afficher les commandes de l'utilisateur.
@@ -150,7 +148,8 @@ public function Commender(Request $request,$produit_id)
            {
                $id = Auth::guard('api')->user()->id;
                $commende = Commende::where('user_id', $id)->get();
-               return response()->json(compact('commende'), 200);
+               $dateCommande = $commende->created_at;
+               return response()->json(compact('commende','dateCommande'), 200);
            }
    
   /**
