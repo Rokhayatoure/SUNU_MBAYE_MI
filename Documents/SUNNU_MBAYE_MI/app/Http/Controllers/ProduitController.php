@@ -81,13 +81,33 @@ class ProduitController extends Controller
         $validator = Validator::make($request->all(), [
             'nom_produit' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'quantite' => ['required', 'integer', 'min:0'],
+            'quantite' => ['required', 'integer', 'min:1'],
             'prix' => ['required', 'integer', 'min:0'],
             'categorie_id' => ['required', 'integer', 'exists:categories,id'],
-            // 'images' => ['required', 'image', 'max:2048'],
+             'images' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ]);
-    
-        // Si la validation échoue, renvoyez une réponse avec les erreurs
+        
+        $validator->messages([
+            'nom_produit.required' => 'Le champ nom du produit est obligatoire.',
+            'nom_produit.string' => 'Le champ nom du produit doit être une chaîne de caractères.',
+            'nom_produit.max' => 'Le champ nom du produit ne peut pas dépasser :max caractères.',
+            
+            'description.required' => 'Le champ description est obligatoire.',
+            'description.string' => 'Le champ description doit être une chaîne de caractères.',
+            
+            'quantite.required' => 'Le champ quantité est obligatoire.',
+            'quantite.integer' => 'Le champ quantité doit être un entier.',
+            'quantite.min' => 'Le champ quantité doit être d\'au moins :min.',
+            
+            'prix.required' => 'Le champ prix est obligatoire.',
+            'prix.integer' => 'Le champ prix doit être un entier.',
+            'prix.min' => 'Le champ prix doit être d\'au moins :min.',
+            
+            'categorie_id.required' => 'Le champ catégorie est obligatoire.',
+            'categorie_id.integer' => 'Le champ catégorie doit être un entier.',
+            'categorie_id.exists' => 'La catégorie sélectionnée n\'existe pas.',
+        ]);
+        
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
@@ -175,17 +195,41 @@ class ProduitController extends Controller
     public function updateproduit(Request $request,$id)
     {
 
+       
         $validator = Validator::make($request->all(), [
             'nom_produit' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'quantite' => ['required', 'integer', 'min:0'],
+            'quantite' => ['required', 'integer', 'min:1'],
             'prix' => ['required', 'integer', 'min:0'],
             'categorie_id' => ['required', 'integer', 'exists:categories,id'],
-            
+             'images' =>['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ]);
+        
+        $validator->messages([
+            'nom_produit.required' => 'Le champ nom du produit est obligatoire.',
+            'nom_produit.string' => 'Le champ nom du produit doit être une chaîne de caractères.',
+            'nom_produit.max' => 'Le champ nom du produit ne peut pas dépasser :max caractères.',
+            
+            'description.required' => 'Le champ description est obligatoire.',
+            'description.string' => 'Le champ description doit être une chaîne de caractères.',
+            
+            'quantite.required' => 'Le champ quantité est obligatoire.',
+            'quantite.integer' => 'Le champ quantité doit être un entier.',
+            'quantite.min' => 'Le champ quantité doit être d\'au moins :min.',
+            
+            'prix.required' => 'Le champ prix est obligatoire.',
+            'prix.integer' => 'Le champ prix doit être un entier.',
+            'prix.min' => 'Le champ prix doit être d\'au moins :min.',
+            
+            'categorie_id.required' => 'Le champ catégorie est obligatoire.',
+            'categorie_id.integer' => 'Le champ catégorie doit être un entier.',
+            'categorie_id.exists' => 'La catégorie sélectionnée n\'existe pas.',
+        ]);
+        
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
+      
       
     
         $produit = Produit::find($id);
@@ -208,7 +252,7 @@ class ProduitController extends Controller
             if ($produit->user_id !==  Auth::guard('api')->user()->id){
                 return response()->json([
                     "status" => false,
-                    "message" => "produit non trouver "
+                    "message" => "vous etes pas autorise a modifier cette produit "
                 ],403);
             }
            $produit->nom_produit = $request->nom_produit;
@@ -353,8 +397,43 @@ public function rechercheProduit(Request $request){
     
 
 } 
+/**
+ * Filtrer les produits par catégorie.
+ *
+ * @OA\Post(
+ *     path="/api/filtrer-produits-par-categorie",
+ *     summary="Filtrer les produits par catégorie",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"categorie_id"},
+ *             @OA\Property(property="categorie_id", type="integer", example=1)
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Renvoie les produits filtrés par catégorie",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="produits", type="array", @OA\Items(ref="#/components/schemas/Produit"))
+ *         )
+ *     ),
+ *     @OA\Response(response=401, description="Non autorisé"),
+ *     @OA\Response(response=422, description="Erreur de validation")
+ * )
+ */
+public function filtrerProduitsParCategorie(Request $request)
+ {
+    $request->validate([
+        'categorie_id' => 'required|exists:categories,id',
+    ]);
 
+    $categorieId = $request->categorie_id;
 
+    // Filtrer les produits par catégorie
+    $produits = Produit::where('categorie_id', $categorieId)->get();
+
+    return response()->json(compact('produits'), 200);
+}
 
  
 }

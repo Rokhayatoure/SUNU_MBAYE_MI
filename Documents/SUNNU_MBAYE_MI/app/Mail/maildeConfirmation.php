@@ -16,9 +16,10 @@ class maildeConfirmation extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public $succes;
+    public function __construct($succes )
     {
-        //
+        $this->succes = $succes;
     }
 
     /**
@@ -34,11 +35,11 @@ class maildeConfirmation extends Mailable
     /**
      * Get the message content definition.
      */
-    public function content(): Content
+    public function content()
     {
-        return new Content(
-            view: 'view.name',
-        );
+        // return new Content()
+            return $this->subject('votre annonce a ete bien puble  dans notre page ')->view('email.mailvaidate');
+    
     }
 
     /**

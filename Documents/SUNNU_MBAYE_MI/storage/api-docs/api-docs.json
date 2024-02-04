@@ -71,11 +71,11 @@
                 ]
             }
         },
-        "/api/modifierAnnonce/{id}": {
+        "/api/modifierAnnonce{id}": {
             "put": {
                 "summary": "Modifier une annonce",
                 "description": "Modifier une annonce existante.",
-                "operationId": "45b5207fc51dd1fea9645c25e8f37419",
+                "operationId": "8eac08e39d70a1d774d31ff2061e68c5",
                 "parameters": [
                     {
                         "name": "id",
@@ -258,7 +258,123 @@
                     "401": {
                         "description": "Non autorisé"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/publierAnnonce/{id}": {
+            "post": {
+                "summary": "Publier une annonce sur la page d'accueil",
+                "description": "Publier une annonce sur la page d'accueil.",
+                "operationId": "039d2fd2404d72e3c1a403bb8f331a06",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'annonce à publier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Annonce publiée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Annonce publiée avec succès"
+                                        },
+                                        "annonce": {
+                                            "$ref": "#/components/schemas/Annonce"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    },
+                    "404": {
+                        "description": "Annonce non trouvée"
+                    },
+                    "403": {
+                        "description": "Vous avez atteint la limite hebdomadaire de publication d'annonces"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/retirerAnnonce/{id}": {
+            "delete": {
+                "summary": "Retirer une annonce de la page d'accueil",
+                "description": "Retirer une annonce de la page d'accueil.",
+                "operationId": "35d09754d1de9fe709d55adeb95b972b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'annonce à retirer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Annonce retirée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Annonce retirée avec succès"
+                                        },
+                                        "annonce": {
+                                            "$ref": "#/components/schemas/Annonce"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    },
+                    "404": {
+                        "description": "Annonce non trouvée"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/listeCategorie": {
@@ -494,20 +610,32 @@
                 ]
             }
         },
-        "/api/effectuerCommande": {
+        "/api/commander": {
             "post": {
-                "summary": "Effectue une commande",
-                "operationId": "9eee5936efbdad8e8703a199cb67f3f2",
+                "summary": "Passer une commande",
+                "description": "Passer une commande.",
+                "operationId": "30391e8606a0ccc5194fc1cec56bd789",
                 "responses": {
                     "200": {
-                        "description": "Commande effectuée avec succès",
+                        "description": "Commande passée avec succès",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
                                         "message": {
                                             "type": "string",
-                                            "example": "Commande effectuée avec succès"
+                                            "example": "Commande passée avec succès"
+                                        },
+                                        "commende_id": {
+                                            "type": "integer"
+                                        },
+                                        "total_prix": {
+                                            "type": "number",
+                                            "format": "float"
                                         }
                                     },
                                     "type": "object"
@@ -515,7 +643,10 @@
                             }
                         }
                     },
-                    "422": {
+                    "500": {
+                        "description": "Le panier est vide"
+                    },
+                    "403": {
                         "description": "Non autorisé"
                     }
                 },
@@ -526,13 +657,14 @@
                 ]
             }
         },
-        "/api/AfficheCommende": {
+        "/api/afficheCommende": {
             "get": {
-                "summary": "Affiche les commandes de l'utilisateur",
-                "operationId": "c9c042f33c1016ea8da17c159a86fc0c",
+                "summary": "Afficher les commandes de l'utilisateur",
+                "description": "Afficher les commandes de l'utilisateur.",
+                "operationId": "e063cb6455982a11f3379e8db24d3e1e",
                 "responses": {
                     "200": {
-                        "description": "Commandes affichées avec succès",
+                        "description": "Liste des commandes de l'utilisateur",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -548,6 +680,9 @@
                                 }
                             }
                         }
+                    },
+                    "403": {
+                        "description": "Non autorisé"
                     }
                 },
                 "security": [
@@ -559,8 +694,9 @@
         },
         "/api/voirPlus/{commende_id}": {
             "get": {
-                "summary": "Affiche plus de détails sur une commande",
-                "operationId": "97e3d5598a1edc37bc80f8fa6367a0e5",
+                "summary": "Afficher les détails d'une commande",
+                "description": "Afficher les détails d'une commande.",
+                "operationId": "3d6daf762b9e98a58a2b568826870e56",
                 "parameters": [
                     {
                         "name": "commende_id",
@@ -574,7 +710,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Détails de la commande affichés avec succès",
+                        "description": "Détails de la commande",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -589,7 +725,10 @@
                         }
                     },
                     "201": {
-                        "description": "Non connecté"
+                        "description": "Veillez vous connecter d'abord"
+                    },
+                    "404": {
+                        "description": "Commande non trouvée"
                     }
                 },
                 "security": [
@@ -599,10 +738,11 @@
                 ]
             }
         },
-        "/api/suprimmerCommende/{commende_id}": {
+        "/api/supprimerCommende/{commende_id}": {
             "delete": {
-                "summary": "Supprime une commande",
-                "operationId": "7b4d1c48d09263e18e3ce044c3944e3d",
+                "summary": "Supprimer une commande",
+                "description": "Supprimer une commande.",
+                "operationId": "6b1017c09c0a6ff2f475085b6a666a35",
                 "parameters": [
                     {
                         "name": "commende_id",
@@ -632,7 +772,10 @@
                         }
                     },
                     "403": {
-                        "description": "Non autorisé"
+                        "description": "Veillez vous connecter d'abord"
+                    },
+                    "404": {
+                        "description": "Commande non trouvée"
                     }
                 },
                 "security": [
@@ -642,15 +785,16 @@
                 ]
             }
         },
-        "/api/AnnulerLivraison/{commende_id}": {
+        "/api/annulerLivraison/{$commende_id}": {
             "put": {
-                "summary": "Annule une livraison",
-                "operationId": "3052e7bf1df7c194f9946daebac36a64",
+                "summary": "Annuler la livraison d'une commande",
+                "description": "Annuler la livraison d'une commande.",
+                "operationId": "06e5957ac25e96d65ad816428f0d0a3a",
                 "parameters": [
                     {
-                        "name": "livraison_id",
+                        "name": "commende_id",
                         "in": "path",
-                        "description": "ID de la livraison à annuler",
+                        "description": "ID de la commande à annuler la livraison",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -673,6 +817,9 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Commande non trouvée"
                     }
                 },
                 "security": [
@@ -682,15 +829,16 @@
                 ]
             }
         },
-        "/api/LivraisonTerminer/{commende_id}": {
+        "/api/livraisonTerminer/{commende_id}": {
             "put": {
-                "summary": "Termine une livraison",
-                "operationId": "ba66f75283eb7da1b5e9793ed0162a9f",
+                "summary": "Marquer la livraison d'une commande comme terminée",
+                "description": "Marquer la livraison d'une commande comme terminée.",
+                "operationId": "c98a82d12232857aff2164e5c442abce",
                 "parameters": [
                     {
-                        "name": "livraison_id",
+                        "name": "commende_id",
                         "in": "path",
-                        "description": "ID de la livraison à terminer",
+                        "description": "ID de la commande à marquer comme terminée",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -713,6 +861,128 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Commande non trouvée"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ajouterMessage": {
+            "post": {
+                "tags": [
+                    "Messages"
+                ],
+                "summary": "Ajouter un message",
+                "description": "Ajouter un nouveau message.",
+                "operationId": "5b7852d04efcb21f892c469935ed9b63",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nom",
+                                    "email",
+                                    "telephone",
+                                    "message"
+                                ],
+                                "properties": {
+                                    "nom": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "telephone": {
+                                        "type": "string"
+                                    },
+                                    "message": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Message ajouté avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Message ajouté avec succès"
+                                        },
+                                        "message_data": {
+                                            "$ref": "#/components/schemas/Message"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/listerMessages": {
+            "get": {
+                "tags": [
+                    "Messages"
+                ],
+                "summary": "Lister tous les messages",
+                "description": "Lister tous les messages.",
+                "operationId": "299f1cd2e8939ca9b8d1c2062807d4f1",
+                "responses": {
+                    "200": {
+                        "description": "Liste de tous les messages",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "messages": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Message"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
                     }
                 },
                 "security": [
@@ -827,6 +1097,137 @@
                     },
                     "404": {
                         "description": "Produit non trouvé dans le panier"
+                    }
+                }
+            }
+        },
+        "/api/payment": {
+            "get": {
+                "tags": [
+                    "Payements"
+                ],
+                "summary": "Page d'accueil du paiement",
+                "description": "Afficher la page d'accueil du processus de paiement.",
+                "operationId": "91a9c987bdd7f7b2518f1cc6bc88c659",
+                "responses": {
+                    "200": {
+                        "description": "Affiche la page d'accueil du paiement"
+                    }
+                }
+            }
+        },
+        "/api/checkout": {
+            "post": {
+                "tags": [
+                    "Payements"
+                ],
+                "summary": "Effectuer un paiement",
+                "description": "Effectuer un paiement via PayTech.",
+                "operationId": "ac2b3019e3a5de0ca5de65347d249da2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "price",
+                                    "commende_id"
+                                ],
+                                "properties": {
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 100
+                                    },
+                                    "commende_id": {
+                                        "type": "integer",
+                                        "example": 123
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Redirige vers le site PayTech pour finaliser le paiement"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/payment-success/{code}": {
+            "get": {
+                "tags": [
+                    "Payements"
+                ],
+                "summary": "Page de succès du paiement",
+                "description": "Gérer la réussite du paiement.",
+                "operationId": "74bc9a7b1538200c0464053a1238eaa7",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "path",
+                        "description": "Code de réussite du paiement",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Affiche la page de succès du paiement"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/payment/{code}/success": {
+            "get": {
+                "tags": [
+                    "Payements"
+                ],
+                "summary": "Page de succès du paiement",
+                "description": "Afficher la page de succès du paiement.",
+                "operationId": "c2c720108f064f708bd9a819e18c33b4",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "path",
+                        "description": "Code de réussite du paiement",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Affiche la page de succès du paiement"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/payment-cancel": {
+            "get": {
+                "tags": [
+                    "Payements"
+                ],
+                "summary": "Annuler le paiement",
+                "description": "Annuler le paiement.",
+                "operationId": "78dbf541ebec251e791165c69f7ecb8d",
+                "responses": {
+                    "200": {
+                        "description": "Affiche la page d'annulation du paiement"
                     }
                 }
             }
@@ -1144,6 +1545,58 @@
                                 }
                             }
                         }
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/filtrer-produits-par-categorie": {
+            "post": {
+                "summary": "Filtrer les produits par catégorie",
+                "description": "Filtrer les produits par catégorie.",
+                "operationId": "2b802c098d1020bf93d3f02a43ce6c66",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "categorie_id"
+                                ],
+                                "properties": {
+                                    "categorie_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Renvoie les produits filtrés par catégorie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "produits": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Produit"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non autorisé"
                     },
                     "422": {
                         "description": "Erreur de validation"

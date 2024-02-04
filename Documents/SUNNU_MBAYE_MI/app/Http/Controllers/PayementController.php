@@ -19,11 +19,47 @@ class PayementController extends Controller
      *
      */
 
+     /**
+     * Afficher la page d'accueil du processus de paiement.
+     *
+     * @OA\Get(
+     *     path="/api/payment",
+     *     summary="Page d'accueil du paiement",
+     *     tags={"Payements"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Affiche la page d'accueil du paiement"
+     *     )
+     * )
+     */
+
     public function index()
     {
 
         return view('index');
     }
+     /**
+     * Effectuer un paiement via PayTech.
+     *
+     * @OA\Post(
+     *     path="/api/checkout",
+     *     summary="Effectuer un paiement",
+     *     tags={"Payements"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"price", "commende_id"},
+     *             @OA\Property(property="price", type="number", format="float", example=100.0),
+     *             @OA\Property(property="commende_id", type="integer", example=123)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Redirige vers le site PayTech pour finaliser le paiement"
+     *     ),
+     *     @OA\Response(response=422, description="Erreur de validation")
+     * )
+     */
 
     public function payment(PayementRequest $request){
         //  dd($request->all());
@@ -76,7 +112,27 @@ class PayementController extends Controller
             return Redirect::to($jsonResponse['redirect_url']);
         }
     }
-
+ /**
+     * Gérer la réussite du paiement.
+     *
+     * @OA\Get(
+     *     path="/api/payment-success/{code}",
+     *     summary="Page de succès du paiement",
+     *     tags={"Payements"},
+     *     @OA\Parameter(
+     *         name="code",
+     *         in="path",
+     *         required=true,
+     *         description="Code de réussite du paiement",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Affiche la page de succès du paiement"
+     *     ),
+     *     @OA\Response(response=422, description="Erreur de validation")
+     * )
+     */
     public function success(Request $request, $code){
         // $token = session('token') ?? '';
 
@@ -115,7 +171,27 @@ class PayementController extends Controller
         return view('success');
     }
 
-
+ /**
+     * Afficher la page de succès du paiement.
+     *
+     * @OA\Get(
+     *     path="/api/payment/{code}/success",
+     *     summary="Page de succès du paiement",
+     *     tags={"Payements"},
+     *     @OA\Parameter(
+     *         name="code",
+     *         in="path",
+     *         required=true,
+     *         description="Code de réussite du paiement",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Affiche la page de succès du paiement"
+     *     ),
+     *     @OA\Response(response=422, description="Erreur de validation")
+     * )
+     */
     public function paymentSuccessView(Request $request, $code)
     {
         // You can fetch data from db if you want to return the data to views
@@ -128,6 +204,21 @@ class PayementController extends Controller
         return view('vendor.paytech.success'/* , compact('record') */)->with('success', 'Félicitation, Votre paiement est éffectué avec succès');
     }
 
+
+
+     /**
+     * Annuler le paiement.
+     *
+     * @OA\Get(
+     *     path="/api/payment-cancel",
+     *     summary="Annuler le paiement",
+     *     tags={"Payements"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Affiche la page d'annulation du paiement"
+     *     )
+     * )
+     */
     public function cancel()
     {
         # code...

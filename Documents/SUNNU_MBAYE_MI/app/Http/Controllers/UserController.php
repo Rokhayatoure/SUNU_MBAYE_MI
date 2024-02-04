@@ -107,7 +107,7 @@ class UserController extends Controller
             'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
             'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'telephone' => ['required', 'string'],
+            'telephone' => ['required', 'string', 'regex:/^(\+221|221)?[76|77|78|70|33]\d{7}$/'],
             'role_id' => ['required','integer',],
             'password' => ['required', 'string', 'min:8'],
 
@@ -252,38 +252,55 @@ class UserController extends Controller
 // update
 public function updateUser(Request $request,$id)
 {
+$validator = Validator::make($request->all(), [
+        'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
+        'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
+        'email' => ['required', 'email', 'unique:users,email'],
+        'telephone' => ['required', 'string', 'regex:/^(\+221|221)?[76|77|78|70|33]\d{7}$/'],
+        'role_id' => ['required','integer',],
+        'password' => ['required', 'string', 'min:8'],
+
+    ]); 
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
     $user = User::find($id);
 
-    if (!$user) {
-        return response()->json(['message' => 'Utilisateur non trouvé'], 404);
-    }
-
-    $user->name = $request->name;
-    $user->prenom = $request->prenom;
-    $user->adresse = $request->adresse;
-    $user->date_naissance = $request->date_naissance;
-    $user->telephone = $request->telephone;
-    $user->sexe= $request->sexe;
-    $user->password= $request->password;
-   
-  
-
-    // Gérer la mise à jour de l'image si elle est fournie
-    if ($request->hasFile('image')) {
-        $file = $request->file('image');
-        $filename = date('YmdHi') . $file->getClientOriginalName();
-        $file->move(public_path('images'), $filename);
-        $user->image = $filename;
-    }
-
-    $user->save();
-
+if (!$user) {
+    return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+}
+if ($user->user_id !==  Auth::guard('api')->user()->id){
     return response()->json([
-        "status" => true,
-        "message" => "modifier avec success avec succes ",
-        
-        'user'=>$user
-    ]);
+        "status" => false,
+        "message" => "vous ne pouvez pas faire cette action "
+    ],403);
+}
+
+$user->nom = $request->nom;
+$user->prenom = $request->prenom;
+$user->adresse = $request->adresse;
+$user->date_naissance = $request->date_naissance;
+$user->telephone = $request->telephone;
+$user->sexe = $request->sexe;
+$user->email = $request->email;
+$user->password = $request->password;
+
+// Gérer la mise à jour de l'image si elle est fournie
+if ($request->hasFile('image')) {
+    $file = $request->file('image');
+    $filename = date('YmdHi') . $file->getClientOriginalName();
+    $file->move(public_path('images'), $filename);
+    $user->image = $filename;
+}
+
+$user->save();
+
+return response()->json([
+    "status" => true,
+    "message" => "Modifier avec succès",
+    'user' => $user
+]);
 }
 
 

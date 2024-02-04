@@ -8,6 +8,7 @@ use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class CategorieController extends Controller
 {
@@ -118,7 +119,16 @@ $requiredRole = 'admin';
 // Vérifiez si l'utilisateur a le bon rôle
 if ($user->role->nom_role !== $requiredRole) {
     return response()->json(['errors' => 'Vous n\'avez pas les autorisations nécessaires pour faire cette action.'], 403);
-}
+}$validator = Validator::make($request->all(), [
+    'nom_categories' => ['required', 'string', 'max:255'],
+]);
+
+$validator->messages([
+    'nom_categories.required' => 'Le champ nom de la catégorie est obligatoire.',
+    'nom_categories.string' => 'Le champ nom de la catégorie doit être une chaîne de caractères.',
+    'nom_categories.max' => 'Le champ nom de la catégorie ne peut pas dépasser :max caractères.',
+]);
+
 
     // Créer une nouvelle instance de la catégorie
     $categorie = new Categorie([
@@ -174,6 +184,16 @@ if ($user->role->nom_role !== $requiredRole) {
 
     
     {
+        $validator = Validator::make($request->all(), [
+            'nom_categories' => ['required', 'string', 'max:255'],
+        ]);
+    
+        $validator->messages([
+            'nom_categories.required' => 'Le champ nom de la catégorie est obligatoire.',
+            'nom_categories.string' => 'Le champ nom de la catégorie doit être une chaîne de caractères.',
+            'nom_categories.max' => 'Le champ nom de la catégorie ne peut pas dépasser :max caractères.',
+        ]);
+    
         if (!Auth::guard('api')->check()) {
             return response()->json(['errors' => 'veilleir vous connecter avant de fair cette action.'], 422);
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commende;
 use App\Models\panier;
 use App\Models\Produit;
 use Illuminate\Http\Request;
@@ -40,17 +41,15 @@ class PanierController extends Controller
       
         $user = Auth::guard('api')->user();
         $produit =Produit::find($produit_id);
-        $panier=new Panier;
+        $panier=new Commende();
         $panier->email=$user->email;
         $panier->nom=$user->nom;
         $panier->prenom=$user->prenom;
         $panier->user_id=auth()->guard('api')->user()->id;
-        // $panier->contact=$user->contact;
-        // $panier->prix=$produit->prix;
+        
         $panier->quantite= $produit->quantite;
        $panier->prix=intval($produit->prix )*intval($produit->quantite);
-    //    var_dump($request->quantite);
-        // $panier->prix=4*4;
+    
         $panier->nom_produit=$produit->nom_produit;
         $panier->images=$produit->images;
         
