@@ -50,11 +50,7 @@ class AnnonceController extends Controller
    
     public function ajoutAnnonce(Request $request)
     {
-
-
-
-       
-        if (Auth::guard('api')->check()) {
+       if (Auth::guard('api')->check()) {
        
             $user = Auth::guard('api')->user();
             $annonce = new Annonce();
@@ -132,10 +128,16 @@ class AnnonceController extends Controller
 
     public function modifierAnnonce(Request $request, $id)
     {
+        $user = Auth::guard('api')->user();
         if (Auth::guard('api')->check()) {
-            $user = Auth::guard('api')->user();
+           
             $annonce = Annonce::find($id);
-    
+            if ($user->id !== $annonce->user_id) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "Vous n'êtes pas autorisé à modifier cette annonce."
+                ], 403);
+            }
             if (!$annonce) {
                 return response()->json([
                     "status" => false,
@@ -236,10 +238,17 @@ class AnnonceController extends Controller
  */
 public function supprimerAnnonce($id)
 {
+
+    $user = Auth::guard('api')->user();
     if (Auth::guard('api')->check()) {
         
         $annonce = Annonce::find($id);
-
+        if ($user->id !== $annonce->user_id) {
+            return response()->json([
+                "status" => false,
+                "message" => "Vous n'êtes pas autorisé à suprimer cette annonce."
+            ], 403);
+        }
         if (!$annonce) {
             return response()->json(['message' => 'Annonce non trouvée'], 404);
         }
@@ -280,48 +289,5 @@ public function listeAnnonceAgriculteur()
     return response()->json(compact('anonces'), 200);
 }
 
-public function ajoutAnnonceAdmin(Request $request)
-{
-   
-        $user = Auth::guard('api')->user();
-
-        // Vérifier le nombre d'annonces existantes pour l'utilisateur
-        $nombreAnnonces = Annonce::where('user_id', $user->id)->count();
-
-        // Limiter à 3 annonces
-        if ($nombreAnnonces >= 3) {
-            return response()->json([
-                "status" => false,
-                "message" => "Vous avez atteint la limite de 3 annonces. Vous ne pouvez pas en ajouter plus."
-            ]);
-        }
-
-        // Créer une nouvelle annonce
-        $annonce = new Annonce();
-        $annonce->titre = $request->titre;
-        $annonce->description = $request->description;
-        $annonce->user_id = $user->id;
-
-        if ($request->hasFile('images')) {
-            $file = $request->file('images');
-            $filename = date('YmdHi') . $file->getClientOriginalName();
-            $file->move(public_path('images'), $filename);
-            $annonce->images = $filename;
-        }
-
-        $annonce->save();
-
-        return response()->json([
-            "status" => true,
-            "message" => "Annonce ajoutée avec succès.",
-            'annonce' => $annonce
-        ]);
-    
-        return response()->json([
-            "status" => false,
-            "message" => "Veuillez vous connecter d'abord."
-        ]);
-    
-}
 
 }

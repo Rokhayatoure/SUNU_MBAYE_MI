@@ -189,19 +189,26 @@ class ProduitController extends Controller
       
     
         $produit = Produit::find($id);
+        $user = Auth::guard('api')->user();
+        if ($user->id !==  $produit->user_id) {
+            return response()->json([
+                "status" => false,
+                "message" => "Vous n'êtes pas autorisé à modifier cette produit."
+            ], 403);
+        }
        
          if (!$produit) {
                 return response()->json([
                     "status" => false,
-                    "message" => "annonce non trouver "
+                    "message" => "produit non trouver "
                 ]);
             }
     
-            // Vérifier si l'utilisateur est le propriétaire de l'annonce
+            // Vérifier si l'utilisateur est le propriétaire de l'produit
             if ($produit->user_id !==  Auth::guard('api')->user()->id){
                 return response()->json([
                     "status" => false,
-                    "message" => "annonce non trouver "
+                    "message" => "produit non trouver "
                 ],403);
             }
            $produit->nom_produit = $request->nom_produit;
@@ -256,13 +263,21 @@ class ProduitController extends Controller
 
 
     public function supProduit($id)
-    {
+    { 
         
         if(!Auth::guard('api')->check()){
             return response()->json(['message' => 'veiller vouss connecter avant de faire cette action'], 403);
 
         }
-        Produit::find($id)->delete();
+        
+      $produit=  Produit::find($id)->delete();
+      $user = Auth::guard('api')->user();
+        if ($user->id !==  $produit->user_id) {
+            return response()->json([
+                "status" => false,
+                "message" => "Vous n'êtes pas autorisé à suprimer cette produit."
+            ], 403);
+        }
         return response()->json(['message' => 'produit supprimé avec succès'], 200);
     }
 

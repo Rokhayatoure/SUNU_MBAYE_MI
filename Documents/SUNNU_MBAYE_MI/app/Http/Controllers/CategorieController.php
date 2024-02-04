@@ -110,8 +110,6 @@ public function AjoutCategorie(Request $request)
     if (!Auth::guard('api')->check()) {
         return response()->json(['errors' => 'Veuillez vous connecter avant de faire cette action.'], 422);
     }
-
-
     $user = Auth::guard('api')->user();
 
 // Définissez le rôle que vous voulez vérifier
@@ -237,12 +235,7 @@ if ($user->role->nom_role !== $requiredRole) {
      */
     public function destroy($id)
     {
-
-
-        // if (!Auth::check()) {
-        //     return response()->json(['errors' => 'veilleir vous connecter avant de fair cette action.'], 422);
-        // }
-        Categorie::find($id)->delete();
+      Categorie::find($id)->delete();
     return response()->json(['message' => 'categorie supprimé avec succès'], 200);
     
     }

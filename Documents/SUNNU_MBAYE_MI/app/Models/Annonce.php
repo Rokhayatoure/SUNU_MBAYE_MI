@@ -14,5 +14,12 @@ class Annonce extends Model
         'images',
         'user_id'
     ];
+    // Annonce.php
+
+public function publiees()
+{
+    return $this->hasMany(AnnoncePublier::class);
+}
+
 
 }

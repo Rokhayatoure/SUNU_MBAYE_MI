@@ -7,11 +7,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PagnerController;
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\AnnonceController;
+use App\Http\Controllers\AnnoncepublierController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\PayementController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\CommendeController;
-use App\Http\Controllers\DetailCommendeController;
+use App\Http\Controllers\MessageController;
 use Spatie\LaravelIgnition\Solutions\SolutionProviders\RunningLaravelDuskInProductionProvider;
 
 /*
@@ -44,6 +45,7 @@ Route::get('/listeCategorie', [CategorieController::class ,'listeCategorie']);
 Route::get('Produitrecherche', [ProduitController::class ,'Produitrecherche']);
 Route::get('rechercheProduit', [ProduitController::class ,'rechercheProduit']);
 Route::get('listeProduit', [ProduitController::class ,'listeProduit']);
+Route::post('ajouterMessage', [MessageController::class ,'ajouterMessage']);
 
 // Route::delete('/listeCategorie', [ProduitController::class ,'listeCategorie']);
 //pagner
@@ -59,7 +61,7 @@ Route::get('/AfficherPanier', [PanierController::class, 'AfficherPanier']);
 Route::delete('/viderPanier/{produit_id}', [PanierController::class, 'viderPanier']);
 Route::delete('/validerPanier/{panier_id}', [PanierController::class, 'validerPanier']);
 //commender 
-Route::put('/AnnulerLivraison/{commende_id}', [DetailCommendeController::class, 'AnnulerLivraison']);
+Route::put('/AnnulerLivraison/{commende_id}', [CommendeController::class, 'AnnulerLivraison']);
 Route::post('/Commander', [CommendeController::class, 'Commander']);
 
 });
@@ -83,8 +85,8 @@ Route::post('/ajoutAnnonce', [AnnonceController::class ,'ajoutAnnonce']);
 Route::middleware(['auth','nom_role:admin'])->group(function () {
 Route::post('/AjoutCategorie', [CategorieController::class ,'AjoutCategorie']);
 
-Route::delete('/suprimmerCommende/{commende_id}', [DetailCommendeController::class, 'suprimmerCommende']);
-Route::put('/LivraisonTerminer/{commende_id}', [DetailCommendeController::class, 'LivraisonTerminer']);
+Route::delete('/suprimmerCommende/{commende_id}', [CommendeController::class, 'suprimmerCommende']);
+Route::put('/LivraisonTerminer/{commende_id}', [CommendeController::class, 'LivraisonTerminer']);
 //annonce
 Route::put('/modifierAnnonce/{id}',[AnnonceController::class ,'modifierAnnonce']);
 Route::delete('/supAnnonce/{id}', [AnnonceController::class ,'supprimerAnnonce']);
@@ -92,10 +94,12 @@ Route::delete('/supAnnonce/{id}', [AnnonceController::class ,'supprimerAnnonce']
 Route::put('/modifieCategorie/{id}', [CategorieController::class ,'modifieCategorie']);
 Route::delete('/supCategorie/{id}', [CategorieController::class ,'destroy']);
 Route::get('/listeUser',[UserController::class ,'listeUser'] );
-Route::get('/AfficheCommende', [DetailCommendeController::class, 'AfficheCommende']);
-Route::get('/voirplus/{commende_id}', [DetailCommendeController::class, 'voirplus']);
+Route::get('/AfficheCommende', [CommendeController::class, 'AfficheCommende']);
+Route::get('/voirplus/{commende_id}', [CommendeController::class, 'voirplus']);
 
-Route::post('/ajoutAnnonceAdmin', [AnnonceController::class ,'ajoutAnnonceAdmin']);
+Route::post('/publierAnnonce/{id}', [AnnoncepublierController::class ,'publierAnnonce']);
+Route::post('/retirerAnnonce/{id}', [AnnoncepublierController::class ,'retirerAnnonce']);
+Route::get('listerMessages', [MessageController::class ,'listerMessages']);
 
 });
 
