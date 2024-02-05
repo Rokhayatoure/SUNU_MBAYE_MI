@@ -91,32 +91,25 @@ class CommendeController extends Controller
 public function Commender(Request $request)
     {
         if (Auth::guard('api')->check()){
-        $user = Auth::guard('api')->user();
-       
         $commende=new Commende();
-        // $commende->livraison='Encourt';
         $commende->user_id=auth()->guard('api')->user()->id;
-       
-        //  $cptQ = 0
         $commende->save();
-        
         $cptC = 0;
+        $cptQ=0;
         $commende_id=$commende->id;
-        // dd($commende_id);
-        foreach( $request->input('panier') as $produit) {
+       foreach( $request->input('panier') as $produit) {
             $detailecommende=DetailCommende::create([
             'commende_id'=>$commende->id,
             'produit_id'=>$produit['produit_id'],
             'nombre_produit'=>$produit['nombre_produit'],
             'montant'=>$produit['montant'],
           ]);
-        
-     Produit::where('id',$produit['produit_id'])->decremente('quantite',$produit['montant']);
-     $cptC+= $produit['montant'];
-    //  $cptQ+=$produit ['nombre_produit']*$produit['montant'];
+     Produit::where('id',$produit['produit_id'])->decrement('quantite',$produit['montant']);
+     $cptQ+= $produit['montant'];
+     $cptC+=$produit ['nombre_produit']*$produit['montant'];
      }
-    //  $detailecommende->quantite =$cptQ;
-    //  $detailecommende->prix =$cptC;
+     $detailecommende->quantite =$cptQ;
+      $detailecommende->prix =$cptC;
 
         $detailecommende->save(); 
     }   else{
