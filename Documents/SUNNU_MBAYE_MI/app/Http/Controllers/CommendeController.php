@@ -88,18 +88,21 @@ class CommendeController extends Controller
 
 
 
-public function Commender(Request $request,$commende_id)
+public function Commender(Request $request)
     {
         if (Auth::guard('api')->check()){
         $user = Auth::guard('api')->user();
        
         $commende=new Commende();
-        $commende->livraison='Encourt';
+        // $commende->livraison='Encourt';
         $commende->user_id=auth()->guard('api')->user()->id;
        
-         $cptQ = 0;
-          $cptC = 0;
+        //  $cptQ = 0
         $commende->save();
+        
+        $cptC = 0;
+        $commende_id=$commende->id;
+        // dd($commende_id);
         foreach( $request->input('panier') as $produit) {
             $detailecommende=DetailCommende::create([
             'commende_id'=>$commende->id,

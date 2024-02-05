@@ -63,7 +63,7 @@ Route::delete('/viderPanier/{produit_id}', [PanierController::class, 'viderPanie
 Route::delete('/validerPanier/{panier_id}', [PanierController::class, 'validerPanier']);
 //commender 
 Route::put('/AnnulerLivraison/{commende_id}', [CommendeController::class, 'AnnulerLivraison']);
-Route::post('/Commender/{commende_id}', [CommendeController::class, 'Commender']);
+Route::post('/Commender', [CommendeController::class, 'Commender']);
 
 });
 
