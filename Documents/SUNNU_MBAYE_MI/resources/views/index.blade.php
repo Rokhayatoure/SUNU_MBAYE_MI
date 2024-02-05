@@ -145,10 +145,10 @@
                                 <input type="text" name="product_name" value="HP EliteBook 1030 G5" class="form-control" placeholder="Nom du produit">
                             </div> -->
                             <div class="form-group">
-                                <input type="number" name="price"  value="{{$cptC }}" class="form-control" placeholder="Montant">
+                                <input type="number" name="price"  value="{{request()->get('cptC' )}}" class="form-control" placeholder="Montant">
                             </div>
                             <div class="form-group">
-                                <input type="number" name="commende_id" value="{{$commende_id}}" class="form-control" placeholder="Quantité">
+                                <input type="number" name="commende_id" value="{{quest()->get('commende_id')}" class="form-control" placeholder="Quantité">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary btn-block">Effectuer le Paiement</button>

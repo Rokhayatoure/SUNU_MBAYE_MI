@@ -112,8 +112,8 @@ public function Commender(Request $request,$commende_id)
      $cptC+= $produit['montant'];
     //  $cptQ+=$produit ['nombre_produit']*$produit['montant'];
      }
-     $detailecommende->quantite =$cptQ;
-     $detailecommende->prix =$cptC;
+    //  $detailecommende->quantite =$cptQ;
+    //  $detailecommende->prix =$cptC;
 
         $detailecommende->save(); 
     }   else{
@@ -123,7 +123,7 @@ public function Commender(Request $request,$commende_id)
             'status'=>true,
             'payment_url'=>"http://127.0.0.1:8000/api/payment?cptC={$cptC}&commende_id={$commende_id}"
         ]);
-        // return view('index', compact('cptC','commende_id'));
+        //  return view('index', compact('cptC','commende_id'));
         }
   /**
      * Afficher les commandes de l'utilisateur.

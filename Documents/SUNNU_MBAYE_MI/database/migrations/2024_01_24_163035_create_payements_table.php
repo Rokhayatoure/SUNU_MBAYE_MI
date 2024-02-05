@@ -19,9 +19,8 @@ return new class extends Migration
             $table->foreign('commende_id')->references('id')->on('commendes')->onDelete('cascade');
              $table->string('token')->unique()->nullable();
              $table->integer('amount');
-            
-            $table->timestamps();
-            $table->softDeletes();
+             $table->timestamps();
+             $table->softDeletes();
         });
     }
 
