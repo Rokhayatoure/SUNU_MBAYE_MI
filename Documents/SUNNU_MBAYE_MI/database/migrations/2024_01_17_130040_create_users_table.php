@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('date_naissance')->nullable();
             $table->string('adresse')->nullable();
             $table->string('nom_entreprise')->nullable();
+            $table->boolean('est_bloquer')->default(false);
             $table->foreignIdFor(Role::class)->constrained()->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();

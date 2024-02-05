@@ -325,4 +325,45 @@ public function listeUser()
     return response()->json(compact('user'), 200);
 }
 
+
+public function debloquerUser($id)
+{
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
+    }
+
+    // Débloquer l'utilisateur
+    $user->is_blocked = false;
+    $user->save();
+
+    return response()->json([
+        'status' => true,
+        'message' => "L'utilisateur a été débloqué avec succès.",
+        'user' => $user,
+    ]);
+}
+
+public function BloquerUser($id)
+{
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
+    }
+
+    // Inverser l'état de blocage
+    $user->est_bloquer= !$user->est_bloquer;
+    $user->save();
+
+    $status = $user->est_bloquer ? 'bloqué' : 'débloqué';
+
+    return response()->json([
+        'status' => true,
+        'message' => "L'utilisateur a été $status avec succès.",
+        'user' => $user,
+    ]);
+}
+
 }

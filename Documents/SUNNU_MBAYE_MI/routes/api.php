@@ -103,6 +103,8 @@ Route::get('/retirerAnnonce/{id}', [AnnonceController::class ,'retirerAnnonce'])
 Route::get('listerMessages', [MessageController::class ,'listerMessages']);
 Route::get('/listeAnnoncesPubliees', [AnnonceController::class ,'listeAnnoncesPubliees']);
 Route::delete('supProduitAdmine/{id}', [ProduitController::class ,'supProduitAdmine']);
+Route::delete('debloquerUser/{id}', [UserController::class ,'debloquerUser']);
+Route::delete('BloquerUser/{id}', [UserController::class ,'BloquerUser']);
 
 
 });

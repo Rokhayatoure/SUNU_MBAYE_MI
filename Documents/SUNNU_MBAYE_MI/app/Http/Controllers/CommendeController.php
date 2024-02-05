@@ -88,11 +88,9 @@ class CommendeController extends Controller
 
 
 
-public function Commender(Request $request)
+public function Commender(Request $request,$commende_id)
     {
         if (Auth::guard('api')->check()){
-
-      
         $user = Auth::guard('api')->user();
        
         $commende=new Commende();
@@ -101,28 +99,31 @@ public function Commender(Request $request)
        
          $cptQ = 0;
           $cptC = 0;
-        
+        $commende->save();
         foreach( $request->input('panier') as $produit) {
-          DetailCommende::create([
+            $detailecommende=DetailCommende::create([
             'commende_id'=>$commende->id,
             'produit_id'=>$produit['produit_id'],
-            'prix'=>$produit['prix'],
-            'quantite'=>$produit['quantite'],
+            'nombre_produit'=>$produit['nombre_produit'],
+            'montant'=>$produit['montant'],
           ]);
         
-     Produit::where('id',$produit['produit_id'])->decremente('quantite',$produit['quantite']);
-     $cptQ+= $produit['quantite'];
-     $cptC+=$produit ['prix']*$produit['quantite'];
+     Produit::where('id',$produit['produit_id'])->decremente('quantite',$produit['montant']);
+     $cptC+= $produit['montant'];
+    //  $cptQ+=$produit ['nombre_produit']*$produit['montant'];
      }
-     $commende->quantite =$cptQ;
-     $commende->prix =$cptC;
+     $detailecommende->quantite =$cptQ;
+     $detailecommende->prix =$cptC;
 
-        $commende->save(); 
+        $detailecommende->save(); 
     }   else{
         return response()->json(['message' => ' Veiller vous connecter dabord'], 201);
     }
-        // 
-        return view('index', compact('cptC','commende_id'));
+        return response()->json([
+            'status'=>true,
+            'payment_url'=>"http://127.0.0.1:8000/api/payment?cptC={$cptC}&commende_id={$commende_id}"
+        ]);
+        // return view('index', compact('cptC','commende_id'));
         }
   /**
      * Afficher les commandes de l'utilisateur.

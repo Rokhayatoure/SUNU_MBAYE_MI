@@ -71,9 +71,9 @@ class AnonceTest extends TestCase
     
         // Créer un utilisateur manuellement
         $user = User::create([
-            'nom' => 'Toure',
-            'prenom' => 'Rokhaya',
-            'email' => 'rokhaya@gmail.com',
+            'nom' => 'keita',
+            'prenom' => 'baba',
+            'email' => 'baba@gmail.com',
             'telephone' => '+221774065162',
             'role_id' => 1,
             'password' => Hash::make('Passer11'),
@@ -122,10 +122,10 @@ class AnonceTest extends TestCase
       
   // Créer un utilisateur manuellement
   $user = User::create([
-      'nom' => 'Toure',
-      'prenom' => 'Rokhaya',
-      'email' => 'rokhaya@gmail.com',
-      'telephone' => '+221774065162',
+      'nom' => 'colly',
+      'prenom' => 'dieye',
+      'email' => 'dieye@gmail.com',
+      'telephone' => '+221764890909',
       'role_id' => 1,
       'password' => Hash::make('Passer11'),
   ]);
@@ -156,9 +156,9 @@ class AnonceTest extends TestCase
     
         // Créer un utilisateur manuellement
         $user = User::create([
-            'nom' => 'Toure',
-            'prenom' => 'Rokhaya',
-            'email' => 'rokhaya@gmail.com',
+            'nom' => 'ba',
+            'prenom' => 'kya',
+            'email' => 'kya@gmail.com',
             'telephone' => '+221774065162',
             'role_id' => 1,
             'password' => Hash::make('Passer11'),

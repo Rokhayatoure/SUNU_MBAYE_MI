@@ -13,18 +13,13 @@ return new class extends Migration
     {
         Schema::create('detail_commendes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('commende_id');
+            $table->foreign('commende_id')->references('id')->on('commendes')->onDelete('cascade');
             $table->unsignedBigInteger('produit_id');
             $table->foreign('produit_id')->references('id')->on('produits')->onDelete('cascade');
-            $table->string('prenom');
-            $table->string('nom');
-            $table->string('contact');
-            $table->string('email');
-            $table->string('prix');
-            $table->string('images');
-            $table->string('quantite');
-            $table->string('nom_prouit');
+             $table->integer('nombre_produit');
+            $table->integer('montant');
+            $table->string('nom_prouit')->nulable();
             $table->timestamps();
         });
     }
