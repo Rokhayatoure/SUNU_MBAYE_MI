@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('produit_id')->references('id')->on('produits')->onDelete('cascade');
              $table->integer('nombre_produit');
             $table->integer('montant'); 
-            $table->integer('quantite');
+            
             $table->timestamps();
         });
     }

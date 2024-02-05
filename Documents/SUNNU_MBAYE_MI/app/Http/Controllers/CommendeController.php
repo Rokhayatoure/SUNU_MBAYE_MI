@@ -108,8 +108,8 @@ public function Commender(Request $request)
      $cptQ+= $produit['montant'];
      $cptC+=$produit ['nombre_produit']*$produit['montant'];
      }
-     $detailecommende->quantite =$cptQ;
-      $detailecommende->prix =$cptC;
+     $detailecommende->nombre_produit =$cptQ;
+      $detailecommende->montant =$cptC;
 
         $detailecommende->save(); 
     }   else{
