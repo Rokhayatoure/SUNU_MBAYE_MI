@@ -27,8 +27,7 @@ use Spatie\LaravelIgnition\Solutions\SolutionProviders\RunningLaravelDuskInProdu
 */
 //Utilisateur inscription auth sup deconnection
 
-Route::post('/role', [UserController::class ,'ajouterRole']);
-Route::get('/listRole', [UserController::class ,'listRole']);
+
 Route::post('inscription', [UserController::class ,'inscription']);
 Route::post('login', [UserController::class ,'login']);
 Route::post('logout', [UserController::class ,'logout']);
@@ -95,24 +94,26 @@ Route::delete('/supAnnonce/{id}', [AnnonceController::class ,'supprimerAnnonce']
 //categorie
 Route::put('/modifieCategorie/{id}', [CategorieController::class ,'modifieCategorie']);
 Route::delete('/supCategorie/{id}', [CategorieController::class ,'destroy']);
-Route::get('/listeUser',[UserController::class ,'listeUser'] );
-Route::get('/ListerCommende', [CommendeController::class, 'ListerCommende']);
-Route::get('/VoirplusCommende/{id}', [CommendeController::class, 'VoirplusCommende']);
-
 Route::get('/publierAnnonce/{id}', [AnnonceController::class ,'publierAnnonce']);
 Route::get('/retirerAnnonce/{id}', [AnnonceController::class ,'retirerAnnonce']);
 Route::get('listerMessages', [MessageController::class ,'listerMessages']);
 Route::get('/listeAnnoncesPubliees', [AnnonceController::class ,'listeAnnoncesPubliees']);
 Route::delete('supProduitAdmine/{id}', [ProduitController::class ,'supProduitAdmine']);
+// user
 Route::delete('debloquerUser/{id}', [UserController::class ,'debloquerUser']);
 Route::delete('BloquerUser/{id}', [UserController::class ,'BloquerUser']);
+Route::get('/listeUser',[UserController::class ,'listeUser'] );
+//commende
+Route::get('/ListerCommende', [CommendeController::class, 'ListerCommende']);
+Route::get('/VoirplusCommende/{id}', [CommendeController::class, 'VoirplusCommende']);
+//role
+Route::post('/role', [UserController::class ,'ajouterRole']);
+Route::get('/listRole', [UserController::class ,'listRole']);
+
 
 
 });
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 
 
 Route::get('payment', [PayementController::class, 'index'])->name('payment.index');
@@ -121,6 +122,3 @@ Route::get('ipn', [PayementController::class, 'ipn'])->name('paytech-ipn');
 Route::get('payment-cancel', [PayementController::class, 'cancel'])->name('paytech.cancel');
 Route::get('payment-success/{code}', [PayementController::class, 'success'])->name('payment.success');
 Route::get('payment/{code}/success', [PayementController::class, 'paymentSuccessView'])->name('payment.success.view');
-// Route::post('initiatePayment/{commende_id}', [PayementController::class, 'initiatePayment']);
-// Route::post('payment', [PayementController::class, 'payment']);
-

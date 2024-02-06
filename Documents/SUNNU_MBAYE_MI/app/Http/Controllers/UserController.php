@@ -74,9 +74,9 @@ class UserController extends Controller
 
 
 
-    public function listRole($id)
+    public function listRole()
     {
-       $role=Role::find($id);
+       $role=Role::all();
        
     return response()->json(compact('role'), 200);
     }
