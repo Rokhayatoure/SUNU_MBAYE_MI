@@ -21,10 +21,10 @@ class UserSeeder extends Seeder
         if ($adminRole) {
             User::create([
                 'nom' => 'Coly',
-                'prenom' => 'Dieynaba',
-                'email' => 'Dieynaba@gmail.com',
+                'prenom' => 'admin',
+                'email' => 'admin@gmail.com',
                 'telephone' => '+221774003030',
-                'password' => bcrypt('votreMotDePasse'),
+                'password' => bcrypt('admin@123'),
                 'role_id' => $adminRole->id,
             ]);
         } else {
