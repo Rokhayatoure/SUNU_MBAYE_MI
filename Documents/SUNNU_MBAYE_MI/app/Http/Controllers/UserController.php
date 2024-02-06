@@ -117,7 +117,7 @@ class UserController extends Controller
             'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
             'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'telephone' => ['required', 'string', 'regex:/^(\+221|221)?[76|77|78|70|33]\d{7}$/'],
+            'telephone' => ['required', 'string', 'regex:/^(\+221|221)?[76|77|78|70|33]\d{8}$/'],
             'role_id' => ['required','integer',],
             'password' => ['required', 'string', 'min:8'],
 
@@ -266,7 +266,7 @@ $validator = Validator::make($request->all(), [
         'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
         'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
         'email' => ['required', 'email', 'unique:users,email'],
-        // 'telephone' => ['required',  'regex:/^(\+221|221)?[76|77|78|70|33]\d{7}$/'],
+        'telephone' => ['required', 'string', 'regex:/^(\+221|221)?[76|77|78|70|33]\d{8}$/'],
         'role_id' => ['required','integer',],
         'password' => ['required', 'string', 'min:8'],
 
