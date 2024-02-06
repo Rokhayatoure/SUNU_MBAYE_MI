@@ -109,11 +109,11 @@ Route::get('/listeUser',[UserController::class ,'listeUser'] );
 Route::post('/role', [UserController::class ,'ajouterRole']);
 Route::get('/listRole', [UserController::class ,'listRole']);
 
+Route::get('/ListerCommende', [CommendeController::class, 'ListerCommende']);
+Route::get('/VoirplusCommende/{id}', [CommendeController::class, 'VoirplusCommende']);
 
 
 });
-Route::get('/ListerCommende', [CommendeController::class, 'ListerCommende']);
-Route::get('/VoirplusCommende/{id}', [CommendeController::class, 'VoirplusCommende']);
 
 
 Route::get('payment', [PayementController::class, 'index'])->name('payment.index');
