@@ -96,7 +96,7 @@ Route::delete('/supAnnonce/{id}', [AnnonceController::class ,'supprimerAnnonce']
 Route::put('/modifieCategorie/{id}', [CategorieController::class ,'modifieCategorie']);
 Route::delete('/supCategorie/{id}', [CategorieController::class ,'destroy']);
 Route::get('/listeUser',[UserController::class ,'listeUser'] );
-Route::get('/ListerCommend', [CommendeController::class, 'ListerCommend']);
+Route::get('/ListerCommende', [CommendeController::class, 'ListerCommende']);
 Route::get('/VoirplusCommende/{id}', [CommendeController::class, 'VoirplusCommende']);
 
 Route::get('/publierAnnonce/{id}', [AnnonceController::class ,'publierAnnonce']);

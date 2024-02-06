@@ -107,7 +107,7 @@ public function Commender(Request $request)
           ]);
      Produit::where('id',$produit['produit_id'])->decrement('quantite',$produit['montant']);
      $cptQ+= $produit['montant'];
-     $cptC+=$produit ['nombre_produit']*$produit['montant'];
+    //  $cptC+=$produit ['nombre_produit']*$produit['montant'];
      }
      $detailecommende->nombre_produit =$cptQ;
       $detailecommende->montant =$cptC;
