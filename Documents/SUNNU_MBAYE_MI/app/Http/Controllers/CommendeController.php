@@ -8,6 +8,7 @@ use App\Models\Panier;
 use App\Models\Produit;
 use App\Models\Commende;
 use App\Models\DetailCommende;
+use App\Models\Payment;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -127,9 +128,10 @@ public function Commender(Request $request)
   public function ListerCommende(Request $request)
 {
     if (Auth::guard('api')->check()){
-        $user_id = auth()->guard('api')->user()->id;
-        $commandes = Commende::where('user_id', $user_id)->get();
-        return response()->json(['status' => true, 'commandes' => $commandes]);
+        
+        $commandes = Commende::all();
+        $payement = Payment::all();
+        return response()->json(['status' => true, 'commandes' => $commandes,'Payement'=>$payement]);
     } else {
         return response()->json(['status' => false, 'message' => 'Veuillez vous connecter d\'abord'], 201);
     }
@@ -139,11 +141,12 @@ public function Commender(Request $request)
 public function VoirplusCommende(Request $request, $id)
 {
     if (Auth::guard('api')->check()){
-        $user_id = auth()->guard('api')->user()->id;
-        $commande = Commende::where('user_id', $user_id)->where('id', $id)->first();
+        
+        $commande = Commende::find($id);
         if ($commande){
-            $details = DetailCommende::where('commende_id', $id)->get();
-            return response()->json(['status' => true, 'commande' => $commande, 'details' => $details]);
+            $details = DetailCommende::find('commende_id', $id);
+            $payement = Payment::find('commende_id', $id);
+            return response()->json(['status' => true, 'commande' => $commande, 'details' => $details,'Payement'=>$payement]);
         } else {
             return response()->json(['status' => false, 'message' => 'Commande introuvable'], 404);
         }
