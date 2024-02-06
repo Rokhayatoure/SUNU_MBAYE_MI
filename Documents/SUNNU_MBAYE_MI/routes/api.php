@@ -67,6 +67,7 @@ Route::post('/Commender', [CommendeController::class, 'Commender']);
 
 });
 
+
 //agriculteur middleware
 Route::middleware(['auth','nom_role:agriculteur'])->group(function () {
 Route::put('updateproduit/{id}', [ProduitController::class ,'updateproduit']);
@@ -103,8 +104,7 @@ Route::delete('debloquerUser/{id}', [UserController::class ,'debloquerUser']);
 Route::delete('BloquerUser/{id}', [UserController::class ,'BloquerUser']);
 Route::get('/listeUser',[UserController::class ,'listeUser'] );
 //commende
-Route::get('/ListerCommende', [CommendeController::class, 'ListerCommende']);
-Route::get('/VoirplusCommende/{id}', [CommendeController::class, 'VoirplusCommende']);
+
 //role
 Route::post('/role', [UserController::class ,'ajouterRole']);
 Route::get('/listRole', [UserController::class ,'listRole']);
@@ -112,7 +112,8 @@ Route::get('/listRole', [UserController::class ,'listRole']);
 
 
 });
-
+Route::get('/ListerCommende', [CommendeController::class, 'ListerCommende']);
+Route::get('/VoirplusCommende/{id}', [CommendeController::class, 'VoirplusCommende']);
 
 
 Route::get('payment', [PayementController::class, 'index'])->name('payment.index');

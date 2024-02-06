@@ -63,29 +63,28 @@ public function Commender(Request $request)
     if (Auth::guard('api')->check()){
         
         $commandes = Commende::all();
-        $payement = Payment::all();
-        return response()->json(['status' => true, 'commandes' => $commandes,'Payement'=>$payement]);
-    } else {
-        return response()->json(['status' => false, 'message' => 'Veuillez vous connecter d\'abord'], 201);
+        $detailCommende=DetailCommende::all();
+        return response()->json(['status' => true, 'commandes' => $commandes, 'detailCommende' => $detailCommende]);
+    
     }
 }
 
 // Cette fonction renvoie les détails d'une commande spécifiée par son id
 public function VoirplusCommende(Request $request, $id)
 {
-    if (Auth::guard('api')->check()){
+    // if (Auth::guard('api')->check()){
         
         $commande = Commende::find($id);
         if ($commande){
-            $details = DetailCommende::find('commende_id', $id);
-            $payement = Payment::find('commende_id', $id);
+         $details = DetailCommende::find('commende_id', $id);
+         $payement = Payment::find('commende_id', $id);
             return response()->json(['status' => true, 'commande' => $commande, 'details' => $details,'Payement'=>$payement]);
         } else {
             return response()->json(['status' => false, 'message' => 'Commande introuvable'], 404);
         }
-    } else {
-        return response()->json(['status' => false, 'message' => 'Veuillez vous connecter d\'abord'], 201);
-    }
+    // } else {
+    //     return response()->json(['status' => false, 'message' => 'Veuillez vous connecter d\'abord'], 201);
+    // }
 }
 
 
