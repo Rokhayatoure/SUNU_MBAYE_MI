@@ -74,7 +74,6 @@ Route::delete('supProduit/{id}', [ProduitController::class ,'supProduit']);
 Route::get('/listeAnnonceAgriculteur', [AnnonceController::class ,'listeAnnonceAgriculteur']);
 Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
 Route::get('listeProduitAgriculteur', [ProduitController::class ,'listeProduitAgriculteur']);
-
 Route::post('/ajoutAnnonce', [AnnonceController::class ,'ajoutAnnonce']);
 
 
