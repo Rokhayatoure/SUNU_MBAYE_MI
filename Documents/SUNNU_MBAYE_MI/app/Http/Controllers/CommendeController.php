@@ -121,74 +121,37 @@ public function Commender(Request $request)
         ]);
         //  return view('index', compact('cptC','commende_id'));
         }
-  /**
-     * Afficher les commandes de l'utilisateur.
-     *
-     * @OA\Get(
-     *     path="/api/afficheCommende",
-     *     summary="Afficher les commandes de l'utilisateur",
-     *     security={
-     *         {"bearerAuth": {}}
-     *     },
-     *     @OA\Response(
-     *         response=200,
-     *         description="Liste des commandes de l'utilisateur",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="commende", type="array", @OA\Items(ref="#/components/schemas/Commende"))
-     *         )
-     *     ),
-     *     @OA\Response(response=403, description="Non autorisé")
-     * )
-     */
-  
-           public function AfficheCommende ()
-           {
-               $id = Auth::guard('api')->user()->id;
-               $commende = Commende::where('user_id', $id)->get();
-               $dateCommande = $commende->created_at;
-               return response()->json(compact('commende','dateCommande'), 200);
-           }
-   
-  /**
-     * Afficher les détails d'une commande.
-     *
-     * @OA\Get(
-     *     path="/api/voirPlus/{commende_id}",
-     *     summary="Afficher les détails d'une commande",
-     *     security={
-     *         {"bearerAuth": {}}
-     *     },
-     *     @OA\Parameter(
-     *         name="commende_id",
-     *         in="path",
-     *         required=true,
-     *         description="ID de la commande",
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Détails de la commande",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="commende", type="object", ref="#/components/schemas/Commende")
-     *         )
-     *     ),
-     *     @OA\Response(response=201, description="Veillez vous connecter d'abord"),
-     *     @OA\Response(response=404, description="Commande non trouvée")
-     * )
-     */
-           public function voirPlus( $commende_id)
-           {
-               if (Auth::guard('api')->check())
-               {
-                   $commende = Commende::find($commende_id);
-                   return response()->json(compact('commende'), 200);
-           
-       
-               }
-               else{
-                   return response()->json(['message' => ' Veiller vous connecter dabord'], 201);
-               }
-           }
+  // Cette fonction renvoie la liste des commandes d'un utilisateur authentifié
+
+
+  public function ListerCommende(Request $request)
+{
+    if (Auth::guard('api')->check()){
+        $user_id = auth()->guard('api')->user()->id;
+        $commandes = Commende::where('user_id', $user_id)->get();
+        return response()->json(['status' => true, 'commandes' => $commandes]);
+    } else {
+        return response()->json(['status' => false, 'message' => 'Veuillez vous connecter d\'abord'], 201);
+    }
+}
+
+// Cette fonction renvoie les détails d'une commande spécifiée par son id
+public function VoirplusCommende(Request $request, $id)
+{
+    if (Auth::guard('api')->check()){
+        $user_id = auth()->guard('api')->user()->id;
+        $commande = Commende::where('user_id', $user_id)->where('id', $id)->first();
+        if ($commande){
+            $details = DetailCommende::where('commende_id', $id)->get();
+            return response()->json(['status' => true, 'commande' => $commande, 'details' => $details]);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Commande introuvable'], 404);
+        }
+    } else {
+        return response()->json(['status' => false, 'message' => 'Veuillez vous connecter d\'abord'], 201);
+    }
+}
+
 
            
     /**

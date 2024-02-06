@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use OpenAi\Annotations as OA;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use OpenAi\Annotations as OA;
 
 /**
  * @OA\Info(
@@ -107,7 +108,8 @@ class UserController extends Controller
             'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
             'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
             'email' => ['required', 'email', 'unique:users,email'],
-            // 'telephone' => ['required', 'string', 'regex:/^(\+221|221)?[76|77|78|70|33]\d{5}$/'],
+              'telephone' => ['required', 'string', 'regex:/^(\+221|221)?[76|77|78|70|33]\d{7}$/'],
+
             'role_id' => ['required','integer',],
             'password' => ['required', 'string', 'min:8'],
 
@@ -256,7 +258,7 @@ $validator = Validator::make($request->all(), [
         'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
         'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
         'email' => ['required', 'email', 'unique:users,email'],
-        'telephone' => ['required', 'string', 'regex:/^(\+221|221)?[76|77|78|70|33]\d{7}$/'],
+        // 'telephone' => ['required', 'string', 'regex:/^(\+221|221)?[76|77|78|70|33]\d{7}$/'],
         'role_id' => ['required','integer',],
         'password' => ['required', 'string', 'min:8'],
 
@@ -319,12 +321,21 @@ return response()->json([
  * )
  */
 
+// public function listeUser()
+// {
+//     $user=User::all();
+//     return response()->json(compact('user'), 200);
+// }
 public function listeUser()
 {
-    $user=User::all();
-    return response()->json(compact('user'), 200);
-}
+    // Récupérer l'ID du rôle "admin"
+    $adminRoleId = DB::table('roles')->where('nom_role', 'admin')->value('id');
 
+    // Récupérer tous les utilisateurs sauf l'admin
+    $users = User::where('role_id', '!=', $adminRoleId)->get();
+
+    return response()->json(compact('users'), 200);
+}
 
 public function debloquerUser($id)
 {
@@ -365,5 +376,7 @@ public function BloquerUser($id)
         'user' => $user,
     ]);
 }
+
+
 
 }
