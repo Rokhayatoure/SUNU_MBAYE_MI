@@ -28,6 +28,7 @@ use Spatie\LaravelIgnition\Solutions\SolutionProviders\RunningLaravelDuskInProdu
 //Utilisateur inscription auth sup deconnection
 
 Route::post('/role', [UserController::class ,'ajouterRole']);
+Route::get('/listRole', [UserController::class ,'listRole']);
 Route::post('inscription', [UserController::class ,'inscription']);
 Route::post('login', [UserController::class ,'login']);
 Route::post('logout', [UserController::class ,'logout']);

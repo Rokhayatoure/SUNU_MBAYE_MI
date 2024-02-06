@@ -71,6 +71,15 @@ class UserController extends Controller
         return response()->json(['message' => 'Rôle ajouté avec succès', 'role' => $role], 201);
     }
 
+
+
+
+    public function listRole($id)
+    {
+       $role=Role::find($id);
+       
+    return response()->json(compact('role'), 200);
+    }
 /**
  * @OA\Post(
  *     path="/api/inscription",
@@ -108,13 +117,12 @@ class UserController extends Controller
             'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
             'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
             'email' => ['required', 'email', 'unique:users,email'],
-              'telephone' => ['required', 'string', 'regex:/^(\+221|221)?[76|77|78|70|33]\d{7}$/'],
-
+            'telephone' => ['required', 'string', 'regex:/^(\+221|221)?[76|77|78|70|33]\d{7}$/'],
             'role_id' => ['required','integer',],
             'password' => ['required', 'string', 'min:8'],
 
         ]); 
-    
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
