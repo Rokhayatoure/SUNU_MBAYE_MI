@@ -32,6 +32,7 @@ public function Commender(Request $request)
         $cptC = 0;
         
         $commende_id=$commende->id;
+        // dd($commende_id);
        foreach( $request->input('panier') as $produit) {
             DetailCommende::create([
             'commende_id'=>$commende->id,
