@@ -59,13 +59,20 @@ public function Commender(Request $request)
   // Cette fonction renvoie la liste des commandes d'un utilisateur authentifié
 
 
+
+
+
+
+
+
   public function ListerCommende(Request $request)
 {
     if (Auth::guard('api')->check()){
         
         $commandes = Commende::all();
         $detailCommende=DetailCommende::all();
-        return response()->json(['status' => true, 'commandes' => $commandes, 'detailCommende' => $detailCommende]);
+        $payment=Payment::all();
+        return response()->json(['status' => true, 'commandes' => $commandes, 'detailCommende' => $detailCommende,'payment' => $payment]);
     
     }
 }

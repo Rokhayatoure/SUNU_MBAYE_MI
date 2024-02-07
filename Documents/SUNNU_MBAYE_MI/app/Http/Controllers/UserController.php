@@ -374,6 +374,7 @@ public function debloquerUser($id)
     return response()->json([
         'status' => true,
         'message' => "L'utilisateur a été débloqué avec succès.",
+        
         'user' => $user,
     ]);
 }
