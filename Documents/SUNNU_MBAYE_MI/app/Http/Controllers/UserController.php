@@ -185,41 +185,59 @@ class UserController extends Controller
      */
 // loging
 
-  public function login(Request $request)
-    {
-
-        // data validate 
+public function login(Request $request)
+{
+    try {
+        // Validation des données d'entrée
         $validator = Validator::make($request->all(), [
             "email" => "required|email",
-             "password" => "required|"
-
+            "password" => "required"
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // JWTAuth
-        $token = JWTAuth::attempt([
-            "email" => $request->email,
-            "password" => $request->password
-        ]);
-        if (!empty($token)) {
-       $user = Auth::user();
+        // Authentification de l'utilisateur
+        $credentials = $request->only('email', 'password');
+        if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json([
-                "status" => true,
-                "message" => "utilisateur connecter avec succe",
-                "token" => $token,
-                'user'=>$user
-            ]);
+                "status" => false,
+                "message" => "Identifiants invalides",
+            ], 401);
         }
 
+        // Récupération de l'utilisateur
+        $user = Auth::user();
+
+        // Vérification si l'utilisateur est bloqué
+        if ($user && $user->est_bloquer) {
+            return response()->json([
+                "status" => false,
+                "message" => "Votre compte est bloqué. Veuillez contacter l'administrateur.",
+            ], 403);
+        }
+
+        // Génération du token JWT
+        return response()->json([
+            "status" => true,
+            "message" => "Utilisateur connecté avec succès",
+            "token" => $token,
+            'user' => $user
+        ]);
+
+    } catch (\Exception $e) {
         return response()->json([
             "status" => false,
-            "message" => "details invalide",
-            
-        ],201);
+            "message" => "Une erreur s'est produite lors de la connexion.",
+            "error" => $e->getMessage()
+        ], 500);
     }
+}
+
+
+    
+   
 
 
  /**
@@ -366,6 +384,11 @@ public function BloquerUser($id)
 
     if (!$user) {
         return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
+    }
+
+    $admin = Auth::user();
+    if ($admin->id === $user->id) {
+        return response()->json(['message' => 'Vous ne pouvez pas vous bloquer vous-même.'], 403);
     }
 
     // Inverser l'état de blocage

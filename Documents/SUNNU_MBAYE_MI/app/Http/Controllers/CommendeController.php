@@ -38,6 +38,7 @@ public function Commender(Request $request)
             'produit_id'=>$produit['produit_id'],
             'nombre_produit'=>$produit['nombre_produit'],
             'montant'=>$produit['montant'],
+            
           ]);
      Produit::where('id',$produit['produit_id'])->decrement('quantite',$produit['montant']);
      $cptC+= $produit['montant'];
