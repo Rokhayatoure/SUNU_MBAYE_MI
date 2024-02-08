@@ -180,7 +180,7 @@ public function voirplusmessage($id){
 public function reponse(Request $request)
     {
         try {
-            $data = $request->message;
+            $data = $request->continue;
             if (Mail::to($request->email)->send(new ResponseMail($data))) {
                 return response()->json(['message' => 'reponse envoye avec success']);
             } else {

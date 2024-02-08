@@ -18,6 +18,7 @@ class CategorieController extends Controller
      * @OA\Get(
      *     path="/api/listeCategorie",
      *     summary="Liste de toutes les catégories",
+     *  tags={"Categories"},
      *     @OA\Response(
      *         response=200,
      *         description="Liste des catégories",
@@ -43,6 +44,7 @@ class CategorieController extends Controller
      * @OA\Get(
      *     path="/api/voiplusCategorie/{id}",
      *     summary="Détails d'une catégorie",
+     * tags={"Categories"},
      *     @OA\Parameter(
      *         name="categori_id",
      *         in="path",
@@ -85,6 +87,7 @@ class CategorieController extends Controller
      * @OA\Post(
      *     path="/api/AjoutCategorie",
      *     summary="Ajouter une catégorie",
+     * tags={"Categories"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -150,6 +153,7 @@ $validator->messages([
      * @OA\Put(
      *     path="/api/modifieCategorie/{id}",
      *     summary="Modifier une catégorie",
+     * tags={"Categories"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -232,6 +236,7 @@ if ($user->role->nom_role !== $requiredRole) {
      * @OA\Delete(
      *     path="/api/supCategorie/{id}",
      *     summary="Supprimer une catégorie",
+     * tags={"Categories"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

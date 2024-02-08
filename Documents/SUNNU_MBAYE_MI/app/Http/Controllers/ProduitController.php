@@ -15,6 +15,7 @@ class ProduitController extends Controller
  /**
      * @OA\Get(
      *     path="/api/listeProduitAgriculteur",
+     * tags={"Produit"},
      *     summary="Liste des produits  de L'agriculteur ",
      *     @OA\Response(response=200, description="Renvoie la liste de tous les produits.")
      * )
@@ -29,8 +30,9 @@ class ProduitController extends Controller
 
      /**
      * @OA\Get(
-     *     path="/api/produits",
+     *     path="/api/listeProduit",
      *     summary="Liste des produits",
+     *  tags={"Produit"},
      *     @OA\Response(response=200, description="Renvoie la liste de tous les produits.")
      * )
      */
@@ -43,8 +45,9 @@ class ProduitController extends Controller
     }
 /**
  * @OA\Post(
- *     path="/api/ajoutProduit",
+ *     path="/api/AjoutProduit",
  *     summary="Ajouter un produit",
+ * tags={"Produit"},
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\MediaType(
@@ -151,6 +154,7 @@ class ProduitController extends Controller
  * @OA\Put(
  *     path="/api/updateproduit/{id}",
  *     summary="Mettre à jour un produit",
+ *  tags={"Produit"},
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
@@ -283,6 +287,7 @@ class ProduitController extends Controller
      * @OA\Delete(
      *     path="/api/supProduit/{id}",
      *     summary="Supprime un produit",
+     * tags={"Produit"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -326,9 +331,10 @@ class ProduitController extends Controller
     }
 
 /**
- * @OA\Post(
+ * @OA\get(
  *     path="/api/produitrecherche",
  *     summary="Recherche de produits",
+ * tags={"Produit"},
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
@@ -363,9 +369,10 @@ class ProduitController extends Controller
 
 
 /**
- * @OA\Post(
+ * @OA\get(
  *     path="/api/rechercheproduit",
  *     summary="Recherche de produits",
+ * tags={"Produit"},
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
@@ -400,9 +407,10 @@ public function rechercheProduit(Request $request){
 /**
  * Filtrer les produits par catégorie.
  *
- * @OA\Post(
- *     path="/api/filtrer-produits-par-categorie",
+ * @OA\get(
+ *     path="/api/filtrerProduitsParCategorie",
  *     summary="Filtrer les produits par catégorie",
+ * tags={"Produit"},
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(

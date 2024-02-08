@@ -228,7 +228,7 @@ class AnnonceController extends Controller
  * Liste toutes les annonces.
  *
  * @OA\Get(
- *     path="/api/listeAnnonce",
+ *     path="/api/listAnnonce",
  *     summary="Liste toutes les annonces",
  *     tags={"Annonces"},
  *     security={
@@ -468,6 +468,7 @@ public function publierAnnonce(Request $request, $id)
  * @OA\Delete(
  *     path="/api/retirerAnnonce/{id}",
  *     summary="Retirer une annonce de la page d'accueil",
+ * tags={"Annonces"},
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
@@ -524,6 +525,7 @@ public function retirerAnnonce($id)
  * @OA\Get(
  *     path="/api/listeAnnoncesPubliees",
  *     summary="Liste de toutes les annonces publiées",
+ * tags={"Annonces"},
  *     security={
  *         {"bearerAuth": {}}
  *     },

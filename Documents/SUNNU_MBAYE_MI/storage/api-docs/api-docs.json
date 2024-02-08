@@ -164,14 +164,14 @@
                 ]
             }
         },
-        "/api/listeAnnonce": {
+        "/api/listAnnonce": {
             "get": {
                 "tags": [
                     "Annonces"
                 ],
                 "summary": "Liste toutes les annonces",
                 "description": "Liste toutes les annonces.",
-                "operationId": "00778bef9020cead74a58bfd26285e12",
+                "operationId": "13f2f0bd645aa23cff7899e7c45cdcde",
                 "responses": {
                     "200": {
                         "description": "Liste de toutes les annonces",
@@ -411,6 +411,9 @@
         },
         "/api/retirerAnnonce/{id}": {
             "delete": {
+                "tags": [
+                    "Annonces"
+                ],
                 "summary": "Retirer une annonce de la page d'accueil",
                 "description": "Retirer une annonce de la page d'accueil.",
                 "operationId": "35d09754d1de9fe709d55adeb95b972b",
@@ -465,6 +468,9 @@
         },
         "/api/listeAnnoncesPubliees": {
             "get": {
+                "tags": [
+                    "Annonces"
+                ],
                 "summary": "Liste de toutes les annonces publiées",
                 "description": "Liste des annonces publiées.",
                 "operationId": "f998d52171b7b4a77710ccd988da6ee6",
