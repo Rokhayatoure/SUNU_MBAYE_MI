@@ -19,12 +19,13 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
-            $table->string('contact')->nullable();
+            $table->string('telephone');
             $table->string('image')->nullable();
             $table->string('sexe')->nullable();
             $table->string('date_naissance')->nullable();
-            $table->string('adresse');
+            $table->string('adresse')->nullable();
             $table->string('nom_entreprise')->nullable();
+            $table->boolean('est_bloquer')->default(false);
             $table->foreignIdFor(Role::class)->constrained()->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();

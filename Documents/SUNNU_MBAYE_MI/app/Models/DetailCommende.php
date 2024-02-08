@@ -11,15 +11,9 @@ class DetailCommende extends Model
     protected $fillable = [
         'commende_id',
         'produit_id',
-           'nom',
-           'prenom',
-           'contact',
-           'prix',
-           'images',
-           'quantite',
-           'nom_produit',
-           'email',
-           'user_id'
+           'nombre_produit',
+           'montant',
+           'quantite'
 
         
     ];

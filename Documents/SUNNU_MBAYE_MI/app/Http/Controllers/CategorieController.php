@@ -8,6 +8,7 @@ use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class CategorieController extends Controller
 {
@@ -17,6 +18,7 @@ class CategorieController extends Controller
      * @OA\Get(
      *     path="/api/listeCategorie",
      *     summary="Liste de toutes les catégories",
+     *  tags={"Categories"},
      *     @OA\Response(
      *         response=200,
      *         description="Liste des catégories",
@@ -42,6 +44,7 @@ class CategorieController extends Controller
      * @OA\Get(
      *     path="/api/voiplusCategorie/{id}",
      *     summary="Détails d'une catégorie",
+     * tags={"Categories"},
      *     @OA\Parameter(
      *         name="categori_id",
      *         in="path",
@@ -49,6 +52,9 @@ class CategorieController extends Controller
      *         description="ID de la catégorie à afficher",
      *         @OA\Schema(type="integer")
      *     ),
+     *  security={
+     *         {"bearerAuth": {}}
+     *     },
      *     @OA\Response(
      *         response=200,
      *         description="Détails de la catégorie",
@@ -81,12 +87,16 @@ class CategorieController extends Controller
      * @OA\Post(
      *     path="/api/AjoutCategorie",
      *     summary="Ajouter une catégorie",
+     * tags={"Categories"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
      *             @OA\Property(property="nom_categories", type="string")
      *         )
      *     ),
+     *  security={
+     *         {"bearerAuth": {}}
+     *     },
      *     @OA\Response(
      *         response=200,
      *         description="Catégorie ajoutée avec succès",
@@ -104,8 +114,6 @@ public function AjoutCategorie(Request $request)
     if (!Auth::guard('api')->check()) {
         return response()->json(['errors' => 'Veuillez vous connecter avant de faire cette action.'], 422);
     }
-
-
     $user = Auth::guard('api')->user();
 
 // Définissez le rôle que vous voulez vérifier
@@ -114,7 +122,16 @@ $requiredRole = 'admin';
 // Vérifiez si l'utilisateur a le bon rôle
 if ($user->role->nom_role !== $requiredRole) {
     return response()->json(['errors' => 'Vous n\'avez pas les autorisations nécessaires pour faire cette action.'], 403);
-}
+}$validator = Validator::make($request->all(), [
+    'nom_categories' => ['required', 'string', 'max:255'],
+]);
+
+$validator->messages([
+    'nom_categories.required' => 'Le champ nom de la catégorie est obligatoire.',
+    'nom_categories.string' => 'Le champ nom de la catégorie doit être une chaîne de caractères.',
+    'nom_categories.max' => 'Le champ nom de la catégorie ne peut pas dépasser :max caractères.',
+]);
+
 
     // Créer une nouvelle instance de la catégorie
     $categorie = new Categorie([
@@ -136,6 +153,7 @@ if ($user->role->nom_role !== $requiredRole) {
      * @OA\Put(
      *     path="/api/modifieCategorie/{id}",
      *     summary="Modifier une catégorie",
+     * tags={"Categories"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -149,6 +167,9 @@ if ($user->role->nom_role !== $requiredRole) {
      *             @OA\Property(property="nom_categories", type="string")
      *         )
      *     ),
+     *  security={
+     *         {"bearerAuth": {}}
+     *     },
      *     @OA\Response(
      *         response=200,
      *         description="Catégorie modifiée avec succès",
@@ -167,6 +188,16 @@ if ($user->role->nom_role !== $requiredRole) {
 
     
     {
+        $validator = Validator::make($request->all(), [
+            'nom_categories' => ['required', 'string', 'max:255'],
+        ]);
+    
+        $validator->messages([
+            'nom_categories.required' => 'Le champ nom de la catégorie est obligatoire.',
+            'nom_categories.string' => 'Le champ nom de la catégorie doit être une chaîne de caractères.',
+            'nom_categories.max' => 'Le champ nom de la catégorie ne peut pas dépasser :max caractères.',
+        ]);
+    
         if (!Auth::guard('api')->check()) {
             return response()->json(['errors' => 'veilleir vous connecter avant de fair cette action.'], 422);
         }
@@ -205,6 +236,7 @@ if ($user->role->nom_role !== $requiredRole) {
      * @OA\Delete(
      *     path="/api/supCategorie/{id}",
      *     summary="Supprimer une catégorie",
+     * tags={"Categories"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -212,6 +244,9 @@ if ($user->role->nom_role !== $requiredRole) {
      *         description="ID de la catégorie à supprimer",
      *         @OA\Schema(type="integer")
      *     ),
+     *  security={
+     *         {"bearerAuth": {}}
+     *     },
      *     @OA\Response(
      *         response=200,
      *         description="Catégorie supprimée avec succès",
@@ -225,12 +260,7 @@ if ($user->role->nom_role !== $requiredRole) {
      */
     public function destroy($id)
     {
-
-
-        if (!Auth::check()) {
-            return response()->json(['errors' => 'veilleir vous connecter avant de fair cette action.'], 422);
-        }
-        Categorie::find($id)->delete();
+      Categorie::find($id)->delete();
     return response()->json(['message' => 'categorie supprimé avec succès'], 200);
     
     }

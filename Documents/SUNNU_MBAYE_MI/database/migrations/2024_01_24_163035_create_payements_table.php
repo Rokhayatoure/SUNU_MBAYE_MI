@@ -14,20 +14,15 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('nom_produit');
-            $table->string('token')->unique()->nullable();
-            $table->integer('prix');
-            $table->integer('quantite');
-            $table
-                ->foreignIdFor(User::class)
-                ->nullable()
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->timestamps();
-            $table->softDeletes();
+           
+            $table->unsignedBigInteger('commende_id');
+            $table->foreign('commende_id')->references('id')->on('commendes')->onDelete('cascade');
+             $table->string('token')->unique()->nullable();
+             $table->integer('amount');
+             $table->timestamps();
+             $table->softDeletes();
         });
-    }
+    }    
 
     /**
      * Reverse the migrations.

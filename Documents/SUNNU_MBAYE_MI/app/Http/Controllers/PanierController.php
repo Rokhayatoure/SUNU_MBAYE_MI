@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commende;
 use App\Models\panier;
 use App\Models\Produit;
 use Illuminate\Http\Request;
@@ -10,10 +11,29 @@ use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\MockObject\Stub\ReturnCallback;
 
 class PanierController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     */
+{/**
+ * @OA\Post(
+ *     path="/api/AjoutPanier/{produit_id}",
+ *     summary="Ajoute un produit au panier",
+ *     @OA\Parameter(
+ *         name="produit_id",
+ *         in="path",
+ *         description="ID du produit à ajouter",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Produit ajouté au panier avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="boolean", example=true),
+ *             @OA\Property(property="panier", type="object", ref="#/components/schemas/Panier")
+ *         )
+ *     ),
+ *     @OA\Response(response=201, description="Non connecté"),
+ * )
+ */
+
     public function AjoutPanier(Request $request,$produit_id)
     {
         if (Auth::guard('api')->check()){
@@ -21,24 +41,17 @@ class PanierController extends Controller
       
         $user = Auth::guard('api')->user();
         $produit =Produit::find($produit_id);
-        $panier=new Panier;
+        $panier=new Commende();
         $panier->email=$user->email;
         $panier->nom=$user->nom;
         $panier->prenom=$user->prenom;
         $panier->user_id=auth()->guard('api')->user()->id;
-        $panier->contact=$user->contact;
-        // $panier->prix=$produit->prix;
         $panier->quantite= $produit->quantite;
-       $panier->prix=intval($produit->prix )*intval($produit->quantite);
-    //    var_dump($request->quantite);
-        // $panier->prix=4*4;
+        $panier->prix=intval($produit->prix )*intval($produit->quantite);
         $panier->nom_produit=$produit->nom_produit;
         $panier->images=$produit->images;
-        
-
-      
         $panier->produit_id= $produit->id;
-        // dd($panier);
+        
 
 
         $panier->save(); 
@@ -51,9 +64,20 @@ class PanierController extends Controller
         ], 201);
         }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    
+/**
+ * @OA\Get(
+ *     path="/api/AfficherPanier",
+ *     summary="Affiche le panier de l'utilisateur",
+ *     @OA\Response(
+ *         response=200,
+ *         description="Panier affiché avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="panier", type="array", @OA\Items(ref="#/components/schemas/Panier"))
+ *         )
+ *     ),
+ * )
+ */
     //afficher pagner 
     public function AfficherPanier()
     {
@@ -65,6 +89,29 @@ class PanierController extends Controller
 
 
 
+/**
+ * @OA\Delete(
+ *     path="/api/viderPanier/{produit_id}",
+ *     summary="Vide un produit du panier",
+ *     @OA\Parameter(
+ *         name="produit_id",
+ *         in="path",
+ *         description="ID du produit à vider",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Produit vidé du panier avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="boolean", example=true),
+ *             @OA\Property(property="panier", type="object", ref="#/components/schemas/Panier"),
+ *             @OA\Property(property="message", type="string", example="Le produit est vidé du panier avec succès")
+ *         )
+ *     ),
+ *     @OA\Response(response=404, description="Produit non trouvé dans le panier"),
+ * )
+ */
 
     public function viderPanier($produit_id)
     {

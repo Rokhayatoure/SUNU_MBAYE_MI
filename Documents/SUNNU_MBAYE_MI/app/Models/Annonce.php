@@ -14,5 +14,8 @@ class Annonce extends Model
         'images',
         'user_id'
     ];
+    // Annonce.php
+
+
 
 }

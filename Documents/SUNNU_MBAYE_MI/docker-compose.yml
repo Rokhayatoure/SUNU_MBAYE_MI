@@ -1,49 +1,48 @@
 version: "3.8"
-
 services:
-  database:
-    image: mysql:5.7
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-    ports:
-      - "3306:3306"
-    networks:
-      - dev
+    # Mysql database container
+    db:
+        image: mysql
+        container_name: certification_simplon
+        restart: always
+        volumes:
+            - db-data:/var/lib/mysql
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        ports:
+            - '3306'
+        networks:
+            - tutorial
 
-  phpmyadmin:
-    image: phpmyadmin
-    container_name: phpmyadmin_docker_symfony
-    restart: always
-    depends_on:
-      - database
-    ports:
-      - "8080:80"
-    environment:
-      PMA_HOST: database
-    networks:
-      - dev
+    # phpmyadmin container
+    phpmyadmin:
+        image: phpmyadmin
+        container_name: certification_simplon1
+        restart: always
+        depends_on:
+            - db
+        ports:
+            - 8080:80
+        environment:
+            PMA_HOST: db
+        networks:
+            - tutorial
 
-  maildev:
-    image: maildev/maildev
-    container_name: maildev_docker_symfony
-    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
-    ports:
-      - "8081:80"
-    restart: always
-    networks:
-      - dev
-
-  www:
-    build: php
-    container_name: www_sunu_mbay
-    ports:
-      - "8091:80"
-    volumes:
-      - ./php/vhosts:/etc/apache2/sites-enabled
-      - ./:/var/www/html
-    restart: always
-    networks:
-      - dev
+    # laravel apache project container
+    www:
+        build: docker/php
+        container_name: certification_simplon2
+        ports:
+          - "8741:80"
+        volumes:
+            - ./docker/php/vhosts:/etc/apache2/sites-enabled
+            - ./:/var/www/html
+        restart: always
+        networks:
+            - tutorial
 
 networks:
-  dev:
+    tutorial:
+
+volumes:
+    db-data:

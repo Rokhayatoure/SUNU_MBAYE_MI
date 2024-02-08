@@ -80,7 +80,7 @@ class PaytechService
     public function send()
     {
         $params = [
-            'item_name' => PaytechService::arrayGet($this->query, 'item_name'),
+            'commende_id' => PaytechService::arrayGet($this->query, 'commende_id'),
             'item_price' => PaytechService::arrayGet($this->query, 'item_price'),
             'command_name' => PaytechService::arrayGet($this->query, 'command_name'),
             'ref_command' => $this->refCommand,

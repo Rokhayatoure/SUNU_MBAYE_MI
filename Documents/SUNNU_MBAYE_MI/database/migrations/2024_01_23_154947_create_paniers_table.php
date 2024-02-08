@@ -17,14 +17,14 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('produit_id');
             $table->foreign('produit_id')->references('id')->on('produits')->onDelete('cascade');
-            $table->string('prenom');
-            $table->string('nom');
-            $table->string('contact');
-            $table->string('email');
-            $table->intiger('prix');
-            $table->string('images');
-            $table->intiger('quantite');
-            $table->intiger('nom_produit');
+            $table->string('prenom')->nulable();
+            $table->string('nom')->nulable();
+            // $table->string('contact')->nulable();
+            $table->string('email')->nulable();
+            $table->integer('prix')->nulable();
+            $table->string('images')->nulable();
+            $table->integer('quantite')->nulable();
+            $table->string('nom_produit')->nullable();
             $table->timestamps();
         });
     }

@@ -141,14 +141,14 @@
                         <h3 class="header-title">Validation de Commande</h3>
                         <form class="login-form" action="{{ route('payment.submit') }}" method="POST">
                             @csrf
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <input type="text" name="product_name" value="HP EliteBook 1030 G5" class="form-control" placeholder="Nom du produit">
+                            </div> -->
+                            <div class="form-group">
+                                <input type="number" name="price"  value="{{request()->get('cptC' )}}" class="form-control" placeholder="Montant">
                             </div>
                             <div class="form-group">
-                                <input type="number" name="price" value="380000" class="form-control" placeholder="Montant">
-                            </div>
-                            <div class="form-group">
-                                <input type="number" name="qty" value="1" class="form-control" placeholder="Quantité">
+                                <input type="number" name="commende_id" value="{{request()->get('commende_id')}" class="form-control" placeholder="Quantité">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary btn-block">Effectuer le Paiement</button>

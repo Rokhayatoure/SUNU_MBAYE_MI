@@ -9,6 +9,7 @@ class Commende extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'id',
         'produit_id',
         'nom',
         'prenom',
@@ -23,6 +24,10 @@ class Commende extends Model
     public function detailCommende()
     {
         return $this->hasMany(DetailCommende::class);
+    }
+    public function Payement()
+    {
+        return $this->belongsTo(Payment::class);
     }
 
 }
