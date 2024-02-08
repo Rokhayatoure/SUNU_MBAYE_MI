@@ -111,6 +111,8 @@ Route::get('/listRole', [UserController::class ,'listRole']);
 
 Route::get('/ListerCommende', [CommendeController::class, 'ListerCommende']);
 Route::get('/VoirplusCommende/{id}', [CommendeController::class, 'VoirplusCommende']);
+Route::post('reponse', [MessageController::class ,'reponse']);
+Route::get('voirplusmessage/{id}', [MessageController::class ,'voirplusmessage']);
 
 
 });

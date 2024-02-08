@@ -15,46 +15,43 @@ class AnnonceController extends Controller
 
 
  /**
-     * Ajouter une nouvelle annonce.
-     *
-     * @OA\Post(
-     *     path="/api/ajoutAnnonce",
-     *     summary="Ajouter une annonce",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 required={"titre", "description", "images"},
-     *                 @OA\Property(property="titre", type="string"),
-     *                 @OA\Property(property="description", type="string"),
-     *                 @OA\Property(property="images", type="string", format="binary")
-     *             )
-     *         )
-     *     ),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     },
-     *     @OA\Response(
-     *         response=201,
-     *         description="Annonce ajoutée avec succès",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Annonce ajoutée avec succès"),
-     *             @OA\Property(property="annonce", type="object", ref="#/components/schemas/Annonce")
-     *         )
-     *     ),
-     *     @OA\Response(response=401, description="Non autorisé"),
-     *     @OA\Response(response=422, description="Erreur de validation")
-     * )
-     */
-
+ * Ajouter une nouvelle annonce.
+ *
+ * @OA\Post(
+ *     path="/api/ajoutAnnonce",
+ *     summary="Ajouter une annonce",
+ *     tags={"Annonces"},
+ *     security={
+ *         {"bearerAuth": {}}
+ *     },
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 required={"titre", "description", "images"},
+ *                 @OA\Property(property="titre", type="string"),
+ *                 @OA\Property(property="description", type="string"),
+ *                 @OA\Property(property="images", type="string", format="binary")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Annonce ajoutée avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Annonce ajoutée avec succès"),
+ *             @OA\Property(property="annonce", ref="#/components/schemas/Annonce")
+ *         )
+ *     ),
+ *     @OA\Response(response=401, description="Non autorisé"),
+ *     @OA\Response(response=422, description="Erreur de validation")
+ * )
+ */
    
     public function ajoutAnnonce(Request $request)
     {
-
-
-
         $validator = Validator::make($request->all(), [
             'titre' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
@@ -112,46 +109,51 @@ class AnnonceController extends Controller
 
 
  /**
-     * Modifier une annonce existante.
-     *
-     * @OA\Put(
-     *     path="/api/modifierAnnonce{id}",
-     *     summary="Modifier une annonce",
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         description="ID de l'annonce à modifier",
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 @OA\Property(property="titre", type="string"),
-     *                 @OA\Property(property="description", type="string"),
-     *                 @OA\Property(property="images", type="string", format="binary")
-     *             )
-     *         )
-     *     ),
-     *     security={
-     *         {"bearerAuth": {}}
-     *     },
-     *     @OA\Response(
-     *         response=200,
-     *         description="Annonce modifiée avec succès",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Annonce modifiée avec succès"),
-     *             @OA\Property(property="annonce", type="object", ref="#/components/schemas/Annonce")
-     *         )
-     *     ),
-     *     @OA\Response(response=401, description="Non autorisé"),
-     *     @OA\Response(response=404, description="Annonce non trouvée"),
-     *     @OA\Response(response=422, description="Erreur de validation")
-     * )
-     */
+ * Modifier une annonce existante.
+ *
+ * @OA\Put(
+ *     path="/api/modifierAnnonce/{id}",
+ *     summary="Modifier une annonce",
+ *     tags={"Annonces"},
+ *     security={
+ *         {"bearerAuth": {}}
+ *     },
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID de l'annonce à modifier",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer"
+ *         )
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 required={"titre", "description", "images"},
+ *                 @OA\Property(property="titre", type="string"),
+ *                 @OA\Property(property="description", type="string"),
+ *                 @OA\Property(property="images", type="string", format="binary")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Annonce modifiée avec succès",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Annonce modifiée avec succès"),
+ *             @OA\Property(property="annonce", ref="#/components/schemas/Annonce")
+ *         )
+ *     ),
+ *     @OA\Response(response=401, description="Non autorisé"),
+ *     @OA\Response(response=403, description="Vous n'êtes pas autorisé à modifier cette annonce."),
+ *     @OA\Response(response=404, description="Annonce non trouvée"),
+ *     @OA\Response(response=422, description="Erreur de validation")
+ * )
+ */
 
     public function modifierAnnonce(Request $request, $id)
     {
@@ -222,22 +224,26 @@ class AnnonceController extends Controller
     }
     
 
-    /**
-     * Liste de toutes les annonces.
-     *
-     * @OA\Get(
-     *     path="/api/listAnnonce",
-     *     summary="Liste de toutes les annonces",
-     *     @OA\Response(
-     *         response=200,
-     *         description="Liste des annonces",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="anonces", type="array", @OA\Items(ref="#/components/schemas/Annonce"))
-     *         )
-     *     ),
-     *     @OA\Response(response=401, description="Non autorisé")
-     * )
-     */
+   /**
+ * Liste toutes les annonces.
+ *
+ * @OA\Get(
+ *     path="/api/listeAnnonce",
+ *     summary="Liste toutes les annonces",
+ *     tags={"Annonces"},
+ *     security={
+ *         {"bearerAuth": {}}
+ *     },
+ *     @OA\Response(
+ *         response=200,
+ *         description="Liste de toutes les annonces",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="anonces", type="array", @OA\Items(ref="#/components/schemas/Annonce"))
+ *         )
+ *     ),
+ *     @OA\Response(response=401, description="Non autorisé")
+ * )
+ */
     public function listAnnonce(Request $request) 
 
     {
@@ -247,30 +253,33 @@ class AnnonceController extends Controller
 
 
 /**
-     * Afficher les détails d'une annonce.
-     *
-     * @OA\Get(
-     *     path="/api/voirPlus/{annonce_id}",
-     *     summary="Afficher les détails d'une annonce",
-     *     @OA\Parameter(
-     *         name="annonce_id",
-     *         in="path",
-     *         required=true,
-     *         description="ID de l'annonce à afficher",
-     *         @OA\Schema(type="integer")
-     *     ),
-     *  security={
-     *         {"bearerAuth": {}}
-     *     },
-     *     @OA\Response(
-     *         response=200,
-     *         description="Détails de l'annonce",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="annonce", type="object", ref="#/components/schemas/Annonce")
-     *         )
-     *     ),
-     *     @OA\Response(response=401, description="Non autorisé"),
-    */
+ * Affiche les détails d'une annonce spécifique.
+ *
+ * @OA\Get(
+ *     path="/api/voirPlus/{annonce_id}",
+ *     summary="Affiche les détails d'une annonce spécifique",
+ *     tags={"Annonces"},
+ *     security={
+ *         {"bearerAuth": {}}
+ *     },
+ *     @OA\Parameter(
+ *         name="annonce_id",
+ *         in="path",
+ *         description="ID de l'annonce à afficher",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Détails de l'annonce",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="annonce", ref="#/components/schemas/Annonce")
+ *         )
+ *     ),
+ *     @OA\Response(response=201, description="Veillez vous connecter d'abord"),
+ *     @OA\Response(response=404, description="Annonce non trouvée")
+ * )
+ */
  public function voirPlus( $annonce_id)
     {
         if (Auth::guard('api')->check())
@@ -285,31 +294,34 @@ class AnnonceController extends Controller
         }
     }
 /**
- * Supprimer une annonce.
+ * Supprime une annonce.
  *
  * @OA\Delete(
  *     path="/api/supAnnonce/{id}",
- *     summary="Supprimer une annonce",
+ *     summary="Supprime une annonce",
+ *     tags={"Annonces"},
+ *     security={
+ *         {"bearerAuth": {}}
+ *     },
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
- *         required=true,
  *         description="ID de l'annonce à supprimer",
+ *         required=true,
  *         @OA\Schema(type="integer")
  *     ),
- *  security={
-     *         {"bearerAuth": {}}
-     *     },
  *     @OA\Response(
  *         response=200,
  *         description="Annonce supprimée avec succès",
  *         @OA\JsonContent(
  *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="message", type="string", example="Annonce supprimée avec succès")
+ *             @OA\Property(property="message", type="string", example="annonce supprimée avec succès"),
+ *             @OA\Property(property="annonce", ref="#/components/schemas/Annonce")
  *         )
  *     ),
- *     @OA\Response(response=404, description="Annonce non trouvée"),
- *     @OA\Response(response=403, description="Vous n'êtes pas autorisé à supprimer cette annonce")
+ *     @OA\Response(response=401, description="Veillez vous connecter d'abord"),
+ *     @OA\Response(response=403, description="Vous n'êtes pas autorisé à supprimer cette annonce"),
+ *     @OA\Response(response=404, description="Annonce non trouvée")
  * )
  */
 public function supprimerAnnonce($id)
@@ -342,24 +354,25 @@ public function supprimerAnnonce($id)
 }
 
 /**
-     * Liste des annonces en fonction du users.
-     *
-     * @OA\Get(
-     *     path="/api/listeAnnonceAgriculteur",
-     *     summary="Liste de toutes les annonces",
-     *  security={
-     *         {"bearerAuth": {}}
-     *     },
-     *     @OA\Response(
-     *         response=200,
-     *         description="Liste des annonces",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="anonces", type="array", @OA\Items(ref="#/components/schemas/Annonce"))
-     *         )
-     *     ),
-     *     @OA\Response(response=401, description="Non autorisé")
-     * )
-     */
+ * Liste des annonces de l'agriculteur connecté.
+ *
+ * @OA\Get(
+ *     path="/api/listeAnnonceAgriculteur",
+ *     summary="Liste des annonces de l'agriculteur connecté",
+ *     tags={"Annonces"},
+ *     security={
+ *         {"bearerAuth": {}}
+ *     },
+ *     @OA\Response(
+ *         response=200,
+ *         description="Liste des annonces de l'agriculteur",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="anonces", type="array", @OA\Items(ref="#/components/schemas/Annonce"))
+ *         )
+ *     ),
+ *     @OA\Response(response=401, description="Veillez vous connecter d'abord")
+ * )
+ */
 public function listeAnnonceAgriculteur()
 {
     
@@ -371,33 +384,43 @@ public function listeAnnonceAgriculteur()
 
 
 /**
- * Publier une annonce sur la page d'accueil.
+ * Publier une annonce.
  *
  * @OA\Post(
  *     path="/api/publierAnnonce/{id}",
- *     summary="Publier une annonce sur la page d'accueil",
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         required=true,
- *         description="ID de l'annonce à publier",
- *         @OA\Schema(type="integer")
- *     ),
+ *     summary="Publier une annonce",
+ *     tags={"Annonces"},
  *     security={
  *         {"bearerAuth": {}}
  *     },
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID de l'annonce à publier",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
  *     @OA\Response(
  *         response=200,
  *         description="Annonce publiée avec succès",
  *         @OA\JsonContent(
  *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="message", type="string", example="Annonce publiée avec succès"),
- *             @OA\Property(property="annonce", type="object", ref="#/components/schemas/Annonce")
+ *             @OA\Property(property="message", type="string", example="Annonce publiée avec succès."),
+ *             @OA\Property(property="annonce", ref="#/components/schemas/Annonce")
  *         )
  *     ),
- *     @OA\Response(response=401, description="Non autorisé"),
- *     @OA\Response(response=404, description="Annonce non trouvée"),
- *     @OA\Response(response=403, description="Vous avez atteint la limite hebdomadaire de publication d'annonces")
+ *     @OA\Response(
+ *         response=401,
+ *         description="Veuillez vous connecter d'abord"
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Annonce non trouvée"
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Vous avez déjà publié trois annonces cette semaine."
+ *     )
  * )
  */
 public function publierAnnonce(Request $request, $id)
@@ -428,16 +451,7 @@ public function publierAnnonce(Request $request, $id)
         // Marquer l'annonce comme publiée
         $annonce->is_published = true;
         $annonce->save();
-        // if ($annonce->is_published === true) {
-        //     $succes = [
-        //         'title' => 'Mail de validation confirmation',
-        //         'body' => 'Votre payment a été bien pris en compte et votre annonce a été bien publiée.',
-        //     ];
-    
-        //     Mail::to($user->email)->send(new maildeConfirmation($succes));
-    
-        // }
-      
+       
         
         return response()->json([
             "status" => true,
