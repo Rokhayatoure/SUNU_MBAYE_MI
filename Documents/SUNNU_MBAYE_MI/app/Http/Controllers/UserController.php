@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use OpenAi\Annotations as OA;
+use Illuminate\Validation\Rule;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -374,10 +375,31 @@ public function login(Request $request)
  */
 public function updateUser(Request $request,$id)
 {
+<<<<<<< HEAD
     $validator = Validator::make($request->all(), [
+=======
+
+    $user = User::find($id);
+    
+    // dd($user);
+if (!$user) {
+    return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+}
+$utilisateurconnecter = Auth::guard('api')->user();
+
+if ($user->id !== $utilisateurconnecter->id){
+
+    return response()->json([
+        "status" => false,
+        "message" => "vous ne pouvez pas faire cette action "
+    ],403);
+} 
+
+$validator = Validator::make($request->all(), [
+>>>>>>> feature/ROKHAYA
         'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
         'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
-        'email' => ['required', 'email', 'unique:users,email'],
+        'email' => ['required', 'email',Rule::unique('users')->ignore($user->id)],
         'telephone' => ['required', 'string', 'regex:/^(\+221|221)?[76|77|78|70|33]\d{8}$/'],
         'role_id' => ['required','integer',],
         'password' => ['required', 'string', 'min:8'],
@@ -387,18 +409,7 @@ public function updateUser(Request $request,$id)
     if ($validator->fails()) {
         return response()->json(['errors' => $validator->errors()], 422);
     }
-    $user = User::find($id);
-
-if (!$user) {
-    return response()->json(['message' => 'Utilisateur non trouvé'], 404);
-}
-if ($user->user_id !==  Auth::guard('api')->user()->id){
-    return response()->json([
-        "status" => false,
-        "message" => "vous ne pouvez pas faire cette action "
-    ],403);
-}
-
+   
 $user->nom = $request->nom;
 $user->prenom = $request->prenom;
 $user->adresse = $request->adresse;
@@ -406,7 +417,7 @@ $user->date_naissance = $request->date_naissance;
 $user->telephone = $request->telephone;
 $user->sexe = $request->sexe;
 $user->email = $request->email;
-$user->password = $request->password;
+$user->password =  Hash::make($request->password);
 
 // Gérer la mise à jour de l'image si elle est fournie
 if ($request->hasFile('image')) {
