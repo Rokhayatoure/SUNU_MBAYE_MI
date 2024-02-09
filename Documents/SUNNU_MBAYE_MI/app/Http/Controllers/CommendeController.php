@@ -191,7 +191,7 @@ public function Commender(Request $request)
 
            public function listeCommandes()
            {
-               $commandes = Commende::with(['user', 'payment'])
+               $commandes = Commende::with(['user', 'payment','detailcommende','detailcommende.produit'])
                    ->get(['id', 'user_id', 'livraison']); // Sélectionne seulement les colonnes nécessaires
            
                $commandesList = [];
@@ -207,7 +207,7 @@ public function Commender(Request $request)
                        'id' => $commande->id,
                        'nom_utilisateur' => $user->nom,
                        'prenom_utilisateur' => $user->prenom,
-                       'photo_utilisateur' => $user->image,
+                       'photo_produit' => $commande->detaicommende->produit->images,
                        'etat_livraison' => $commande->livraison,
                        'montant_total' => $montantTotal,
                    ];
@@ -218,28 +218,61 @@ public function Commender(Request $request)
       
            public function VoirplusCommende($commendeId)
            {
-        $details = DetailCommende::with(['produit', 'commende.user'])
-    ->where('commende_id', $commendeId)
-    ->get();
 
-$detailsList = [];
-foreach ($details as $detail) {
-    $montantTotal = $detail->montant * $detail->nombre_produit;
+            $details = DetailCommende::with(['produit', 'commende.user'])
+           ->where('commende_id', $commendeId)
+             ->get();
+
+               $detailsList = [];
+                 foreach ($details as $detail) 
+                 {
+                       $montantTotal = $detail->montant * $detail->nombre_produit;
     
-    $detailsList[] = [
-        'user_photo' => $detail->commende->user->photo,
-        'produit_nom' => $detail->produit->nom_produit,
-        'prix_unitaire' => $detail->montant,
-        'quantite' => $detail->nombre_produit,
-        'prix_total' => $montantTotal,
-    ];
-}
+                $detailsList[] = [
+                'produit_photo' => $detail->produit->images,
+                 'produit_nom' => $detail->produit->nom_produit,
+                  'prix_unitaire' => $detail->montant,
+                   'quantite' => $detail->nombre_produit,
+                        'prix_total' => $montantTotal,
+                         ];
+                        }
 
 return response()->json(['details_commande' => $detailsList]);
 
-      }
+}
+
+
+public function VoirplusCommendeAgriculteur($commendeId)
+{$agriculteur = auth()->guard('api')->user();
+    if (!$agriculteur) {
+        return response()->json(['message' => 'Veuillez vous connecter d\'abord'], 401);
+    }
+
+
+    $details = DetailCommende::with(['produit', 'commende.user'])
+    ->where('commende_id', $commendeId)
+    ->whereHas('produit', function ($query) use ($agriculteur) {
+        $query->where('user_id', $agriculteur->id);
+    })
+    ->get();
+$detailsList = [];
+foreach ($details as $detail) {
+$montantTotal = $detail->montant * $detail->nombre_produit;
+
+$detailsList[] = [
+'produit_photo' => $detail->produit->images,
+'produit_nom' => $detail->produit->nom_produit,
+'prix_unitaire' => $detail->montant,
+'quantite' => $detail->nombre_produit,
+'prix_total' => $montantTotal,
+];
+}
+
+return response()->json(['details_commande' => $detailsList]);
+      
            
    }
 
    
 
+}

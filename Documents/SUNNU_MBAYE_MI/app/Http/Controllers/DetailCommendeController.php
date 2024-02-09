@@ -7,5 +7,5 @@ use Illuminate\Routing\Controller;
 
 class DetailCommendeController extends Controller
 {
-    //
+    
 }

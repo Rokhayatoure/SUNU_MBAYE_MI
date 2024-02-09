@@ -76,6 +76,7 @@ Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
 Route::get('listeProduitAgriculteur', [ProduitController::class ,'listeProduitAgriculteur']);
 Route::post('/ajoutAnnonce', [AnnonceController::class ,'ajoutAnnonce']);
 Route::delete('/supAnnonce/{id}', [AnnonceController::class ,'supprimerAnnonce']);
+Route::get('/VoirplusCommendeAgriculteur/{commendeId}', [CommendeController::class, 'VoirplusCommende']);
 
 
 
