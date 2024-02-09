@@ -230,7 +230,7 @@ foreach ($details as $detail) {
         'user_photo' => $detail->commende->user->photo,
         'produit_nom' => $detail->produit->nom_produit,
         'prix_unitaire' => $detail->montant,
-        'quantite' => $detail->nom_produit,
+        'quantite' => $detail->nombre_produit,
         'prix_total' => $montantTotal,
     ];
 }
