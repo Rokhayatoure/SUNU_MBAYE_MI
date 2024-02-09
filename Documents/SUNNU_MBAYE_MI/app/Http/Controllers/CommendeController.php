@@ -238,8 +238,36 @@ foreach ($details as $detail) {
 return response()->json(['details_commande' => $detailsList]);
 
       }
-           
+      public function VoirplusCommendeAgriculteur($commendeId)
+      {$agriculteur = auth()->guard('api')->user();
+          if (!$agriculteur) {
+              return response()->json(['message' => 'Veuillez vous connecter d\'abord'], 401);
+          }
+      
+      
+          $details = DetailCommende::with(['produit', 'commende.user'])
+          ->where('commende_id', $commendeId)
+          ->whereHas('produit', function ($query) use ($agriculteur) {
+              $query->where('user_id', $agriculteur->id);
+          })
+          ->get();
+      $detailsList = [];
+      foreach ($details as $detail) {
+      $montantTotal = $detail->montant * $detail->nombre_produit;
+      
+      $detailsList[] = [
+      'produit_photo' => $detail->produit->images,
+      'produit_nom' => $detail->produit->nom_produit,
+      'prix_unitaire' => $detail->montant,
+      'quantite' => $detail->nombre_produit,
+      'prix_total' => $montantTotal,
+      ];
+      }
+      
+      return response()->json(['details_commande' => $detailsList]);
+            
+            
    }
 
    
-
+}
