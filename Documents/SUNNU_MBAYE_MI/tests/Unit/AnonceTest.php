@@ -2,7 +2,9 @@
 
 namespace Tests\Unit;
 
+
 use Tests\TestCase;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Annonce;
 use Illuminate\Http\UploadedFile;
@@ -12,24 +14,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AnonceTest extends TestCase
 {
-    use RefreshDatabase;
+     use RefreshDatabase;
 
     public function testAjoutAnnonce()
     {
         // Storage::fake('images');
-        $role=[
-                  'nom_role'=>'admin'
-                ];
-                $response = $this->postJson('api/role', $role);
-                $response->assertStatus(201);
-            
+        $role=Role::create(["nom_role"=>"agriculteur"]);
+           
         // Créer un utilisateur manuellement
         $user = User::create([
             'nom' => 'Toure',
             'prenom' => 'Rokhaya',
-            'email' => 'rokhaya@gmail.com',
+            'email' => 'rokhy@gmail.com',
             'telephone' => '+221774065162',
-            'role_id' => 1,
+            'role_id' => 2,
             'password' => Hash::make('Passer11'),
         ]);
 
@@ -39,7 +37,7 @@ class AnonceTest extends TestCase
         $annonceData = [
             'titre' => 'Nouvelle annonce',
             'description' => 'Description de la nouvelle annonce',
-            // 'images' => UploadedFile::fake()->image('annonce.jpg'),
+            
         ];
 
         // Envoyer la demande d'ajout d'annonce
@@ -63,11 +61,7 @@ class AnonceTest extends TestCase
     public function testModifierAnnonce()
     {
         // Créer un rôle manuellement
-        $role = [
-            'nom_role' => 'admin'
-        ];
-        $response = $this->postJson('api/role', $role);
-        $response->assertStatus(201);
+        $role=Role::create(["nom_role"=>"admin"]);
     
         // Créer un utilisateur manuellement
         $user = User::create([
@@ -106,7 +100,7 @@ class AnonceTest extends TestCase
             ]);
     
         // Assurez-vous que l'image existe dans le stockage simulé
-        // 
+        
     }
     
 
@@ -114,11 +108,7 @@ class AnonceTest extends TestCase
     public function testListAnnonce()
     {
         
-        $role=[
-            'nom_role'=>'admin'
-          ];
-          $response = $this->postJson('api/role', $role);
-          $response->assertStatus(201);
+        $role=Role::create(["nom_role"=>"admin"]);
       
   // Créer un utilisateur manuellement
   $user = User::create([
@@ -138,7 +128,7 @@ class AnonceTest extends TestCase
       'description' => 'Description de la nouvelle annonce',
        'images' => 'C:\Users\simplon\Documents\SUNNU_MBAYE_MI\public\images\202401191737woman-8492233_1280.jpg',
   ];
-//   $response = $this->postJson('/api/ajoutAnnonce', $annonceData);
+
         $response = $this->getJson('/api/listAnnonce');
 
         $response->assertStatus(200);
@@ -148,12 +138,7 @@ class AnonceTest extends TestCase
     public function testSupprimerAnnonce()
     {
         // Créer un utilisateur
-        $role = [
-            'nom_role' => 'admin'
-        ];
-        $response = $this->postJson('api/role', $role);
-        $response->assertStatus(201);
-    
+        $role=Role::create(["nom_role"=>"admin"]);
         // Créer un utilisateur manuellement
         $user = User::create([
             'nom' => 'ba',
@@ -190,6 +175,13 @@ class AnonceTest extends TestCase
         // Vérifier que l'annonce a été supprimée de la base de données
         $this->assertDatabaseMissing('annonces', ['id' => $annonce->id]);
     }
+
+
+
+
+
+
+
 }
 
 

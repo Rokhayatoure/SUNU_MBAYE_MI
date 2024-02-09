@@ -35,7 +35,6 @@ Route::put('/updateUser/{id}',[UserController::class ,'updateUser'] );
 
 //anonce
 
-Route::get('/listAnnonce', [AnnonceController::class ,'listAnnonce']);
 Route::get('/voirPlus/{annonce_id}', [AnnonceController::class ,'voirPlus']);
 //categorie
 
@@ -76,6 +75,7 @@ Route::get('/listeAnnonceAgriculteur', [AnnonceController::class ,'listeAnnonceA
 Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
 Route::get('listeProduitAgriculteur', [ProduitController::class ,'listeProduitAgriculteur']);
 Route::post('/ajoutAnnonce', [AnnonceController::class ,'ajoutAnnonce']);
+Route::delete('/supAnnonce/{id}', [AnnonceController::class ,'supprimerAnnonce']);
 
 
 
@@ -90,7 +90,6 @@ Route::delete('/suprimmerCommende/{commende_id}', [CommendeController::class, 's
 Route::put('/LivraisonTerminer/{commende_id}', [CommendeController::class, 'LivraisonTerminer']);
 //annonce
 Route::put('/modifierAnnonce/{id}',[AnnonceController::class ,'modifierAnnonce']);
-Route::delete('/supAnnonce/{id}', [AnnonceController::class ,'supprimerAnnonce']);
 //categorie
 Route::put('/modifieCategorie/{id}', [CategorieController::class ,'modifieCategorie']);
 Route::delete('/supCategorie/{id}', [CategorieController::class ,'destroy']);
@@ -114,6 +113,7 @@ Route::get('/VoirplusCommende/{id}', [CommendeController::class, 'VoirplusCommen
 Route::post('reponse', [MessageController::class ,'reponse']);
 Route::get('voirplusmessage/{id}', [MessageController::class ,'voirplusmessage']);
 
+Route::get('/listAnnonce', [AnnonceController::class ,'listAnnonce']);
 
 
 });
