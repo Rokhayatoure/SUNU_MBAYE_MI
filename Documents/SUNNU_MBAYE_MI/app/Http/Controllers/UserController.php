@@ -375,9 +375,6 @@ public function login(Request $request)
  */
 public function updateUser(Request $request,$id)
 {
-<<<<<<< HEAD
-    $validator = Validator::make($request->all(), [
-=======
 
     $user = User::find($id);
     
@@ -396,7 +393,6 @@ if ($user->id !== $utilisateurconnecter->id){
 } 
 
 $validator = Validator::make($request->all(), [
->>>>>>> feature/ROKHAYA
         'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
         'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
         'email' => ['required', 'email',Rule::unique('users')->ignore($user->id)],

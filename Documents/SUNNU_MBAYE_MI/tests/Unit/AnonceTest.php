@@ -27,7 +27,7 @@ class AnonceTest extends TestCase
             'prenom' => 'Rokhaya',
             'email' => 'rokhy@gmail.com',
             'telephone' => '+221774065162',
-            'role_id' => 2,
+            'role_id' => 1,
             'password' => Hash::make('Passer11'),
         ]);
 
@@ -138,7 +138,7 @@ class AnonceTest extends TestCase
     public function testSupprimerAnnonce()
     {
         // Créer un utilisateur
-        $role=Role::create(["nom_role"=>"admin"]);
+        $role=Role::create(["nom_role"=>"agriculteur"]);
         // Créer un utilisateur manuellement
         $user = User::create([
             'nom' => 'ba',
