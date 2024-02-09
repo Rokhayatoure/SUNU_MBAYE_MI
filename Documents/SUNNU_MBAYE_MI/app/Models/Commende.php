@@ -25,9 +25,12 @@ class Commende extends Model
     {
         return $this->hasMany(DetailCommende::class);
     }
-    public function Payement()
+    public function payment()
     {
-        return $this->belongsTo(Payment::class);
+        return $this->hasOne(Payment::class);
     }
-
+public function user()
+{
+    return $this->belongsTo(User::class);
+}
 }
