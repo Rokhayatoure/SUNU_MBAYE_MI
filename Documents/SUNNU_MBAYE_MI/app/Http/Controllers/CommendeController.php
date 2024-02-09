@@ -275,4 +275,8 @@ return response()->json(['details_commande' => $detailsList]);
 
    
 
+
+
+
+   
 }
