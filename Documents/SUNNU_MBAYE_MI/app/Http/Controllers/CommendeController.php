@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 
 
+use App\Models\User;
 use App\Models\Panier;
+use App\Models\Payment;
 use App\Models\Produit;
 use App\Models\Commende;
-use App\Models\DetailCommende;
-use App\Models\Payment;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\DetailCommende;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -66,35 +67,10 @@ public function Commender(Request $request)
 
 
 
-  public function ListerCommende(Request $request)
-{
-    if (Auth::guard('api')->check()){
-        
-        $commandes = Commende::all();
-        $detailCommende=DetailCommende::all();
-        $payment=Payment::all();
-        return response()->json(['status' => true, 'commandes' => $commandes, 'detailCommende' => $detailCommende,'payment' => $payment]);
-    
-    }
-}
+
 
 // Cette fonction renvoie les détails d'une commande spécifiée par son id
-public function VoirplusCommende(Request $request, $id)
-{
-    // if (Auth::guard('api')->check()){
-        
-        $commande = Commende::find($id);
-        if ($commande){
-         $details = DetailCommende::find('commende_id', $id);
-         $payement = Payment::find('commende_id', $id);
-            return response()->json(['status' => true, 'commande' => $commande, 'details' => $details,'Payement'=>$payement]);
-        } else {
-            return response()->json(['status' => false, 'message' => 'Commande introuvable'], 404);
-        }
-    // } else {
-    //     return response()->json(['status' => false, 'message' => 'Veuillez vous connecter d\'abord'], 201);
-    // }
-}
+
 
 
            
@@ -209,6 +185,60 @@ public function VoirplusCommende(Request $request, $id)
                return response()->json(['message' => 'livraison terminer avec succes.'], 200);
            }
        
+
+
+
+
+           public function listeCommandes()
+           {
+               $commandes = Commende::with(['user', 'payment'])
+                   ->get(['id', 'user_id', 'livraison']); // Sélectionne seulement les colonnes nécessaires
+           
+               $commandesList = [];
+           
+               foreach ($commandes as $commande) {
+                   // Récupérer les détails de l'utilisateur
+                   $user = User::find($commande->user_id);
+           
+                   // Récupérer le montant total de la commande à partir de la relation payment
+                   $montantTotal = $commande->payment ? $commande->payment->amount : 0;
+           
+                   $commandesList[] = [
+                       'id' => $commande->id,
+                       'nom_utilisateur' => $user->nom,
+                       'prenom_utilisateur' => $user->prenom,
+                       'photo_utilisateur' => $user->image,
+                       'etat_livraison' => $commande->livraison,
+                       'montant_total' => $montantTotal,
+                   ];
+               }
+           
+               return response()->json(['commandes' => $commandesList]);
+           }
+      
+           public function VoirplusCommende($commendeId)
+           {
+        $details = DetailCommende::with(['produit', 'commende.user'])
+    ->where('commende_id', $commendeId)
+    ->get();
+
+$detailsList = [];
+foreach ($details as $detail) {
+    $montantTotal = $detail->montant * $detail->nombre_produit;
+    
+    $detailsList[] = [
+        'user_photo' => $detail->commende->user->photo,
+        'produit_nom' => $detail->produit->nom,
+        'prix_unitaire' => $detail->montant,
+        'quantite' => $detail->nombre_produit,
+        'prix_total' => $montantTotal,
+    ];
+}
+
+return response()->json(['details_commande' => $detailsList]);
+
+      }
+           
    }
 
    
