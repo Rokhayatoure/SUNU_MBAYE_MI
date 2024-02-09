@@ -49,13 +49,12 @@ class AnnonceController extends Controller
  *     @OA\Response(response=422, description="Erreur de validation")
  * )
  */
-   
     public function ajoutAnnonce(Request $request)
-    {
+     {
         $validator = Validator::make($request->all(), [
             'titre' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'images' => ['required', 'image', 'max:2048'], // Assurez-vous que la taille maximale est appropriée
+            // 'images' => ['required', 'image', 'max:2048'], // Assurez-vous que la taille maximale est appropriée
         ]);
     
         $validator->messages([
@@ -66,8 +65,8 @@ class AnnonceController extends Controller
             'description.required' => 'Le champ description est obligatoire.',
             'description.string' => 'Le champ description doit être une chaîne de caractères.',
             
-            'images.required' => 'Le champ images est obligatoire.',
-            'images.image' => 'Le champ images doit être une image.',
+            // 'images.required' => 'Le champ images est obligatoire.',
+            // 'images.image' => 'Le champ images doit être une image.',
             // 'images.max' => 'La taille de l\'image ne peut pas dépasser :max kilo-octets.',
         ]);
     
@@ -97,7 +96,7 @@ class AnnonceController extends Controller
                 "status" => true,
                 "message" => "anonce ajoter avec succes ",
                 'annonce'=>$annonce
-            ]);
+            ],200);
         }
         else{
             return response()->json([
@@ -173,9 +172,8 @@ class AnnonceController extends Controller
             'description.required' => 'Le champ description est obligatoire.',
             'description.string' => 'Le champ description doit être une chaîne de caractères.',
             
-            'images.required' => 'Le champ images est obligatoire.',
-            'images.image' => 'Le champ images doit être une image.',
-            'images.max' => 'La taille de l\'image ne peut pas dépasser :max kilo-octets.',
+           
+            
         ]);
     
         if ($validator->fails()) {

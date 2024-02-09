@@ -79,7 +79,7 @@ class UserController extends Controller
             'nom_role' => $request->nom_role,
         ]);
   
-        return response()->json(['message' => 'Rôle ajouté avec succès', 'role' => $role], 201);
+        return response()->json(['message' => 'Rôle ajouté avec succès', 'role' => $role], 200);
     }
 
 
@@ -193,7 +193,7 @@ class UserController extends Controller
             "status" => true,
             "message" => "utilisateur connecter inscrit avec succes ",
             'user'=>$user
-        ],201);
+        ],200);
     }
     
 
