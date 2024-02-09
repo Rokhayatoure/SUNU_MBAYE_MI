@@ -228,7 +228,7 @@ foreach ($details as $detail) {
     
     $detailsList[] = [
         'user_photo' => $detail->commende->user->photo,
-        'produit_nom' => $detail->produit->nom,
+        'produit_nom' => $detail->produit->nom_produit,
         'prix_unitaire' => $detail->montant,
         'quantite' => $detail->nombre_produit,
         'prix_total' => $montantTotal,
