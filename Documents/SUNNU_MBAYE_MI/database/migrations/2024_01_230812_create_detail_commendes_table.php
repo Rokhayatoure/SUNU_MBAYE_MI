@@ -20,6 +20,7 @@ return new class extends Migration
              $table->integer('nombre_produit');
             $table->integer('montant'); 
             $table->string('nom_produit'); 
+        
             
             $table->timestamps();
         });

@@ -63,6 +63,7 @@ Route::delete('/validerPanier/{panier_id}', [PanierController::class, 'validerPa
 //commender 
 Route::put('/AnnulerLivraison/{commende_id}', [CommendeController::class, 'AnnulerLivraison']);
 Route::post('/Commender', [CommendeController::class, 'Commender']);
+Route::get('/VoirplusCommendeRevendeur/{commendeId}', [CommendeController::class, 'VoirplusCommendeRevendeur']);
 
 });
 
@@ -77,7 +78,6 @@ Route::get('listeProduitAgriculteur', [ProduitController::class ,'listeProduitAg
 Route::post('/ajoutAnnonce', [AnnonceController::class ,'ajoutAnnonce']);
 Route::delete('/supAnnonce/{id}', [AnnonceController::class ,'supprimerAnnonce']);
 
-Route::get('/VoirplusCommendeAgriculteur/{commendeId}', [CommendeController::class, 'VoirplusCommende']);
 
 
 

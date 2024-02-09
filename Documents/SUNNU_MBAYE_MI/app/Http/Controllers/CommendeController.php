@@ -35,6 +35,7 @@ public function Commender(Request $request)
         $commende_id=$commende->id;
         // dd($commende_id);
        foreach( $request->input('panier') as $produit) {
+        
             DetailCommende::create([
             'commende_id'=>$commende->id,
             'produit_id'=>$produit['produit_id'],
@@ -202,12 +203,12 @@ public function Commender(Request $request)
            
                    // Récupérer le montant total de la commande à partir de la relation payment
                    $montantTotal = $commande->payment ? $commande->payment->amount : 0;
-           
+                   
                    $commandesList[] = [
                        'id' => $commande->id,
                        'nom_utilisateur' => $user->nom,
                        'prenom_utilisateur' => $user->prenom,
-                       'photo_utilisateur' => $user->image,
+                      
                        'etat_livraison' => $commande->livraison,
                        'montant_total' => $montantTotal,
                    ];
@@ -225,9 +226,10 @@ public function Commender(Request $request)
 $detailsList = [];
 foreach ($details as $detail) {
     $montantTotal = $detail->montant * $detail->nombre_produit;
+   
     
     $detailsList[] = [
-        'user_photo' => $detail->commende->user->photo,
+        'produit_photo' => $detail->produit->images,
         'produit_nom' => $detail->produit->nom_produit,
         'prix_unitaire' => $detail->montant,
         'quantite' => $detail->nombre_produit,
@@ -238,17 +240,23 @@ foreach ($details as $detail) {
 return response()->json(['details_commande' => $detailsList]);
 
       }
-      public function VoirplusCommendeAgriculteur($commendeId)
-      {$agriculteur = auth()->guard('api')->user();
-          if (!$agriculteur) {
+
+
+
+
+
+
+      public function VoirplusCommendeRevendeur($commendeId)
+      {$revendeur = auth()->guard('api')->user();
+          if (!$revendeur) {
               return response()->json(['message' => 'Veuillez vous connecter d\'abord'], 401);
           }
       
       
           $details = DetailCommende::with(['produit', 'commende.user'])
           ->where('commende_id', $commendeId)
-          ->whereHas('produit', function ($query) use ($agriculteur) {
-              $query->where('user_id', $agriculteur->id);
+          ->whereHas('produit', function ($query) use ($revendeur) {
+              $query->where('user_id', $revendeur->id);
           })
           ->get();
       $detailsList = [];
