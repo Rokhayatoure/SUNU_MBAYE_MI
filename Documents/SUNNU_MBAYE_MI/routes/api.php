@@ -47,6 +47,7 @@ Route::get('rechercheProduit', [ProduitController::class ,'rechercheProduit']);
 Route::get('listeProduit', [ProduitController::class ,'listeProduit']);
 Route::post('ajouterMessage', [MessageController::class ,'ajouterMessage']);
 
+
 // Route::delete('/listeCategorie', [ProduitController::class ,'listeCategorie']);
 //pagner
 

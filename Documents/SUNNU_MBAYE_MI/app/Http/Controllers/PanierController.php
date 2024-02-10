@@ -11,28 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\MockObject\Stub\ReturnCallback;
 
 class PanierController extends Controller
-{/**
- * @OA\Post(
- *     path="/api/AjoutPanier/{produit_id}",
- *     summary="Ajoute un produit au panier",
- *     @OA\Parameter(
- *         name="produit_id",
- *         in="path",
- *         description="ID du produit à ajouter",
- *         required=true,
- *         @OA\Schema(type="integer")
- *     ),
- *     @OA\Response(
- *         response=201,
- *         description="Produit ajouté au panier avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="panier", type="object", ref="#/components/schemas/Panier")
- *         )
- *     ),
- *     @OA\Response(response=201, description="Non connecté"),
- * )
- */
+{
 
     public function AjoutPanier(Request $request,$produit_id)
     {
@@ -65,19 +44,7 @@ class PanierController extends Controller
         }
 
     
-/**
- * @OA\Get(
- *     path="/api/AfficherPanier",
- *     summary="Affiche le panier de l'utilisateur",
- *     @OA\Response(
- *         response=200,
- *         description="Panier affiché avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="panier", type="array", @OA\Items(ref="#/components/schemas/Panier"))
- *         )
- *     ),
- * )
- */
+
     //afficher pagner 
     public function AfficherPanier()
     {
@@ -89,29 +56,7 @@ class PanierController extends Controller
 
 
 
-/**
- * @OA\Delete(
- *     path="/api/viderPanier/{produit_id}",
- *     summary="Vide un produit du panier",
- *     @OA\Parameter(
- *         name="produit_id",
- *         in="path",
- *         description="ID du produit à vider",
- *         required=true,
- *         @OA\Schema(type="integer")
- *     ),
- *     @OA\Response(
- *         response=201,
- *         description="Produit vidé du panier avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="panier", type="object", ref="#/components/schemas/Panier"),
- *             @OA\Property(property="message", type="string", example="Le produit est vidé du panier avec succès")
- *         )
- *     ),
- *     @OA\Response(response=404, description="Produit non trouvé dans le panier"),
- * )
- */
+
 
     public function viderPanier($produit_id)
     {

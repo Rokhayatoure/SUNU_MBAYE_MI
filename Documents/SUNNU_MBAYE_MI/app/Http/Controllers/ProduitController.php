@@ -12,14 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ProduitController extends Controller
 {
- /**
-     * @OA\Get(
-     *     path="/api/listeProduitAgriculteur",
-     * tags={"Produit"},
-     *     summary="Liste des produits  de L'agriculteur ",
-     *     @OA\Response(response=200, description="Renvoie la liste de tous les produits.")
-     * )
-     */
+ 
     public function listeProduitAgriculteur()
     {
         
@@ -28,14 +21,7 @@ class ProduitController extends Controller
         return response()->json(compact('produit'), 200);
     }
 
-     /**
-     * @OA\Get(
-     *     path="/api/listeProduit",
-     *     summary="Liste des produits",
-     *  tags={"Produit"},
-     *     @OA\Response(response=200, description="Renvoie la liste de tous les produits.")
-     * )
-     */
+     
     public function listeProduit()
     {
         
@@ -43,42 +29,7 @@ class ProduitController extends Controller
         // $panier = Produit::where('user_id',auth()->guard('api')->user()->id)->get();
         return response()->json(compact('produit'), 200);
     }
-/**
- * @OA\Post(
- *     path="/api/AjoutProduit",
- *     summary="Ajouter un produit",
- * tags={"Produit"},
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\MediaType(
- *             mediaType="multipart/form-data",
- *             @OA\Schema(
- *                 @OA\Property(property="nom_produit", type="string"),
- *                 @OA\Property(property="description", type="string"),
- *                 @OA\Property(property="quantite", type="integer"),
- *                 @OA\Property(property="prix", type="integer"),
- *                 @OA\Property(property="categorie_id", type="integer"),
- *                 @OA\Property(property="images", type="string", format="binary")
- *             )
- *         )
- *     ),
- * security={
-     *         {"bearerAuth": {}}
-     *     },
- *     @OA\Response(
- *         response=201,
- *         description="Produit ajouté avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="produit", type="object", ref="#/components/schemas/Produit")
- *         )
- *     ),
- *     @OA\Response(response=401, description="Non autorisé - Jeton invalide"),
- *     @OA\Response(response=422, description="Erreur de validation"),
- *     @OA\Response(response=500, description="Erreur interne du serveur")
- * )
- */
-    
+
     public function AjoutProduit(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -150,50 +101,7 @@ class ProduitController extends Controller
         ], 200);
     
     }
-/**
- * @OA\Put(
- *     path="/api/updateproduit/{id}",
- *     summary="Mettre à jour un produit",
- *  tags={"Produit"},
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         description="ID du produit à mettre à jour",
- *         required=true,
- *         @OA\Schema(type="integer")
- *     ),
- * security={
-     *         {"bearerAuth": {}}
-     *     },
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\MediaType(
- *             mediaType="multipart/form-data",
- *             @OA\Schema(
- *                 @OA\Property(property="nom_produit", type="string"),
- *                 @OA\Property(property="description", type="string"),
- *                 @OA\Property(property="quantite", type="integer"),
- *                 @OA\Property(property="prix", type="integer"),
- *                 @OA\Property(property="categorie_id", type="integer"),
- *                 @OA\Property(property="images", type="string", format="binary")
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=201,
- *         description="Produit mis à jour avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="produit", type="object", ref="#/components/schemas/Produit")
- *         )
- *     ),
- *     @OA\Response(response=401, description="Non autorisé - Jeton invalide"),
- *     @OA\Response(response=403, description="Accès refusé - Utilisateur non autorisé à modifier cette annonce"),
- *     @OA\Response(response=404, description="Produit non trouvé"),
- *     @OA\Response(response=422, description="Erreur de validation"),
- *     @OA\Response(response=500, description="Erreur interne du serveur")
- * )
- */
+
 
 
     public function updateproduit(Request $request,$id)
@@ -283,32 +191,7 @@ class ProduitController extends Controller
     
 
 
-/**
-     * @OA\Delete(
-     *     path="/api/supProduit/{id}",
-     *     summary="Supprime un produit",
-     * tags={"Produit"},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="ID du produit à supprimer",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Produit supprimé avec succès",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Produit supprimé avec succès")
-     *         )
-     *     ),
-     *  security={
-     *         {"bearerAuth": {}}
-     *     },
-     *     @OA\Response(response=403, description="Interdit d'accès"),
-     *     @OA\Response(response=404, description="Produit non trouvé")
-     * )
-     */
+
 
 
     public function supProduit($id)
@@ -330,30 +213,7 @@ class ProduitController extends Controller
         return response()->json(['message' => 'produit supprimé avec succès'], 200);
     }
 
-/**
- * @OA\get(
- *     path="/api/produitrecherche",
- *     summary="Recherche de produits",
- * tags={"Produit"},
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             @OA\Property(property="search", type="string")
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Produits trouvés avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="products", type="array"),
- *             @OA\Property(property="item", type="string"),
- *             @OA\Property(property="categories", type="array"),
- *             @OA\Property(property="newProduct", type="array")
- *         )
- *     ),
- *     @OA\Response(response=422, description="Erreur de validation")
- * )
- */
+
  public function Produitrecherche(Request $request){
 
     $request->validate(['search' => "required"]);
@@ -368,27 +228,6 @@ class ProduitController extends Controller
 }// End Method
 
 
-/**
- * @OA\get(
- *     path="/api/rechercheproduit",
- *     summary="Recherche de produits",
- * tags={"Produit"},
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             @OA\Property(property="search", type="string")
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Produits trouvés avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="products", type="array")
- *         )
- *     ),
- *     @OA\Response(response=422, description="Erreur de validation")
- * )
- */
 
 
 public function rechercheProduit(Request $request){
@@ -404,31 +243,7 @@ public function rechercheProduit(Request $request){
     
 
 } 
-/**
- * Filtrer les produits par catégorie.
- *
- * @OA\get(
- *     path="/api/filtrerProduitsParCategorie",
- *     summary="Filtrer les produits par catégorie",
- * tags={"Produit"},
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             required={"categorie_id"},
- *             @OA\Property(property="categorie_id", type="integer", example=1)
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Renvoie les produits filtrés par catégorie",
- *         @OA\JsonContent(
- *             @OA\Property(property="produits", type="array", @OA\Items(ref="#/components/schemas/Produit"))
- *         )
- *     ),
- *     @OA\Response(response=401, description="Non autorisé"),
- *     @OA\Response(response=422, description="Erreur de validation")
- * )
- */
+
 public function filtrerProduitsParCategorie(Request $request)
  {
     $request->validate([
