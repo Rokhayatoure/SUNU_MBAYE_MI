@@ -202,14 +202,16 @@ class ProduitController extends Controller
 
         }
         
-      $produit=  Produit::find($id)->delete();
+      $produit=  Produit::find($id);
       $user = Auth::guard('api')->user();
-        if ($user->id !==  $produit->user_id) {
-            return response()->json([
-                "status" => false,
-                "message" => "Vous n'êtes pas autorisé à suprimer cette produit."
-            ], 403);
-        }
+      if ($user && $produit->user_id !== $user->id) {
+        return response()->json([
+            "status" => false,
+            "message" => "Vous n'êtes pas autorisé à supprimer ce produit."
+        ]);
+        $produit->delete();
+    }
+
         return response()->json(['message' => 'produit supprimé avec succès'], 200);
     }
 
