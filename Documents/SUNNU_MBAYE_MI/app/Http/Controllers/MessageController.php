@@ -36,7 +36,7 @@ class MessageController extends Controller
             'status' => true,
             'message' => 'Message ajouté avec succès',
             'message_data' => $message,
-        ]);
+        ],200);
     }
 
 
@@ -56,7 +56,7 @@ class MessageController extends Controller
 public function voirplusmessage($id){
      // Récupérer le message par son ID
      $message = Message::findOrFail($id);
-     return response()->json(compact('message'));
+     return response()->json(compact('message'),200);
 }
 
 

@@ -232,7 +232,7 @@ public function publierAnnonce(Request $request, $id)
         }
 
         // Marquer l'annonce comme publiée
-        $annonce->is_published = true;
+        $annonce->est_publier= true;
         $annonce->save();
        
         
@@ -240,7 +240,7 @@ public function publierAnnonce(Request $request, $id)
             "status" => true,
             "message" => "Annonce publiée avec succès.",
             'annonce' => $annonce
-        ]);
+        ],200);
     } else {
         return response()->json(['message' => 'Veuillez vous connecter d\'abord'], 401);
     }
@@ -258,14 +258,14 @@ public function retirerAnnonce($id)
         }
 
         // Retirer de la page d'accueil
-        $annonce->is_published = false;
+        $annonce->est_publier = false;
         $annonce->save();
 
         return response()->json([
             "status" => true,
             "message" => "Annonce retirée avec succès.",
             'annonce' => $annonce
-        ]);
+        ],200);
     } else {
         return response()->json(['message' => 'Veuillez vous connecter d\'abord'], 401);
     }

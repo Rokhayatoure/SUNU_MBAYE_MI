@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('titre');
             $table->string('description');
             $table->string('images')->nullable();
-            $table->boolean('is_published')->default(false);
+            $table->boolean('est_publier')->default(false);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

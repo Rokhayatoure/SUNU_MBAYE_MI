@@ -174,11 +174,57 @@ class AnonceTest extends TestCase
 
         // Vérifier que l'annonce a été supprimée de la base de données
         $this->assertDatabaseMissing('annonces', ['id' => $annonce->id]);
+
     }
 
 
 
+public function testAnnoncePublieeAvecSucces()
+    {
+         // Créer un utilisateur
+         $role=Role::create(["nom_role"=>"agriculteur"]);
+         // Créer un utilisateur manuellement
+         $user = User::create([
+             'nom' => 'ba',
+             'prenom' => 'kya',
+             'email' => 'kya@gmail.com',
+             'telephone' => '+221774065162',
+             'role_id' => 1,
+             'password' => Hash::make('Passer11'),
+         ]);
+         $role=Role::create(["nom_role"=>"admin"]);
+         // Créer un utilisateur manuellement
+         $userAd = User::create([
+             'nom' => 'ba',
+             'prenom' => 'kya',
+             'email' => 'ad@gmail.com',
+             'telephone' => '+221774065162',
+             'role_id' => 2,
+             'password' => Hash::make('Passer11'),
+         ]);
 
+          // Simuler la connexion de l'utilisateur
+        $this->actingAs($user, 'api');
+        // Créer une annonce
+        $annonce = Annonce::create([
+            'titre' => 'Nouvelle annonce',
+            'description' => 'Description de la nouvelle annonce',
+            'user_id' => $user->id,
+            "est_publier"=>1,
+        ]);
+
+
+        // Simuler la connexion de l'utilisateur
+        $this->actingAs($userAd, 'api');
+        
+
+        // Appeler la fonction publierAnnonce avec l'ID de l'annonce
+        $response = $this->json('get',"api/publierAnnonce/{$annonce->id}");
+    
+        // Vérifier que la réponse indique que l'annonce a été publiée avec succès
+        $response->assertStatus(200);
+        
+    }
 
 
 

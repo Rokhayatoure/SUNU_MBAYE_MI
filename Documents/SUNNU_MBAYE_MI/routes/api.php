@@ -115,7 +115,6 @@ Route::get('/listeCommandes', [CommendeController::class, 'listeCommandes']);
 Route::get('/VoirplusCommende/{commendeId}', [CommendeController::class, 'VoirplusCommende']);
 Route::post('reponse', [MessageController::class ,'reponse']);
 Route::get('voirplusmessage/{id}', [MessageController::class ,'voirplusmessage']);
-
 Route::get('/listAnnonce', [AnnonceController::class ,'listAnnonce']);
 
 
