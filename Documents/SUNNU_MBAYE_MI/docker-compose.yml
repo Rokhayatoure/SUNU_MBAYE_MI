@@ -1,48 +1,47 @@
 version: "3.8"
 services:
-    # Mysql database container
-    db:
-        image: mysql
-        container_name: certification_simplon
-        restart: always
-        volumes:
-            - db-data:/var/lib/mysql
-        environment:
-            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-        ports:
-            - '3306'
-        networks:
-            - tutorial
+  # Mysql database container
+  db:
+    image: mysql
+    container_name: mysql_certif
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3309:3306"
+    networks:
+      - certif
 
-    # phpmyadmin container
-    phpmyadmin:
-        image: phpmyadmin
-        container_name: certification_simplon1
-        restart: always
-        depends_on:
-            - db
-        ports:
-            - 8080:80
-        environment:
-            PMA_HOST: db
-        networks:
-            - tutorial
+  # phpmyadmin container
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin_certif
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8010:80
+    environment:
+      PMA_HOST: db
+    networks:
+      - certif
 
-    # laravel apache project container
-    www:
-        build: docker/php
-        container_name: certification_simplon2
-        ports:
-          - "8741:80"
-        volumes:
-            - ./docker/php/vhosts:/etc/apache2/sites-enabled
-            - ./:/var/www/html
-        restart: always
-        networks:
-            - tutorial
+  www:
+    build: docker/php
+    container_name: certification
+    ports:
+      - "8002:80"
+    volumes:
+      - ./docker/php/vhosts:/etc/apache2/sites-enabled
+      - ./:/var/www/html
+    restart: always
+    networks:
+      - certif
 
 networks:
-    tutorial:
+  certif:
 
 volumes:
-    db-data:
+  db-data:

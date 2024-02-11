@@ -13,18 +13,22 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
 /**
- * @OA\Info(
- *     title="Documentation du projet SUNNU_MBAYE_MI",
- *     version="1.0.0",
- *     description="Documentation de l'API du projet SUNNU_MBAYE_MI",
- *     @OA\PathItem(path="/User")
+ * @OA\Tag(
+ *     name="user",
+ *     description="User related operations"
  * )
- */
-
-
- /**
+ * @OA\Info(
+ *     version="1.0",
+ *     title="Example API",
+ *     description="Example info",
+ *     @OA\Contact(name="Swagger API Team")
+ * )
+ * @OA\Server(
+ *     url="https://example.localhost",
+ *     description="API server"
+ * )
+ 
  * @OA\SecurityScheme(
  *      securityScheme="bearerAuth",
  *      type="http",
@@ -37,38 +41,23 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-     /**
- * Ajouter un nouveau rôle.
- *
- * @OA\Post(
- *     path="/api/ajouterRole",
- *     summary="Ajouter un rôle",
- *     tags={"Rôles"},
- *     security={
- *         {"bearerAuth": {}}
- *     },
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\MediaType(
- *             mediaType="application/json",
- *             @OA\Schema(
- *                 required={"nom_role"},
- *                 @OA\Property(property="nom_role", type="string")
- *             )
- *         )
+ /**
+ * @OA\Schema(
+ *     schema="Role",
+ *     title="Role",
+ *     description="Role Model",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
+ *         format="int64"
  *     ),
- *     @OA\Response(
- *         response=201,
- *         description="Rôle ajouté avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="message", type="string", example="Rôle ajouté avec succès"),
- *             @OA\Property(property="role", ref="#/components/schemas/Role")
- *         )
- *     ),
- *     @OA\Response(response=401, description="Non autorisé"),
- *     @OA\Response(response=422, description="Erreur de validation")
+ *     @OA\Property(
+ *         property="nom_role",
+ *         type="string"
+ *     )
  * )
  */
+
     public function ajouterRole(Request $request)
     {
         $request->validate([
@@ -83,27 +72,7 @@ class UserController extends Controller
     }
 
 
-/**
- * Lister tous les rôles.
- *
- * @OA\Get(
- *     path="/api/listRole",
- *     summary="Lister tous les rôles",
- *     tags={"Rôles"},
- *     @OA\Response(
- *         response=200,
- *         description="Liste de tous les rôles",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(
- *                 property="roles",
- *                 type="array",
- *                 @OA\Items(ref="#/components/schemas/Role")
- *             )
- *         )
- *     )
- * )
- */
+
 
     public function listRole()
     {
@@ -111,44 +80,7 @@ class UserController extends Controller
        
     return response()->json(compact('role'), 200);
     }
-/**
- * Inscrire un nouvel utilisateur.
- *
- * @OA\Post(
- *     path="/api/inscription",
- *     summary="Inscrire un nouvel utilisateur",
- *     tags={"Utilisateurs"},
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\MediaType(
- *             mediaType="application/json",
- *             @OA\Schema(
- *                 required={"nom", "prenom", "email", "telephone", "role_id", "password"},
- *                 @OA\Property(property="nom", type="string", example="John"),
- *                 @OA\Property(property="prenom", type="string", example="Doe"),
- *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
- *                 @OA\Property(property="telephone", type="string", example="+221771234567"),
- *                 @OA\Property(property="role_id", type="integer", example=1),
- *                 @OA\Property(property="password", type="string", example="password"),
- *                 @OA\Property(property="adresse", type="string", example="123 Rue de l'Exemple"),
- *                 @OA\Property(property="date_naissance", type="string", format="date", example="1990-01-01"),
- *                 @OA\Property(property="sexe", type="string", example="M"),
- *                 @OA\Property(property="image", type="string", format="binary")
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=201,
- *         description="Utilisateur inscrit avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="message", type="string", example="Utilisateur inscrit avec succès"),
- *             @OA\Property(property="user", ref="#/components/schemas/User")
- *         )
- *     ),
- *     @OA\Response(response=422, description="Erreur de validation")
- * )
- */
+
 
      public function inscription(Request $request, Role $role) {
         $validator = Validator::make($request->all(), [
@@ -196,41 +128,6 @@ class UserController extends Controller
         ],200);
     }
     
-
-/**
- * Connecter l'utilisateur.
- *
- * @OA\Post(
- *     path="/api/login",
- *     summary="Connecter l'utilisateur",
- *     tags={"Utilisateurs"},
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\MediaType(
- *             mediaType="application/json",
- *             @OA\Schema(
- *                 required={"email", "password"},
- *                 @OA\Property(property="email", type="string", format="email"),
- *                 @OA\Property(property="password", type="string")
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Utilisateur connecté avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="message", type="string", example="Utilisateur connecté avec succès"),
- *             @OA\Property(property="token", type="string"),
- *             @OA\Property(property="user", ref="#/components/schemas/User")
- *         )
- *     ),
- *     @OA\Response(response=401, description="Identifiants invalides"),
- *     @OA\Response(response=403, description="Compte bloqué"),
- *     @OA\Response(response=422, description="Erreur de validation"),
- *     @OA\Response(response=500, description="Erreur interne du serveur")
- * )
- */
 
 public function login(Request $request)
 {
@@ -286,27 +183,6 @@ public function login(Request $request)
     
    
 
-/**
- * Déconnecter l'utilisateur.
- *
- * @OA\Post(
- *     path="/api/logout",
- *     summary="Déconnecter l'utilisateur",
- *     tags={"Utilisateurs"},
- *     security={
- *         {"bearerAuth": {}}
- *     },
- *     @OA\Response(
- *         response=200,
- *         description="Utilisateur déconnecté avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="message", type="string", example="Utilisateur déconnecté avec succès")
- *         )
- *     ),
- *     @OA\Response(response=401, description="Non autorisé")
- * )
- */
 
     // logout un user
     public function logout(Request $request)
@@ -320,59 +196,7 @@ public function login(Request $request)
 
 
 
-/**
- * Mettre à jour un utilisateur.
- *
- * @OA\Put(
- *     path="/api/updateUser/{id}",
- *     summary="Mettre à jour un utilisateur",
- *     tags={"Utilisateurs"},
- *     security={
- *         {"bearerAuth": {}}
- *     },
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         description="ID de l'utilisateur à mettre à jour",
- *         required=true,
- *         @OA\Schema(
- *             type="integer",
- *             format="int64"
- *         )
- *     ),
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\MediaType(
- *             mediaType="application/json",
- *             @OA\Schema(
- *                 @OA\Property(property="nom", type="string"),
- *                 @OA\Property(property="prenom", type="string"),
- *                 @OA\Property(property="adresse", type="string"),
- *                 @OA\Property(property="date_naissance", type="string", format="date"),
- *                 @OA\Property(property="telephone", type="string"),
- *                 @OA\Property(property="sexe", type="string", enum={"Homme", "Femme"}),
- *                 @OA\Property(property="email", type="string", format="email"),
- *                 @OA\Property(property="password", type="string", format="password"),
- *                 @OA\Property(property="role_id", type="integer"),
- *                 @OA\Property(property="image", type="string", format="binary")
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Utilisateur mis à jour avec succès",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="message", type="string", example="Modifier avec succès"),
- *             @OA\Property(property="user", ref="#/components/schemas/User")
- *         )
- *     ),
- *     @OA\Response(response=401, description="Non autorisé"),
- *     @OA\Response(response=403, description="Vous ne pouvez pas faire cette action"),
- *     @OA\Response(response=404, description="Utilisateur non trouvé"),
- *     @OA\Response(response=422, description="Erreur de validation")
- * )
- */
+
 public function updateUser(Request $request,$id)
 {
 
@@ -433,26 +257,6 @@ return response()->json([
 }
 
 
-/**
- * Lister tous les utilisateurs (sauf les administrateurs).
- *
- * @OA\Get(
- *     path="/api/listeUser",
- *     summary="Lister tous les utilisateurs (sauf les administrateurs)",
- *     tags={"Utilisateurs"},
- *     security={
- *         {"bearerAuth": {}}
- *     },
- *     @OA\Response(
- *         response=200,
- *         description="Liste de tous les utilisateurs (sauf les administrateurs)",
- *         @OA\JsonContent(
- *             @OA\Property(property="users", type="array", @OA\Items(ref="#/components/schemas/User"))
- *         )
- *     ),
- *     @OA\Response(response=401, description="Non autorisé")
- * )
- */
 
 
 public function listeUser()
@@ -467,40 +271,6 @@ public function listeUser()
 }
 
 
-/**
- * Débloquer un utilisateur.
- *
- * @param int $id ID de l'utilisateur à débloquer
- * 
- * @OA\delete(
- *     path="/api/debloquerUser/{id}",
- *     summary="Débloquer un utilisateur",
- *     tags={"Utilisateurs"},
- *     security={
- *         {"bearerAuth": {}}
- *     },
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         required=true,
- *         description="ID de l'utilisateur à débloquer",
- *         @OA\Schema(
- *             type="integer"
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Opération réussie",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="message", type="string", example="L'utilisateur a été débloqué avec succès."),
- *             @OA\Property(property="user", type="object", ref="#/components/schemas/User")
- *         )
- *     ),
- *     @OA\Response(response=401, description="Non autorisé"),
- *     @OA\Response(response=404, description="Utilisateur non trouvé")
- * )
- */
 public function debloquerUser($id)
 {
     $user = User::find($id);
@@ -510,7 +280,7 @@ public function debloquerUser($id)
     }
 
     // Débloquer l'utilisateur
-    $user->is_blocked = false;
+    $user->est_bloquer= false;
     $user->save();
 
     return response()->json([
@@ -522,41 +292,7 @@ public function debloquerUser($id)
 }
 
 
-/**
- * Bloquer  un utilisateur.
- *
- * @param int $id ID de l'utilisateur à bloquer
- * 
- * @OA\delete(
- *     path="/api/BloquerUser/{id}",
- *     summary="Bloquer ou débloquer un utilisateur",
- *     tags={"Utilisateurs"},
- *     security={
- *         {"bearerAuth": {}}
- *     },
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         required=true,
- *         description="ID de l'utilisateur à bloquer/débloquer",
- *         @OA\Schema(
- *             type="integer"
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Opération réussie",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="message", type="string", example="L'utilisateur a été bloqué/débloqué avec succès"),
- *             @OA\Property(property="user", type="object", ref="#/components/schemas/User")
- *         )
- *     ),
- *     @OA\Response(response=401, description="Non autorisé"),
- *     @OA\Response(response=403, description="Vous ne pouvez pas bloquer votre propre compte"),
- *     @OA\Response(response=404, description="Utilisateur non trouvé")
- * )
- */
+
 public function BloquerUser($id)
 {
     $user = User::find($id);

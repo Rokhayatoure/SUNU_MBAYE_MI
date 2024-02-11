@@ -47,6 +47,7 @@ Route::get('rechercheProduit', [ProduitController::class ,'rechercheProduit']);
 Route::get('listeProduit', [ProduitController::class ,'listeProduit']);
 Route::post('ajouterMessage', [MessageController::class ,'ajouterMessage']);
 
+
 // Route::delete('/listeCategorie', [ProduitController::class ,'listeCategorie']);
 //pagner
 
@@ -63,6 +64,7 @@ Route::delete('/validerPanier/{panier_id}', [PanierController::class, 'validerPa
 //commender 
 Route::put('/AnnulerLivraison/{commende_id}', [CommendeController::class, 'AnnulerLivraison']);
 Route::post('/Commender', [CommendeController::class, 'Commender']);
+Route::get('/VoirplusCommendeRevendeur/{commendeId}', [CommendeController::class, 'VoirplusCommendeRevendeur']);
 
 });
 
@@ -103,7 +105,7 @@ Route::delete('supProduitAdmine/{id}', [ProduitController::class ,'supProduitAdm
 Route::delete('debloquerUser/{id}', [UserController::class ,'debloquerUser']);
 Route::delete('BloquerUser/{id}', [UserController::class ,'BloquerUser']);
 Route::get('/listeUser',[UserController::class ,'listeUser'] );
-//commende
+
 
 //role
 Route::post('/role', [UserController::class ,'ajouterRole']);
