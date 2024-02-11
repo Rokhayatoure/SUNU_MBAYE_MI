@@ -169,41 +169,42 @@ return response()->json(['details_commande' => $detailsList]);
 
       public function VoirplusCommendeRevendeur($commendeId)
       {
-        
-       // Récupérer l'utilisateur revendeur authentifié
-    $revendeur = auth()->guard('api')->user();
+
+        $revendeur = auth()->guard('api')->user();
     
-    // Vérifier si l'utilisateur est authentifié
-    if (!$revendeur) {
-        return response()->json(['message' => 'Veuillez vous connecter d\'abord'], 401);
-    }
-
-    // Récupérer les détails de la commande associée à l'ID de la commande et au revendeur
-    $details = DetailCommende::with(['produit'])
-    ->where('commende_id', $commendeId)
-    ->whereHas('produit', function ($query) use ($revendeur) {
-        $query->where('user_id', $revendeur->id);
-    })
-    ->get();
-
-    // Tableau pour stocker les détails des commandes
-    $detailsList = [];
-
-    // Parcourir les détails de la commande récupérés
-    foreach ($details as $detail) {
-        $montantTotal = $detail->montant * $detail->nombre_produit;
-      
-      $detailsList[] = [
-      'produit_photo' => $detail->produit->images,
-      'produit_nom' => $detail->produit->nom_produit,
-      'prix_unitaire' => $detail->montant,
-      'quantite' => $detail->nombre_produit,
-      'prix_total' => $montantTotal,
-      ];
-      }
-      
-      return response()->json(['details_commande' => $detailsList]);
+        // Vérifier si l'utilisateur est authentifié
+        if (!$revendeur) {
+            return response()->json(['message' => 'Veuillez vous connecter d\'abord'], 401);
+        }
+    
+        // Récupérer les commandes du revendeur
+        $commendes = Commende::where('user_id', $revendeur->id)->orderBy('created_at', 'desc')->get();
+        $detailsList = [];
+    
+        // Parcourir les commandes récupérées
+        foreach ($commendes as $commende) {
+            // Récupérer les détails de chaque commande
+            $detailecommendes = DetailCommende::where('commende_id', $commende->id)->get();
             
+            // Parcourir les détails de la commande
+            foreach ($detailecommendes as $detailecommende) {
+                $nombre_produit = $detailecommende->nombre_produit;
+                $montant = $detailecommende->montant;
+                $images_produit = $detailecommende->produit->images;
+                $nom_produit = $detailecommende->produit->nom_produit;
+                $montantTotal = $detailecommende->montant * $detailecommende->nombre_produit;
+    
+                // Ajouter les détails de la commande à la liste
+                $detailsList[] = [
+                    'produit_photo' => $images_produit,
+                    'produit_nom' => $nom_produit,
+                    'prix_unitaire' => $montant,
+                    'quantite' => $nombre_produit,
+                    'prix_total' => $montantTotal,
+                ];
+            }
+        }
+    
             
    }
 
