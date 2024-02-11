@@ -209,8 +209,10 @@ class ProduitController extends Controller
             "status" => false,
             "message" => "Vous n'êtes pas autorisé à supprimer ce produit."
         ]);
-        $produit->delete();
     }
+    $produit->delete();
+
+    
 
         return response()->json(['message' => 'produit supprimé avec succès'], 200);
     }

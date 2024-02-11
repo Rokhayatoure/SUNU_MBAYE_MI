@@ -169,6 +169,7 @@ return response()->json(['details_commande' => $detailsList]);
 
       public function VoirplusCommendeRevendeur($commendeId)
       {
+        
        // Récupérer l'utilisateur revendeur authentifié
     $revendeur = auth()->guard('api')->user();
     
@@ -179,11 +180,11 @@ return response()->json(['details_commande' => $detailsList]);
 
     // Récupérer les détails de la commande associée à l'ID de la commande et au revendeur
     $details = DetailCommende::with(['produit'])
-        ->where('commende_id', $commendeId)
-        ->whereHas('produit', function ($query) use ($revendeur) {
-            $query->where('user_id', $revendeur->id);
-        })
-        ->get();
+    ->where('commende_id', $commendeId)
+    ->whereHas('produit', function ($query) use ($revendeur) {
+        $query->where('user_id', $revendeur->id);
+    })
+    ->get();
 
     // Tableau pour stocker les détails des commandes
     $detailsList = [];

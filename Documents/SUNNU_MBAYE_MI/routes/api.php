@@ -104,7 +104,7 @@ Route::delete('supProduitAdmine/{id}', [ProduitController::class ,'supProduitAdm
 Route::delete('debloquerUser/{id}', [UserController::class ,'debloquerUser']);
 Route::delete('BloquerUser/{id}', [UserController::class ,'BloquerUser']);
 Route::get('/listeUser',[UserController::class ,'listeUser'] );
-//commende
+
 
 //role
 Route::post('/role', [UserController::class ,'ajouterRole']);
