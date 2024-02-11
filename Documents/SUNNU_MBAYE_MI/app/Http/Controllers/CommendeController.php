@@ -204,7 +204,7 @@ return response()->json(['details_commande' => $detailsList]);
                 ];
             }
         }
-    
+        return response()->json(['details_commande' => $detailsList]);
             
    }
 
