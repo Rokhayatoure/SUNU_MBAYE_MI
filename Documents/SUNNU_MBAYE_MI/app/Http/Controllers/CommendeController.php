@@ -202,7 +202,7 @@ public function Commender(Request $request)
                 ];
             }
         }
-    
+        return response()->json(['details_commande' => $detailsList]);
             
    }
 
