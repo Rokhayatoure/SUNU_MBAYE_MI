@@ -1,1794 +1,2246 @@
 {
     "openapi": "3.0.0",
+    "info": {
+        "title": "Your API Title",
+        "description": "Your API Description",
+        "version": "1.0.0"
+    },
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    },
+    "consumes": [
+        "multipart/form-data"
+    ],
     "paths": {
-        "/api/ajoutAnnonce": {
+        "/api/AjoutPanier": {
             "post": {
-                "tags": [
-                    "Annonces"
-                ],
-                "summary": "Ajouter une annonce",
-                "description": "Ajouter une nouvelle annonce.",
-                "operationId": "181806a34c74c53117fea52fcd82acbe",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "titre",
-                                    "description",
-                                    "images"
-                                ],
-                                "properties": {
-                                    "titre": {
-                                        "type": "string"
-                                    },
-                                    "description": {
-                                        "type": "string"
-                                    },
-                                    "images": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
+                "summary": "AjoutProduit",
+                "description": "",
                 "responses": {
-                    "200": {
-                        "description": "Annonce ajoutée avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Annonce ajoutée avec succès"
-                                        },
-                                        "annonce": {
-                                            "$ref": "#/components/schemas/Annonce"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
-                    },
-                    "422": {
-                        "description": "Erreur de validation"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/modifierAnnonce/{id}": {
-            "put": {
-                "tags": [
-                    "Annonces"
-                ],
-                "summary": "Modifier une annonce",
-                "description": "Modifier une annonce existante.",
-                "operationId": "45b5207fc51dd1fea9645c25e8f37419",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID de l'annonce à modifier",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "titre",
-                                    "description",
-                                    "images"
-                                ],
-                                "properties": {
-                                    "titre": {
-                                        "type": "string"
-                                    },
-                                    "description": {
-                                        "type": "string"
-                                    },
-                                    "images": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Annonce modifiée avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Annonce modifiée avec succès"
-                                        },
-                                        "annonce": {
-                                            "$ref": "#/components/schemas/Annonce"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
-                    },
-                    "403": {
-                        "description": "Vous n'êtes pas autorisé à modifier cette annonce."
-                    },
-                    "404": {
-                        "description": "Annonce non trouvée"
-                    },
-                    "422": {
-                        "description": "Erreur de validation"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/listAnnonce": {
-            "get": {
-                "tags": [
-                    "Annonces"
-                ],
-                "summary": "Liste toutes les annonces",
-                "description": "Liste toutes les annonces.",
-                "operationId": "13f2f0bd645aa23cff7899e7c45cdcde",
-                "responses": {
-                    "200": {
-                        "description": "Liste de toutes les annonces",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "anonces": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Annonce"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/voirPlus/{annonce_id}": {
-            "get": {
-                "tags": [
-                    "Annonces"
-                ],
-                "summary": "Affiche les détails d'une annonce spécifique",
-                "description": "Affiche les détails d'une annonce spécifique.",
-                "operationId": "e800e02e3a8c49a444dee298a5e23971",
-                "parameters": [
-                    {
-                        "name": "annonce_id",
-                        "in": "path",
-                        "description": "ID de l'annonce à afficher",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Détails de l'annonce",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "annonce": {
-                                            "$ref": "#/components/schemas/Annonce"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
                     "201": {
-                        "description": "Veillez vous connecter d'abord"
-                    },
-                    "404": {
-                        "description": "Annonce non trouvée"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/supAnnonce/{id}": {
-            "delete": {
-                "tags": [
-                    "Annonces"
-                ],
-                "summary": "Supprime une annonce",
-                "description": "Supprime une annonce.",
-                "operationId": "e6b7e06cb55bcfb93d04bd8b382c201d",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID de l'annonce à supprimer",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Annonce supprimée avec succès",
+                        "description": "Created successfully",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "annonce supprimée avec succès"
-                                        },
-                                        "annonce": {
-                                            "$ref": "#/components/schemas/Annonce"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
                     "401": {
-                        "description": "Veillez vous connecter d'abord"
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     },
                     "403": {
-                        "description": "Vous n'êtes pas autorisé à supprimer cette annonce"
-                    },
-                    "404": {
-                        "description": "Annonce non trouvée"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/listeAnnonceAgriculteur": {
-            "get": {
-                "tags": [
-                    "Annonces"
-                ],
-                "summary": "Liste des annonces de l'agriculteur connecté",
-                "description": "Liste des annonces de l'agriculteur connecté.",
-                "operationId": "612b5104579ec22348e674b714ec0c38",
-                "responses": {
-                    "200": {
-                        "description": "Liste des annonces de l'agriculteur",
+                        "description": "Unauthorize",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "anonces": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Annonce"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
                             }
                         }
-                    },
-                    "401": {
-                        "description": "Veillez vous connecter d'abord"
                     }
                 },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/publierAnnonce/{id}": {
-            "post": {
                 "tags": [
-                    "Annonces"
+                    "GESTION_produit"
                 ],
-                "summary": "Publier une annonce",
-                "description": "Publier une annonce.",
-                "operationId": "039d2fd2404d72e3c1a403bb8f331a06",
                 "parameters": [
                     {
-                        "name": "id",
                         "in": "path",
-                        "description": "ID de l'annonce à publier",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
+                        "name": "produit_id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Annonce publiée avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Annonce publiée avec succès."
-                                        },
-                                        "annonce": {
-                                            "$ref": "#/components/schemas/Annonce"
-                                        }
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom_produit": {
+                                        "type": "string"
                                     },
-                                    "type": "object"
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "quantite": {
+                                        "type": "string"
+                                    },
+                                    "prix": {
+                                        "type": "string"
+                                    },
+                                    "images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "categorie_id": {
+                                        "type": "string"
+                                    }
                                 }
+                            },
+                            "example": {
+                                "nom_produit": "pome",
+                                "description": "nksqj",
+                                "quantite": "20",
+                                "prix": "12",
+                                "images": {
+                                    "type": "string",
+                                    "format": "binary"
+                                },
+                                "categorie_id": "2"
                             }
                         }
-                    },
-                    "401": {
-                        "description": "Veuillez vous connecter d'abord"
-                    },
-                    "404": {
-                        "description": "Annonce non trouvée"
-                    },
-                    "422": {
-                        "description": "Vous avez déjà publié trois annonces cette semaine."
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/retirerAnnonce/{id}": {
-            "delete": {
-                "tags": [
-                    "Annonces"
-                ],
-                "summary": "Retirer une annonce de la page d'accueil",
-                "description": "Retirer une annonce de la page d'accueil.",
-                "operationId": "35d09754d1de9fe709d55adeb95b972b",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID de l'annonce à retirer",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Annonce retirée avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Annonce retirée avec succès"
-                                        },
-                                        "annonce": {
-                                            "$ref": "#/components/schemas/Annonce"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
-                    },
-                    "404": {
-                        "description": "Annonce non trouvée"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/listeAnnoncesPubliees": {
-            "get": {
-                "tags": [
-                    "Annonces"
-                ],
-                "summary": "Liste de toutes les annonces publiées",
-                "description": "Liste des annonces publiées.",
-                "operationId": "f998d52171b7b4a77710ccd988da6ee6",
-                "responses": {
-                    "200": {
-                        "description": "Liste des annonces publiées",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "annonces": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Annonce"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/listeCategorie": {
-            "get": {
-                "summary": "Liste de toutes les catégories",
-                "description": "Liste toutes les catégories.",
-                "operationId": "1b5bbfda02b549f42ad1aff814f9c7f9",
-                "responses": {
-                    "200": {
-                        "description": "Liste des catégories",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "categorie": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Categorie"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
                     }
                 }
             }
         },
-        "/api/voiplusCategorie/{id}": {
-            "get": {
-                "summary": "Détails d'une catégorie",
-                "description": "Afficher les détails d'une catégorie.",
-                "operationId": "d2f2a07544a4cb4ccaa560f13fbd63bc",
-                "parameters": [
-                    {
-                        "name": "categori_id",
-                        "in": "path",
-                        "description": "ID de la catégorie à afficher",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Détails de la catégorie",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "categorie": {
-                                            "$ref": "#/components/schemas/Categorie"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
-                    },
-                    "404": {
-                        "description": "Catégorie non trouvée"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/AjoutCategorie": {
+        "/api/updateproduit/{id}": {
             "post": {
-                "summary": "Ajouter une catégorie",
-                "description": "Ajouter une nouvelle catégorie.",
-                "operationId": "8e6f3dac358c84ecbc6d9b71179bd598",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "nom_categories": {
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
+                "summary": "Modifier Produit",
+                "description": "",
                 "responses": {
-                    "200": {
-                        "description": "Catégorie ajoutée avec succès",
+                    "201": {
+                        "description": "Created successfully",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Catégorie ajoutée avec succès"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
                     "401": {
-                        "description": "Non autorisé"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/modifieCategorie/{id}": {
-            "put": {
-                "summary": "Modifier une catégorie",
-                "description": "Modifier une catégorie existante.",
-                "operationId": "865ac9f0c75b36aa7f51300674f6513e",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID de la catégorie à modifier",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "nom_categories": {
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Catégorie modifiée avec succès",
+                        "description": "Unauthenticated",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Catégorie modifiée avec succès"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
-                    },
-                    "404": {
-                        "description": "Catégorie non trouvée"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/supCategorie/{id}": {
-            "delete": {
-                "summary": "Supprimer une catégorie",
-                "description": "Supprimer une catégorie.",
-                "operationId": "a1e7e68092878b5fd5d15063c05f9de2",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID de la catégorie à supprimer",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Catégorie supprimée avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Catégorie supprimée avec succès"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
-                    },
-                    "404": {
-                        "description": "Catégorie non trouvée"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/supprimerCommende/{commende_id}": {
-            "delete": {
-                "summary": "Supprimer une commande",
-                "description": "Supprimer une commande.",
-                "operationId": "6b1017c09c0a6ff2f475085b6a666a35",
-                "parameters": [
-                    {
-                        "name": "commende_id",
-                        "in": "path",
-                        "description": "ID de la commande à supprimer",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Commande supprimée avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Commande supprimée avec succès"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
                     "403": {
-                        "description": "Veillez vous connecter d'abord"
-                    },
-                    "404": {
-                        "description": "Commande non trouvée"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/annulerLivraison/{$commende_id}": {
-            "put": {
-                "summary": "Annuler la livraison d'une commande",
-                "description": "Annuler la livraison d'une commande.",
-                "operationId": "06e5957ac25e96d65ad816428f0d0a3a",
-                "parameters": [
-                    {
-                        "name": "commende_id",
-                        "in": "path",
-                        "description": "ID de la commande à annuler la livraison",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Livraison annulée avec succès",
+                        "description": "Unauthorize",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Livraison annulée avec succès"
-                                        }
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "GESTION_produit"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "produit_id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom_produit": {
+                                        "type": "string"
                                     },
-                                    "type": "object"
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "quantite": {
+                                        "type": "string"
+                                    },
+                                    "prix": {
+                                        "type": "string"
+                                    },
+                                    "images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "categorie_id": {
+                                        "type": "string"
+                                    }
                                 }
+                            },
+                            "example": {
+                                "nom_produit": "pome",
+                                "description": "nksqj",
+                                "quantite": "20",
+                                "prix": "12",
+                                "images": {
+                                    "type": "string",
+                                    "format": "binary"
+                                },
+                                "categorie_id": "2"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/supProduit/{id}": {
+            "delete": {
+                "summary": "suprimerProduit",
+                "description": "",
+                "responses": {
+                    "204": {
+                        "description": "Deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
                     "404": {
-                        "description": "Commande non trouvée"
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
-                "security": [
+                "tags": [
+                    "GESTION_produit"
+                ],
+                "parameters": [
                     {
-                        "bearerAuth": []
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
                     }
                 ]
             }
         },
-        "/api/livraisonTerminer/{commende_id}": {
-            "put": {
-                "summary": "Marquer la livraison d'une commande comme terminée",
-                "description": "Marquer la livraison d'une commande comme terminée.",
-                "operationId": "c98a82d12232857aff2164e5c442abce",
-                "parameters": [
-                    {
-                        "name": "commende_id",
-                        "in": "path",
-                        "description": "ID de la commande à marquer comme terminée",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
+        "/api/filtrerProduitsParCategorie": {
+            "get": {
+                "summary": "filtrageproduit",
+                "description": "",
                 "responses": {
                     "200": {
-                        "description": "Livraison terminée avec succès",
+                        "description": "OK",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Livraison terminée avec succès"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
                     "404": {
-                        "description": "Commande non trouvée"
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
-                "security": [
+                "tags": [
+                    "GESTION_produit"
+                ],
+                "parameters": [
                     {
-                        "bearerAuth": []
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "categorie_id": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "categorie_id": 2
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/rechercheProduit": {
+            "get": {
+                "summary": "rechercheProduit",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "GESTION_produit"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/supProduitAdmine/{id}": {
+            "delete": {
+                "summary": "supProduiAdmin",
+                "description": "",
+                "responses": {
+                    "204": {
+                        "description": "Deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "GESTION_produit"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/Commender": {
+            "post": {
+                "summary": "commender",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_commende"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/listeCommandes": {
+            "get": {
+                "summary": "listeCommende",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_commende"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/VoirplusCommende/{commendeId}": {
+            "get": {
+                "summary": "voirPlusCommende",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_commende"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "commendeId",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api//VoirplusCommendeRevendeur/{commendeId}": {
+            "get": {
+                "summary": "voirPlusCommendeRevendeur",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_commende"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "commendeId",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/AnnulerLivraison/{commende_id}": {
+            "get": {
+                "summary": "AnnulerCommende",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_commende"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "commende_id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
                     }
                 ]
             }
         },
         "/api/ajouterMessage": {
             "post": {
+                "summary": "message",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
                 "tags": [
-                    "Messages"
+                    "gestion_messages"
                 ],
-                "summary": "Ajouter un message",
-                "description": "Ajouter un nouveau message.",
-                "operationId": "5b7852d04efcb21f892c469935ed9b63",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
                 "requestBody": {
-                    "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "nom",
-                                    "email",
-                                    "telephone",
-                                    "message"
-                                ],
+                                "type": "object",
                                 "properties": {
                                     "nom": {
                                         "type": "string"
                                     },
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email"
-                                    },
                                     "telephone": {
+                                        "type": "string"
+                                    },
+                                    "email": {
                                         "type": "string"
                                     },
                                     "message": {
                                         "type": "string"
                                     }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Message ajouté avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Message ajouté avec succès"
-                                        },
-                                        "message_data": {
-                                            "$ref": "#/components/schemas/Message"
-                                        }
-                                    },
-                                    "type": "object"
                                 }
+                            },
+                            "example": {
+                                "nom": "toure",
+                                "telephone": "+221773999320",
+                                "email": "rokhaya01@gmail.com",
+                                "message": "love"
                             }
                         }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
-                    },
-                    "422": {
-                        "description": "Erreur de validation"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/listerMessages": {
-            "get": {
-                "tags": [
-                    "Messages"
-                ],
-                "summary": "Lister tous les messages",
-                "description": "Lister tous les messages.",
-                "operationId": "299f1cd2e8939ca9b8d1c2062807d4f1",
-                "responses": {
-                    "200": {
-                        "description": "Liste de tous les messages",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "messages": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Message"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/voirplusmessage/{id}": {
-            "get": {
-                "tags": [
-                    "Messages"
-                ],
-                "summary": "Afficher les détails d'un message",
-                "description": "Afficher les détails d'un message.",
-                "operationId": "dee2fb0b2c2427850f37948c8f9dd652",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID du message à afficher",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Détails du message",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "$ref": "#/components/schemas/Message"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Message non trouvé"
                     }
                 }
             }
         },
         "/api/reponse": {
             "post": {
+                "summary": "reponse",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
                 "tags": [
-                    "Messages"
+                    "gestion_messages"
                 ],
-                "summary": "Envoyer une réponse à un message",
-                "description": "Envoyer une réponse à un message.",
-                "operationId": "70732cbf537f9a63d6b2f295fa3005da",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
                 "requestBody": {
-                    "description": "Données de la réponse",
-                    "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "email",
-                                    "message"
-                                ],
+                                "type": "object",
                                 "properties": {
+                                    "nom": {
+                                        "type": "string"
+                                    },
+                                    "telephone": {
+                                        "type": "string"
+                                    },
                                     "email": {
-                                        "description": "Adresse e-mail du destinataire",
-                                        "type": "string",
-                                        "format": "email"
+                                        "type": "string"
+                                    },
+                                    "contenue": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nom": "toure",
+                                "telephone": "+221773999320",
+                                "email": "rokhaya01@gmail.com",
+                                "contenue": "love"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/listerMessages": {
+            "get": {
+                "summary": "listemessage",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_messages"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom": {
+                                        "type": "string"
+                                    },
+                                    "telephone": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
                                     },
                                     "message": {
-                                        "description": "Contenu de la réponse",
                                         "type": "string"
                                     }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Réponse envoyée avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "description": "Message de confirmation",
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
                                 }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Erreur interne du serveur"
-                    }
-                }
-            }
-        },
-        "/api/AjoutPanier/{produit_id}": {
-            "post": {
-                "summary": "Ajoute un produit au panier",
-                "operationId": "d139f9ec5d2964950a80346582d81d8b",
-                "parameters": [
-                    {
-                        "name": "produit_id",
-                        "in": "path",
-                        "description": "ID du produit à ajouter",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Produit ajouté au panier avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "panier": {
-                                            "$ref": "#/components/schemas/Panier"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                            },
+                            "example": {
+                                "nom": "toure",
+                                "telephone": "+221773999320",
+                                "email": "rokhaya01@gmail.com",
+                                "message": "love"
                             }
                         }
                     }
                 }
             }
         },
-        "/api/AfficherPanier": {
+        "/api/voirplusmessage/{id}": {
             "get": {
-                "summary": "Affiche le panier de l'utilisateur",
-                "operationId": "630735db7c08f4328ce9e2e1802b0cdf",
+                "summary": "Voirplusmessage",
+                "description": "",
                 "responses": {
                     "200": {
-                        "description": "Panier affiché avec succès",
+                        "description": "OK",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "panier": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Panier"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/viderPanier/{produit_id}": {
-            "delete": {
-                "summary": "Vide un produit du panier",
-                "operationId": "e9b1753e334b77c0eb0342b32b12d736",
-                "parameters": [
-                    {
-                        "name": "produit_id",
-                        "in": "path",
-                        "description": "ID du produit à vider",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Produit vidé du panier avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "panier": {
-                                            "$ref": "#/components/schemas/Panier"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Le produit est vidé du panier avec succès"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
                     "404": {
-                        "description": "Produit non trouvé dans le panier"
-                    }
-                }
-            }
-        },
-        "/api/payment": {
-            "get": {
-                "tags": [
-                    "Payements"
-                ],
-                "summary": "Page d'accueil du paiement",
-                "description": "Afficher la page d'accueil du processus de paiement.",
-                "operationId": "91a9c987bdd7f7b2518f1cc6bc88c659",
-                "responses": {
-                    "200": {
-                        "description": "Affiche la page d'accueil du paiement"
-                    }
-                }
-            }
-        },
-        "/api/checkout": {
-            "post": {
-                "tags": [
-                    "Payements"
-                ],
-                "summary": "Effectuer un paiement",
-                "description": "Effectuer un paiement via PayTech.",
-                "operationId": "ac2b3019e3a5de0ca5de65347d249da2",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "price",
-                                    "commende_id"
-                                ],
-                                "properties": {
-                                    "price": {
-                                        "type": "number",
-                                        "format": "float",
-                                        "example": 100
-                                    },
-                                    "commende_id": {
-                                        "type": "integer",
-                                        "example": 123
-                                    }
-                                },
-                                "type": "object"
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     }
                 },
-                "responses": {
-                    "200": {
-                        "description": "Redirige vers le site PayTech pour finaliser le paiement"
-                    },
-                    "422": {
-                        "description": "Erreur de validation"
-                    }
-                }
-            }
-        },
-        "/api/payment-success/{code}": {
-            "get": {
                 "tags": [
-                    "Payements"
+                    "gestion_messages"
                 ],
-                "summary": "Page de succès du paiement",
-                "description": "Gérer la réussite du paiement.",
-                "operationId": "74bc9a7b1538200c0464053a1238eaa7",
                 "parameters": [
                     {
-                        "name": "code",
-                        "in": "path",
-                        "description": "Code de réussite du paiement",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Affiche la page de succès du paiement"
-                    },
-                    "422": {
-                        "description": "Erreur de validation"
-                    }
-                }
-            }
-        },
-        "/api/payment/{code}/success": {
-            "get": {
-                "tags": [
-                    "Payements"
-                ],
-                "summary": "Page de succès du paiement",
-                "description": "Afficher la page de succès du paiement.",
-                "operationId": "c2c720108f064f708bd9a819e18c33b4",
-                "parameters": [
-                    {
-                        "name": "code",
-                        "in": "path",
-                        "description": "Code de réussite du paiement",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Affiche la page de succès du paiement"
-                    },
-                    "422": {
-                        "description": "Erreur de validation"
-                    }
-                }
-            }
-        },
-        "/api/payment-cancel": {
-            "get": {
-                "tags": [
-                    "Payements"
-                ],
-                "summary": "Annuler le paiement",
-                "description": "Annuler le paiement.",
-                "operationId": "78dbf541ebec251e791165c69f7ecb8d",
-                "responses": {
-                    "200": {
-                        "description": "Affiche la page d'annulation du paiement"
-                    }
-                }
-            }
-        },
-        "/api/listeProduitAgriculteur": {
-            "get": {
-                "summary": "Liste des produits  de L'agriculteur ",
-                "operationId": "d4d20a74d0693c4fd1b3f193296e3d18",
-                "responses": {
-                    "200": {
-                        "description": "Renvoie la liste de tous les produits."
-                    }
-                }
-            }
-        },
-        "/api/produits": {
-            "get": {
-                "summary": "Liste des produits",
-                "operationId": "eea3d0e160512645efde4d04355421be",
-                "responses": {
-                    "200": {
-                        "description": "Renvoie la liste de tous les produits."
-                    }
-                }
-            }
-        },
-        "/api/ajoutProduit": {
-            "post": {
-                "summary": "Ajouter un produit",
-                "operationId": "f19499da27676744a66014051960bc8d",
                 "requestBody": {
-                    "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
+                                "type": "object",
                                 "properties": {
-                                    "nom_produit": {
+                                    "nom": {
                                         "type": "string"
                                     },
-                                    "description": {
+                                    "telephone": {
                                         "type": "string"
                                     },
-                                    "quantite": {
-                                        "type": "integer"
+                                    "email": {
+                                        "type": "string"
                                     },
-                                    "prix": {
-                                        "type": "integer"
-                                    },
-                                    "categorie_id": {
-                                        "type": "integer"
-                                    },
-                                    "images": {
-                                        "type": "string",
-                                        "format": "binary"
+                                    "message": {
+                                        "type": "string"
                                     }
-                                },
-                                "type": "object"
+                                }
+                            },
+                            "example": {
+                                "nom": "toure",
+                                "telephone": "+221773999320",
+                                "email": "rokhaya01@gmail.com",
+                                "message": "love"
                             }
                         }
                     }
-                },
+                }
+            }
+        },
+        "/api/AjoutCategorie": {
+            "post": {
+                "summary": "AjoutCategorie",
+                "description": "",
                 "responses": {
                     "201": {
-                        "description": "Produit ajouté avec succès",
+                        "description": "Created successfully",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "produit": {
-                                            "$ref": "#/components/schemas/Produit"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
                     "401": {
-                        "description": "Non autorisé - Jeton invalide"
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     },
-                    "422": {
-                        "description": "Erreur de validation"
-                    },
-                    "500": {
-                        "description": "Erreur interne du serveur"
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
-                "security": [
+                "tags": [
+                    "gestion_categorie"
+                ],
+                "parameters": [
                     {
-                        "bearerAuth": []
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom_categories": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nom_categories": "banane"
+                            }
+                        }
+                    }
+                }
             }
         },
-        "/api/updateproduit/{id}": {
+        "/api/modifieCategorie/{id}": {
             "put": {
-                "summary": "Mettre à jour un produit",
-                "operationId": "558bbbb3524de96b7c4de056a96feb48",
+                "summary": "modifiCategorie",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_categorie"
+                ],
                 "parameters": [
                     {
-                        "name": "id",
                         "in": "path",
-                        "description": "ID du produit à mettre à jour",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
                     }
                 ],
                 "requestBody": {
-                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom_categories": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nom_categories": "bane"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/supCategorie/{id}": {
+            "delete": {
+                "summary": "suprimerCategorie",
+                "description": "",
+                "responses": {
+                    "204": {
+                        "description": "Deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_categorie"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
                     "content": {
                         "multipart/form-data": {
                             "schema": {
+                                "type": "object",
                                 "properties": {
-                                    "nom_produit": {
+                                    "nom_categories": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nom_categories": "banane"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/listeCategorie": {
+            "get": {
+                "summary": "listeCategories",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_categorie"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/voiplusCategorie/{id}": {
+            "get": {
+                "summary": "voirplusCategories",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_categorie"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/ajoutAnnonce": {
+            "post": {
+                "summary": "Ajout annonce",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_annonce"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": {
                                         "type": "string"
                                     },
                                     "description": {
                                         "type": "string"
                                     },
-                                    "quantite": {
-                                        "type": "integer"
+                                    "images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "titre": "promotion",
+                                "description": "reduction",
+                                "images": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/modifierAnnonce/{id}": {
+            "post": {
+                "summary": "modifier annonce",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_annonce"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
                                     },
-                                    "prix": {
-                                        "type": "integer"
-                                    },
-                                    "categorie_id": {
-                                        "type": "integer"
+                                    "description": {
+                                        "type": "string"
                                     },
                                     "images": {
                                         "type": "string",
                                         "format": "binary"
                                     }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Produit mis à jour avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "produit": {
-                                            "$ref": "#/components/schemas/Produit"
-                                        }
-                                    },
-                                    "type": "object"
+                                }
+                            },
+                            "example": {
+                                "titre": "promotion",
+                                "description": "reduction",
+                                "images": {
+                                    "type": "string",
+                                    "format": "binary"
                                 }
                             }
                         }
-                    },
-                    "401": {
-                        "description": "Non autorisé - Jeton invalide"
-                    },
-                    "403": {
-                        "description": "Accès refusé - Utilisateur non autorisé à modifier cette annonce"
+                    }
+                }
+            }
+        },
+        "/api/listeAnnonceAgriculteur": {
+            "get": {
+                "summary": "listeAnnonceAgriculteur",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Produit non trouvé"
-                    },
-                    "422": {
-                        "description": "Erreur de validation"
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     },
                     "500": {
-                        "description": "Erreur interne du serveur"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/supProduit/{id}": {
-            "delete": {
-                "summary": "Supprime un produit",
-                "operationId": "ed54e9c91d63de3bfbdfc1cac02787f5",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID du produit à supprimer",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Produit supprimé avec succès",
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Produit supprimé avec succès"
-                                        }
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_annonce"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
                                     },
-                                    "type": "object"
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
                                 }
+                            },
+                            "example": {
+                                "titre": "promotion",
+                                "description": "reduction",
+                                "images": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/listAnnonce": {
+            "get": {
+                "summary": "listeAnnonce",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_annonce"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "titre": "promotion",
+                                "description": "reduction",
+                                "images": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/voirPlus/{annonce_id}": {
+            "get": {
+                "summary": "VOIPLUSAnnonce",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_annonce"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "annonce_id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "titre": "promotion",
+                                "description": "reduction",
+                                "images": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/publierAnnonce/{id}": {
+            "get": {
+                "summary": "PublierAnonce",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_annonce"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "titre": "promotion",
+                                "description": "reduction",
+                                "images": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/retirerAnnonce/{id}": {
+            "get": {
+                "summary": "RetirerAnnonce",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion_annonce"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "titre": "promotion",
+                                "description": "reduction",
+                                "images": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/supAnnonce/{id}": {
+            "delete": {
+                "summary": "SuprimerAnnonce",
+                "description": "",
+                "responses": {
+                    "204": {
+                        "description": "Deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
                     "403": {
-                        "description": "Interdit d'accès"
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Produit non trouvé"
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
-                "security": [
+                "tags": [
+                    "gestion_annonce"
+                ],
+                "parameters": [
                     {
-                        "bearerAuth": []
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "titre": "promotion",
+                                "description": "reduction",
+                                "images": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/debloquerUser/{id}": {
+            "delete": {
+                "summary": "DebloquerUser",
+                "description": "",
+                "responses": {
+                    "204": {
+                        "description": "Deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestionUtilisateue"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
                     }
                 ]
             }
         },
-        "/api/produitrecherche": {
-            "post": {
-                "summary": "Recherche de produits",
-                "operationId": "d70a7b3336cf183d279259a55e345a70",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "search": {
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
+        "/api/BloquerUser/{id}": {
+            "delete": {
+                "summary": "BloquerUser",
+                "description": "",
                 "responses": {
-                    "200": {
-                        "description": "Produits trouvés avec succès",
+                    "204": {
+                        "description": "Deleted successfully",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "products": {
-                                            "type": "array"
-                                        },
-                                        "item": {
-                                            "type": "string"
-                                        },
-                                        "categories": {
-                                            "type": "array"
-                                        },
-                                        "newProduct": {
-                                            "type": "array"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erreur de validation"
-                    }
-                }
-            }
-        },
-        "/api/rechercheproduit": {
-            "post": {
-                "summary": "Recherche de produits",
-                "operationId": "e9be2194dfbdda4935cfae7c8a690182",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "search": {
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Produits trouvés avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "products": {
-                                            "type": "array"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Erreur de validation"
-                    }
-                }
-            }
-        },
-        "/api/filtrer-produits-par-categorie": {
-            "post": {
-                "summary": "Filtrer les produits par catégorie",
-                "description": "Filtrer les produits par catégorie.",
-                "operationId": "2b802c098d1020bf93d3f02a43ce6c66",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "categorie_id"
-                                ],
-                                "properties": {
-                                    "categorie_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Renvoie les produits filtrés par catégorie",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "produits": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Produit"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
                     "401": {
-                        "description": "Non autorisé"
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     },
-                    "422": {
-                        "description": "Erreur de validation"
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
-                }
-            }
-        },
-        "/api/ajouterRole": {
-            "post": {
+                },
                 "tags": [
-                    "Rôles"
+                    "gestionUtilisateue"
                 ],
-                "summary": "Ajouter un rôle",
-                "description": "Ajouter un nouveau rôle.",
-                "operationId": "eeb3e8cb339cb33abfffc29ac3a75db9",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "nom_role"
-                                ],
-                                "properties": {
-                                    "nom_role": {
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
                     }
-                },
+                ]
+            }
+        },
+        "/api/listeUser": {
+            "get": {
+                "summary": "listUser",
+                "description": "",
                 "responses": {
-                    "201": {
-                        "description": "Rôle ajouté avec succès",
+                    "200": {
+                        "description": "OK",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Rôle ajouté avec succès"
-                                        },
-                                        "role": {
-                                            "$ref": "#/components/schemas/Role"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
-                    "401": {
-                        "description": "Non autorisé"
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     },
-                    "422": {
-                        "description": "Erreur de validation"
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
-                "security": [
+                "tags": [
+                    "gestionUtilisateue"
+                ],
+                "parameters": [
                     {
-                        "bearerAuth": []
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
                     }
                 ]
             }
         },
         "/api/listRole": {
             "get": {
-                "tags": [
-                    "Rôles"
-                ],
-                "summary": "Lister tous les rôles",
-                "description": "Lister tous les rôles.",
-                "operationId": "c1c27eba14d9dc3ca764619461cda19d",
+                "summary": "listeRole",
+                "description": "",
                 "responses": {
                     "200": {
-                        "description": "Liste de tous les rôles",
+                        "description": "OK",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "roles": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Role"
-                                            }
-                                        }
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestionUtilisateue"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/login": {
+            "post": {
+                "summary": "connexion",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestionUtilisateue"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
                                     },
-                                    "type": "object"
+                                    "password": {
+                                        "type": "string"
+                                    }
                                 }
+                            },
+                            "example": {
+                                "email": "admin@gmail.com",
+                                "password": "admin@123"
                             }
                         }
                     }
@@ -1797,242 +2249,264 @@
         },
         "/api/inscription": {
             "post": {
-                "tags": [
-                    "Utilisateurs"
-                ],
-                "summary": "Inscrire un nouvel utilisateur",
-                "description": "Inscrire un nouvel utilisateur.",
-                "operationId": "3ada20efe3f26de09629da386e44eb01",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "nom",
-                                    "prenom",
-                                    "email",
-                                    "telephone",
-                                    "role_id",
-                                    "password"
-                                ],
-                                "properties": {
-                                    "nom": {
-                                        "type": "string",
-                                        "example": "John"
-                                    },
-                                    "prenom": {
-                                        "type": "string",
-                                        "example": "Doe"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email",
-                                        "example": "john@example.com"
-                                    },
-                                    "telephone": {
-                                        "type": "string",
-                                        "example": "+221771234567"
-                                    },
-                                    "role_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "example": "password"
-                                    },
-                                    "adresse": {
-                                        "type": "string",
-                                        "example": "123 Rue de l'Exemple"
-                                    },
-                                    "date_naissance": {
-                                        "type": "string",
-                                        "format": "date",
-                                        "example": "1990-01-01"
-                                    },
-                                    "sexe": {
-                                        "type": "string",
-                                        "example": "M"
-                                    },
-                                    "image": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
+                "summary": "inscription",
+                "description": "",
                 "responses": {
                     "201": {
-                        "description": "Utilisateur inscrit avec succès",
+                        "description": "Created successfully",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Utilisateur inscrit avec succès"
-                                        },
-                                        "user": {
-                                            "$ref": "#/components/schemas/User"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
-                    "422": {
-                        "description": "Erreur de validation"
-                    }
-                }
-            }
-        },
-        "/api/login": {
-            "post": {
-                "tags": [
-                    "Utilisateurs"
-                ],
-                "summary": "Connecter l'utilisateur",
-                "description": "Connecter l'utilisateur.",
-                "operationId": "0fc9610184083ac6dddab2c63139225a",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "email",
-                                    "password"
-                                ],
-                                "properties": {
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email"
-                                    },
-                                    "password": {
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Utilisateur connecté avec succès",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Utilisateur connecté avec succès"
-                                        },
-                                        "token": {
-                                            "type": "string"
-                                        },
-                                        "user": {
-                                            "$ref": "#/components/schemas/User"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
                     "401": {
-                        "description": "Identifiants invalides"
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     },
                     "403": {
-                        "description": "Compte bloqué"
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestionUtilisateue"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom": {
+                                        "type": "string"
+                                    },
+                                    "prenom": {
+                                        "type": "string"
+                                    },
+                                    "telephone": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "role_id": {
+                                        "type": "string"
+                                    },
+                                    "images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nom": "Toure",
+                                "prenom": "Rokhaya",
+                                "telephone": "+221774065162",
+                                "email": "rokhaya4@gmail.com",
+                                "password": "Passer1234",
+                                "role_id": "1",
+                                "images": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/updateUser/{id}": {
+            "post": {
+                "summary": "modifier",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     },
-                    "422": {
-                        "description": "Erreur de validation"
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     },
-                    "500": {
-                        "description": "Erreur interne du serveur"
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestionUtilisateue"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom": {
+                                        "type": "string"
+                                    },
+                                    "prenom": {
+                                        "type": "string"
+                                    },
+                                    "telephone": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "role_id": {
+                                        "type": "string"
+                                    },
+                                    "images": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nom": "Toure",
+                                "prenom": "Rokhaya",
+                                "telephone": "+221774065162",
+                                "email": "rokhaya4@gmail.com",
+                                "password": "Passer1234",
+                                "role_id": "1",
+                                "images": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
         "/api/logout": {
             "post": {
-                "tags": [
-                    "Utilisateurs"
-                ],
-                "summary": "Déconnecter l'utilisateur",
-                "description": "Déconnecter l'utilisateur.",
-                "operationId": "67d5147477c548bfbc3f982833bbc7bd",
+                "summary": "deconnexion",
+                "description": "",
                 "responses": {
-                    "200": {
-                        "description": "Utilisateur déconnecté avec succès",
+                    "201": {
+                        "description": "Created successfully",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Utilisateur déconnecté avec succès"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
                     "401": {
-                        "description": "Non autorisé"
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/updateUser/{id}": {
-            "put": {
                 "tags": [
-                    "Utilisateurs"
+                    "gestionUtilisateue"
                 ],
-                "summary": "Mettre à jour un utilisateur",
-                "description": "Mettre à jour un utilisateur.",
-                "operationId": "0e7cf481f7889e1c541b8461f8a7ef6b",
                 "parameters": [
                     {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID de l'utilisateur à mettre à jour",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
                     }
                 ],
                 "requestBody": {
-                    "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
+                                "type": "object",
                                 "properties": {
                                     "nom": {
                                         "type": "string"
@@ -2040,250 +2514,102 @@
                                     "prenom": {
                                         "type": "string"
                                     },
-                                    "adresse": {
+                                    "email": {
                                         "type": "string"
                                     },
-                                    "date_naissance": {
-                                        "type": "string",
-                                        "format": "date"
+                                    "password": {
+                                        "type": "string"
                                     },
                                     "telephone": {
                                         "type": "string"
                                     },
-                                    "sexe": {
-                                        "type": "string",
-                                        "enum": [
-                                            "Homme",
-                                            "Femme"
-                                        ]
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "format": "password"
-                                    },
                                     "role_id": {
-                                        "type": "integer"
-                                    },
-                                    "image": {
-                                        "type": "string",
-                                        "format": "binary"
+                                        "type": "string"
                                     }
-                                },
-                                "type": "object"
+                                }
+                            },
+                            "example": {
+                                "nom": "toure",
+                                "prenom": "kokhy",
+                                "email": "rokhaya2@gmail.com",
+                                "password": "passer1234",
+                                "telephone": "+221773003030",
+                                "role_id": "2"
                             }
                         }
                     }
-                },
+                }
+            }
+        },
+        "/api/role": {
+            "post": {
+                "summary": "ajoutRole",
+                "description": "",
                 "responses": {
-                    "200": {
-                        "description": "Utilisateur mis à jour avec succès",
+                    "201": {
+                        "description": "Created successfully",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Modifier avec succès"
-                                        },
-                                        "user": {
-                                            "$ref": "#/components/schemas/User"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
                             }
                         }
                     },
                     "401": {
-                        "description": "Non autorisé"
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     },
                     "403": {
-                        "description": "Vous ne pouvez pas faire cette action"
-                    },
-                    "404": {
-                        "description": "Utilisateur non trouvé"
-                    },
-                    "422": {
-                        "description": "Erreur de validation"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/listeUser": {
-            "get": {
-                "tags": [
-                    "Utilisateurs"
-                ],
-                "summary": "Lister tous les utilisateurs (sauf les administrateurs)",
-                "description": "Lister tous les utilisateurs (sauf les administrateurs).",
-                "operationId": "da4618bc73e0be7e0cc623154ebd4382",
-                "responses": {
-                    "200": {
-                        "description": "Liste de tous les utilisateurs (sauf les administrateurs)",
+                        "description": "Unauthorize",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "users": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/User"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {},
+                                "example": ""
                             }
                         }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
                     }
                 },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/debloquerUser/{id}": {
-            "delete": {
                 "tags": [
-                    "Utilisateurs"
+                    "gestionUtilisateue"
                 ],
-                "summary": "Débloquer un utilisateur",
-                "description": "Débloquer un utilisateur.",
-                "operationId": "dde6791df1ed986de2a4f8ce8dd91e4e",
                 "parameters": [
                     {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID de l'utilisateur à débloquer",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Opération réussie",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "L'utilisateur a été débloqué avec succès."
-                                        },
-                                        "user": {
-                                            "$ref": "#/components/schemas/User"
-                                        }
-                                    },
-                                    "type": "object"
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom_role": {
+                                        "type": "string"
+                                    }
                                 }
+                            },
+                            "example": {
+                                "nom_role": "admin"
                             }
                         }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
-                    },
-                    "404": {
-                        "description": "Utilisateur non trouvé"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/BloquerUser/{id}": {
-            "delete": {
-                "tags": [
-                    "Utilisateurs"
-                ],
-                "summary": "Bloquer ou débloquer un utilisateur",
-                "description": "Bloquer  un utilisateur.",
-                "operationId": "977cc465f330cdaa6d7a4837eb3fe31c",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID de l'utilisateur à bloquer/débloquer",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Opération réussie",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "L'utilisateur a été bloqué/débloqué avec succès"
-                                        },
-                                        "user": {
-                                            "$ref": "#/components/schemas/User"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Non autorisé"
-                    },
-                    "403": {
-                        "description": "Vous ne pouvez pas bloquer votre propre compte"
-                    },
-                    "404": {
-                        "description": "Utilisateur non trouvé"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        }
-    },
-    "components": {
-        "securitySchemes": {
-            "bearerAuth": {
-                "type": "http",
-                "bearerFormat": "JWT",
-                "scheme": "bearer"
+                }
             }
         }
     }

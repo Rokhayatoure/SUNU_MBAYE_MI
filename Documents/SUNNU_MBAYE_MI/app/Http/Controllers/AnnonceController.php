@@ -128,7 +128,7 @@ class AnnonceController extends Controller
             }
     
             // Enregistrer les modifications
-            $annonce->save();
+            $annonce->update();
     
             return response()->json([
                 "status" => true,

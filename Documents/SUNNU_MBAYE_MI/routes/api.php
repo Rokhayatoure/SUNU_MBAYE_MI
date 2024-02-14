@@ -26,12 +26,13 @@ use Spatie\LaravelIgnition\Solutions\SolutionProviders\RunningLaravelDuskInProdu
 |
 */
 //Utilisateur inscription auth sup deconnection
+Route::get('/listeUser',[UserController::class ,'listeUser'] );
 
 
 Route::post('inscription', [UserController::class ,'inscription']);
 Route::post('login', [UserController::class ,'login']);
 Route::post('logout', [UserController::class ,'logout']);
-Route::put('/updateUser/{id}',[UserController::class ,'updateUser'] );
+Route::post('/updateUser/{id}',[UserController::class ,'updateUser'] );
 
 //anonce
 
@@ -62,7 +63,6 @@ Route::get('/AfficherPanier', [PanierController::class, 'AfficherPanier']);
 Route::delete('/viderPanier/{produit_id}', [PanierController::class, 'viderPanier']);
 Route::delete('/validerPanier/{panier_id}', [PanierController::class, 'validerPanier']);
 //commender 
-Route::put('/AnnulerLivraison/{commende_id}', [CommendeController::class, 'AnnulerLivraison']);
 Route::post('/Commender', [CommendeController::class, 'Commender']);
 Route::get('/VoirplusCommendeRevendeur/{commendeId}', [CommendeController::class, 'VoirplusCommendeRevendeur']);
 
@@ -71,7 +71,7 @@ Route::get('/VoirplusCommendeRevendeur/{commendeId}', [CommendeController::class
 
 //agriculteur middleware
 Route::middleware(['auth','nom_role:agriculteur'])->group(function () {
-Route::put('updateproduit/{id}', [ProduitController::class ,'updateproduit']);
+Route::post('updateproduit/{id}', [ProduitController::class ,'updateproduit']);
 Route::delete('supProduit/{id}', [ProduitController::class ,'supProduit']);
 Route::get('/listeAnnonceAgriculteur', [AnnonceController::class ,'listeAnnonceAgriculteur']);
 Route::post('AjoutProduit', [ProduitController::class ,'AjoutProduit']);
@@ -91,8 +91,10 @@ Route::post('/AjoutCategorie', [CategorieController::class ,'AjoutCategorie']);
 
 Route::delete('/suprimmerCommende/{commende_id}', [CommendeController::class, 'suprimmerCommende']);
 Route::put('/LivraisonTerminer/{commende_id}', [CommendeController::class, 'LivraisonTerminer']);
+Route::put('/AnnulerLivraison/{commende_id}', [CommendeController::class, 'AnnulerLivraison']);
+
 //annonce
-Route::put('/modifierAnnonce/{id}',[AnnonceController::class ,'modifierAnnonce']);
+Route::post('/modifierAnnonce/{id}',[AnnonceController::class ,'modifierAnnonce']);
 //categorie
 Route::put('/modifieCategorie/{id}', [CategorieController::class ,'modifieCategorie']);
 Route::delete('/supCategorie/{id}', [CategorieController::class ,'destroy']);
@@ -104,7 +106,6 @@ Route::delete('supProduitAdmine/{id}', [ProduitController::class ,'supProduitAdm
 // user
 Route::delete('debloquerUser/{id}', [UserController::class ,'debloquerUser']);
 Route::delete('BloquerUser/{id}', [UserController::class ,'BloquerUser']);
-Route::get('/listeUser',[UserController::class ,'listeUser'] );
 
 
 //role

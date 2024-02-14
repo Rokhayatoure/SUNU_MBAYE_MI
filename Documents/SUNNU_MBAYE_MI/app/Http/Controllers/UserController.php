@@ -13,50 +13,13 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-/**
- * @OA\Tag(
- *     name="user",
- *     description="User related operations"
- * )
- * @OA\Info(
- *     version="1.0",
- *     title="Example API",
- *     description="Example info",
- *     @OA\Contact(name="Swagger API Team")
- * )
- * @OA\Server(
- *     url="https://example.localhost",
- *     description="API server"
- * )
- 
- * @OA\SecurityScheme(
- *      securityScheme="bearerAuth",
- *      type="http",
- *      scheme="bearer",
- *      bearerFormat="JWT",
- * )
- */
+
  
 
 
 class UserController extends Controller
 {
- /**
- * @OA\Schema(
- *     schema="Role",
- *     title="Role",
- *     description="Role Model",
- *     @OA\Property(
- *         property="id",
- *         type="integer",
- *         format="int64"
- *     ),
- *     @OA\Property(
- *         property="nom_role",
- *         type="string"
- *     )
- * )
- */
+
 
     public function ajouterRole(Request $request)
     {
@@ -247,7 +210,7 @@ if ($request->hasFile('image')) {
     $user->image = $filename;
 }
 
-$user->save();
+$user->update();
 
 return response()->json([
     "status" => true,
