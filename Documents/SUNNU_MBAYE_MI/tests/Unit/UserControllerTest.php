@@ -21,6 +21,8 @@ class UserControllerTest extends TestCase
       use RefreshDatabase;
    public function testUserCanRegisterSuccesfully()
    {
+    $this->artisan('migrate:fresh');
+
         $role=Role::create(["nom_role"=>"agriculteur"]);
 
     $userData=[
@@ -51,9 +53,11 @@ class UserControllerTest extends TestCase
 
 
    }
-   public function testUserCanLoginSucessfull()
+   public function testConnexionUtilisateur()
    {
-        // $role=Role::create(["nom_role"=>"agriculteur"]);
+    $this->artisan('migrate:fresh');
+
+        $role=Role::create(["nom_role"=>"agriculteur"]);
         $password='Passer11';
     $userData= User::create([
 
@@ -81,6 +85,8 @@ class UserControllerTest extends TestCase
    }
 public function testUserCanLogoutSuccessfully()
 {
+    $this->artisan('migrate:fresh');
+
     // Effectuez d'abord le processus d'inscription et de connexion
      $role=Role::create(["nom_role"=>"agriculteur"]);
      $password ='Passer11';

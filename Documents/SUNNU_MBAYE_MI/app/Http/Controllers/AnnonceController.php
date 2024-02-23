@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Annonce;
 use Illuminate\Http\Request;
 use App\Mail\maildeConfirmation;
+use App\Models\User;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -224,6 +225,9 @@ public function publierAnnonce(Request $request, $id)
         }
 // Vérifier si l'annonce existe
     $annonce = Annonce::find($id);
+    $idUser = $annonce->user_id;
+    $utilisateur= User::find($idUser);
+    // dd($annonce);
  if (!$annonce) {
             return response()->json([
                 "status" => false,
@@ -232,9 +236,12 @@ public function publierAnnonce(Request $request, $id)
         }
 
         // Marquer l'annonce comme publiée
-        $annonce->est_publier= true;
+        $annonce->is_published= true;
         $annonce->save();
-       
+        if($annonce->save()){
+            Mail::to($utilisateur->email)->send(new maildeConfirmation($annonce));  
+
+        }
         
         return response()->json([
             "status" => true,
@@ -258,7 +265,7 @@ public function retirerAnnonce($id)
         }
 
         // Retirer de la page d'accueil
-        $annonce->est_publier = false;
+        $annonce->is_published= false;
         $annonce->save();
 
         return response()->json([

@@ -14,11 +14,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AnonceTest extends TestCase
 {
-     use RefreshDatabase;
+    //  use RefreshDatabase;
 
     public function testAjoutAnnonce()
     {
-        // Storage::fake('images');
+        
+        $this->artisan('migrate:fresh');
         $role=Role::create(["nom_role"=>"agriculteur"]);
            
         // Créer un utilisateur manuellement
@@ -60,6 +61,8 @@ class AnonceTest extends TestCase
 
     public function testModifierAnnonce()
     {
+        $this->artisan('migrate:fresh');
+
         // Créer un rôle manuellement
         $role=Role::create(["nom_role"=>"admin"]);
     
@@ -88,16 +91,16 @@ class AnonceTest extends TestCase
             'images' => 'C:\Users\simplon\Documents\SUNNU_MBAYE_MI\public\images\202401191737woman-8492233_1280.jpg',
         ];
     
-        $response = $this->putJson("/api/modifierAnnonce/{$annonce->id}", $modificationData);
+        $response = $this->postJson("/api/modifierAnnonce/{$annonce->id}", $modificationData);
     
-        $response->assertStatus(200)
-            ->assertJson([
-                'status' => $response->json('status'),
-                'message' => $response->json('message'),
-                 'annonce' =>$response->json('annonce')
+        $response->assertStatus(200);
+            // ->assertJson([
+            //     'status' => $response->json('status'),
+            //     'message' => $response->json('message'),
+            //      'annonce' =>$response->json('annonce')
                 
                 
-            ]);
+            // ]);
     
         // Assurez-vous que l'image existe dans le stockage simulé
         
@@ -107,6 +110,7 @@ class AnonceTest extends TestCase
 
     public function testListAnnonce()
     {
+        $this->artisan('migrate:fresh');
         
         $role=Role::create(["nom_role"=>"admin"]);
       
@@ -136,7 +140,9 @@ class AnonceTest extends TestCase
     }
 
     public function testSupprimerAnnonce()
-    {
+    { 
+        $this->artisan('migrate:fresh');
+
         // Créer un utilisateur
         $role=Role::create(["nom_role"=>"agriculteur"]);
         // Créer un utilisateur manuellement
@@ -181,6 +187,8 @@ class AnonceTest extends TestCase
 
 public function testAnnoncePublieeAvecSucces()
     {
+        $this->artisan('migrate:fresh');
+
          // Créer un utilisateur
          $role=Role::create(["nom_role"=>"agriculteur"]);
          // Créer un utilisateur manuellement

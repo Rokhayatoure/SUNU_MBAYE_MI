@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('telephone');
             $table->string('image')->nullable();
             $table->string('sexe')->nullable();
-            $table->string('date_naissance')->nullable();
             $table->string('adresse')->nullable();
             $table->string('nom_entreprise')->nullable();
             $table->boolean('est_bloquer')->default(false);

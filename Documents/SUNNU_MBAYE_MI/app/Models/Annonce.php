@@ -15,7 +15,10 @@ class Annonce extends Model
         'user_id'
     ];
     // Annonce.php
-
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
 
 }

@@ -20,6 +20,8 @@ class messageTest extends TestCase
      */
     public function testAjouterMessage()
     {
+        $this->artisan('migrate:fresh');
+
         $data = [
             'nom' => 'John Doe',
             'email' => 'john@example.com',
@@ -39,6 +41,8 @@ class messageTest extends TestCase
     
     public function testListerMessages()
     {
+        $this->artisan('migrate:fresh');
+
 
 
         $role=Role::create(["nom_role"=>"admin"]);
@@ -67,6 +71,8 @@ class messageTest extends TestCase
     }
     public function testVoirPlusMessage()
     {
+        $this->artisan('migrate:fresh');
+
         $role = Role::create(["nom_role" => "admin"]);
         $user = User::create([
             'nom' => 'ba',
@@ -94,7 +100,8 @@ class messageTest extends TestCase
     
     public function testReponse()
     {
-
+        $this->artisan('migrate:fresh');
+       
 
         $role = Role::create(["nom_role" => "admin"]);
         $user = User::create([

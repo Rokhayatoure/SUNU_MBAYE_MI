@@ -66,8 +66,8 @@ class UserController extends Controller
             'prenom' => $request->prenom,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'adresse' => $request->adresse,
-            'date_naissance' => $request->date_naissance,
+            // 'adresse' => $request->adresse,
+            // 'date_naissance' => $request->date_naissance,
             'telephone' => $request->telephone,
             'sexe' => $request->sexe,
             'role_id' => $request->role_id
@@ -86,7 +86,7 @@ class UserController extends Controller
     
         return response()->json([
             "status" => true,
-            "message" => "utilisateur connecter inscrit avec succes ",
+            "message" => "utilisateur inscrit avec succes ",
             'user'=>$user
         ],200);
     }
@@ -166,18 +166,6 @@ public function updateUser(Request $request,$id)
     $user = User::find($id);
     
     // dd($user);
-if (!$user) {
-    return response()->json(['message' => 'Utilisateur non trouvé'], 404);
-}
-$utilisateurconnecter = Auth::guard('api')->user();
-
-if ($user->id !== $utilisateurconnecter->id){
-
-    return response()->json([
-        "status" => false,
-        "message" => "vous ne pouvez pas faire cette action "
-    ],403);
-} 
 
 $validator = Validator::make($request->all(), [
         'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
@@ -196,7 +184,7 @@ $validator = Validator::make($request->all(), [
 $user->nom = $request->nom;
 $user->prenom = $request->prenom;
 $user->adresse = $request->adresse;
-$user->date_naissance = $request->date_naissance;
+
 $user->telephone = $request->telephone;
 $user->sexe = $request->sexe;
 $user->email = $request->email;

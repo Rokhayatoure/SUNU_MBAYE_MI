@@ -10,7 +10,7 @@
 
 <body>
     <h1>Bonjour toi</h1>
-    <h3>{{ $responses }}</h3>
+    <h3>{{$responses}}</h3>
 </body>
 
 </html>

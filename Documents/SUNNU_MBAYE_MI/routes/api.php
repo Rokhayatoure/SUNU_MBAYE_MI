@@ -79,10 +79,6 @@ Route::get('listeProduitAgriculteur', [ProduitController::class ,'listeProduitAg
 Route::post('/ajoutAnnonce', [AnnonceController::class ,'ajoutAnnonce']);
 Route::delete('/supAnnonce/{id}', [AnnonceController::class ,'supprimerAnnonce']);
 Route::get('/VoirplusCommendeAgriculteur/{commendeId}', [CommendeController::class, 'VoirplusCommende']);
-
-
-
-
 });
 
 //admin middleware

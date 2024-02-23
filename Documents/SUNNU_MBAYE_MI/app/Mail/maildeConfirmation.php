@@ -16,10 +16,10 @@ class maildeConfirmation extends Mailable
     /**
      * Create a new message instance.
      */
-    public $succes;
-    public function __construct($succes )
+    private $sucess;
+    public function __construct($sucess)
     {
-        $this->succes = $succes;
+        $this->sucess = $sucess;
     }
 
     /**
@@ -28,18 +28,17 @@ class maildeConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Mailde Confirmation',
+            subject: 'Response Mail',
         );
     }
 
     /**
      * Get the message content definition.
      */
-    public function content()
+    public function content(): Content
     {
-        // return new Content()
-            return $this->subject('votre annonce a ete bien puble  dans notre page ')->view('email.mailvaidate');
-    
+        $responses = $this->sucess;
+        return (new Content())->view('confirmation')->with(compact('responses'));
     }
 
     /**
