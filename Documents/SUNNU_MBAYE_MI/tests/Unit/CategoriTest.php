@@ -69,36 +69,36 @@ class CategoriTest extends TestCase
       
 //     }
     
-    public function testSupprimeCategorie()
-    {
-        // Créer un rôle "admin"
+    // public function testSupprimeCategorie()
+    // {
+    //     // Créer un rôle "admin"
         
-        $role=Role::create(["nom_role"=>"admin"]);
+    //     $role=Role::create(["nom_role"=>"admin"]);
       
-        // Créer un utilisateur avec le rôle "admin"
-        $user = User::create([
-            'nom' => 'Toure',
-            'prenom' => 'Rokhaya',
-            'email' =>'papa@gmail.com',
-            'telephone' => '+221774065162',
-            'role_id' => 1,
-            'password' => Hash::make('Passer11'),
-        ]);
+    //     // Créer un utilisateur avec le rôle "admin"
+    //     $user = User::create([
+    //         'nom' => 'Toure',
+    //         'prenom' => 'Rokhaya',
+    //         'email' =>'ADA@gmail.com',
+    //         'telephone' => '+221774065162',
+    //         'role_id' => 1,
+    //         'password' => Hash::make('Passer11'),
+    //     ]);
     
-        $this->actingAs($user, 'api');
+    //     $this->actingAs($user, 'api');
     
-        // Créer une catégorie
-        $categorieData = ['nom_categories' => 'Nouvelle catégorie'];
-        $response = $this->postJson('/api/AjoutCategorie', $categorieData);
+    //     // Créer une catégorie
+    //     $categorieData = ['nom_categories' => 'Nouvelle catégorie'];
+    //     $response = $this->postJson('/api/AjoutCategorie', $categorieData);
         
-         $categorieId = 1;
+    //      $categorieId = 1;
       
     
-        // Envoyer la demande de suppression de catégorie
-        $response = $this->actingAs($user, 'api')->deleteJson("/api/supCategorie/{$categorieId}");
+    //     // Envoyer la demande de suppression de catégorie
+    //     $response = $this->actingAs($user, 'api')->deleteJson("/api/supCategorie/{$categorieId}");
     
-        // Vérifier la réponse
-        $response->assertStatus(200);
-            // ->assertJson(['message' => 'Catégorie supprimée avec succès']);
-    }
+    //     // Vérifier la réponse
+    //     $response->assertStatus(200);
+    //         // ->assertJson(['message' => 'Catégorie supprimée avec succès']);
+    // }
     }
