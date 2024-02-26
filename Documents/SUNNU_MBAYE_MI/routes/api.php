@@ -2,18 +2,20 @@
 
 use Illuminate\Http\Request;
 use App\Models\DetailCommende;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PagnerController;
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\AnnonceController;
-use App\Http\Controllers\AnnoncepublierController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\CommendeController;
 use App\Http\Controllers\PayementController;
 use App\Http\Controllers\CategorieController;
-use App\Http\Controllers\CommendeController;
-use App\Http\Controllers\MessageController;
+use App\Http\Controllers\AnnoncepublierController;
 use Spatie\LaravelIgnition\Solutions\SolutionProviders\RunningLaravelDuskInProductionProvider;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +28,15 @@ use Spatie\LaravelIgnition\Solutions\SolutionProviders\RunningLaravelDuskInProdu
 |
 */
 //Utilisateur inscription auth sup deconnection
+// Route::get('/greeting/{locale}', function (string $locale) {
+//     if (! in_array($locale, [ 'fr'])) {
+//         abort(400);
+//     }
+ 
+//     App::setLocale($locale);
+ 
+//     // ...
+// });
 Route::get('/listeUser',[UserController::class ,'listeUser'] );
 
 
