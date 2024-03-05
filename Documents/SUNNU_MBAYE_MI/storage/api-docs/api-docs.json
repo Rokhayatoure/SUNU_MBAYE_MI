@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "SUNU MBAYE",
-        "description": "Etude et  realisation d'une mis en relation entre agriculteur et revendeur",
+        "title": "Your API Title",
+        "description": "Your API Description",
         "version": "1.0.0"
     },
     "security": [
@@ -23,7 +23,7 @@
         "multipart/form-data"
     ],
     "paths": {
-        "/api/AjoutPanier": {
+        "/api/AjoutProduit": {
             "post": {
                 "summary": "AjoutProduit",
                 "description": "",
@@ -116,7 +116,7 @@
                                     "type": "string",
                                     "format": "binary"
                                 },
-                                "categorie_id": "2"
+                                "categorie_id": "1"
                             }
                         }
                     }
@@ -337,7 +337,7 @@
                                 }
                             },
                             "example": {
-                                "categorie_id": 2
+                                "categorie_id": 1
                             }
                         }
                     }
@@ -1154,7 +1154,7 @@
                                 }
                             },
                             "example": {
-                                "nom_categories": "banane"
+                                "nom_categories": "fruits"
                             }
                         }
                     }
@@ -1470,8 +1470,8 @@
                                 }
                             },
                             "example": {
-                                "titre": "promotion",
-                                "description": "reduction",
+                                "titre": "promotion banane",
+                                "description": "reduction de banane",
                                 "images": {
                                     "type": "string",
                                     "format": "binary"
@@ -1797,7 +1797,7 @@
                 }
             }
         },
-        "/api/publierAnnonce/{id}": {
+        "/api/publierAnnonce/1": {
             "get": {
                 "summary": "PublierAnonce",
                 "description": "",
@@ -1876,7 +1876,7 @@
                 }
             }
         },
-        "/api/retirerAnnonce/{id}": {
+        "/api/retirerAnnonce/1": {
             "get": {
                 "summary": "RetirerAnnonce",
                 "description": "",
@@ -2405,27 +2405,31 @@
                                     "images": {
                                         "type": "string",
                                         "format": "binary"
+                                    },
+                                    "adresse": {
+                                        "type": "string"
                                     }
                                 }
                             },
                             "example": {
                                 "nom": "Toure",
                                 "prenom": "Rokhaya",
-                                "telephone": "+221774065162",
-                                "email": "rokhaya4@gmail.com",
+                                "telephone": "774065162",
+                                "email": "rokh@gmail.com",
                                 "password": "Passer1234",
-                                "role_id": "1",
+                                "role_id": "3",
                                 "images": {
                                     "type": "string",
                                     "format": "binary"
-                                }
+                                },
+                                "adresse": "MBAO"
                             }
                         }
                     }
                 }
             }
         },
-        "/api/updateUser/{id}": {
+        "/api/updateUser/1": {
             "post": {
                 "summary": "modifier",
                 "description": "",
@@ -2516,9 +2520,9 @@
                                 "nom": "Toure",
                                 "prenom": "Rokhaya",
                                 "telephone": "+221774065162",
-                                "email": "rokhaya4@gmail.com",
+                                "email": "rokhaya77@gmail.com",
                                 "password": "Passer1234",
-                                "role_id": "1",
+                                "role_id": "3",
                                 "images": {
                                     "type": "string",
                                     "format": "binary"
